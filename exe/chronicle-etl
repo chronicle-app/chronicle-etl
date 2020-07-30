@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-require "chronicle/etl"
+require "chronicle/etl/cli"
+
+Chronicle::Etl::CLI.start(ARGV)
