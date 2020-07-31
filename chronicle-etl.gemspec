@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Andrew Louis"]
   spec.email         = ["andrew@hyfen.net"]
 
-  spec.summary       = "Personal data ETL tool"
+  spec.summary       = "ETL tool for personal data"
   spec.description   = "Chronicle-ETL allows you to extract personal data from a variety of services, transformer it, and load it."
   spec.homepage      = "https://github.com/chronicle-app"
   spec.license       = "MIT"
@@ -37,8 +37,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "thor", "~> 0.20"
+  spec.add_dependency "colorize", "~> 0.8.1"
+  spec.add_dependency "table_print"
+  spec.add_dependency "ruby-progressbar", "~> 1.10"
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "pry-byebug", "~> 3.9"
 end

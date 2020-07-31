@@ -1,28 +1,50 @@
 # Chronicle::Etl
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chronicle/etl`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Chronicle ETL is a utility tool for manipulating personal data. You can extract it from a variety of source, transform it, and load it to different APIs or file formats.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'chronicle-etl'
+```bash
+$ gem install chronicle-etl
 ```
 
-And then execute:
+## Examples
 
-    $ bundle
+After installing the gem, `chronicle-etl` is available to run in your shell.
 
-Or install it yourself as:
+```
+chronicle-etl --extractor csv --extractor-opts filename:test.csv --loader table
+cat test.csv | chronicle-etl --extractor csv --loader table
+```
 
-    $ gem install chronicle-etl
+## Full usage
 
-## Usage
+```
+Commands:
+  chronicle-etl help [COMMAND]  # Describe available commands or one specific command
+  chronicle-etl job             # Runs an ETL job
+```
 
-TODO: Write usage instructions here
+### Job options
+
+```
+Usage:
+  chronicle-etl job
+
+Options:
+  -e, [--extractor=extractor-name]      # Extractor class (available: stdin, csv, file)
+                                        # Default: stdin
+      [--extractor-opts=key:value]      # Extractor options
+  -t, [--transformer=transformer-name]  # Transformer class (available: null)
+                                        # Default: null
+      [--transformer-opts=key:value]    # Transformer options
+  -l, [--loader=loader-name]            # Loader class (available: stdout, csv, table)
+                                        # Default: stdout
+      [--loader-opts=key:value]         # Loader options
+  -j, [--job=JOB]                       # Job configuration file
+
+Runs an ETL job
+```
 
 ## Development
 
@@ -32,7 +54,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/chronicle-etl. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/chronicle-app/chronicle-etl. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -40,4 +62,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Chronicle::Etl project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/chronicle-etl/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Chronicle::Etl project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/chronicle-app/chronicle-etl/blob/master/CODE_OF_CONDUCT.md).
