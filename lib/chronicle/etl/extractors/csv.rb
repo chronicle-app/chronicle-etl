@@ -1,6 +1,4 @@
 require 'csv'
-require 'pry-byebug'
-
 class Chronicle::Etl::Extractors::Csv < Chronicle::Etl::Extractors::Extractor
   DEFAULT_OPTIONS = {
     headers: true,

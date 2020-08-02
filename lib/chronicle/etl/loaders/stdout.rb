@@ -1,5 +1,3 @@
-require 'pry'
-
 module Chronicle
   module Etl
     module Loaders
