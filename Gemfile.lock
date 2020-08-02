@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chronicle-etl (0.1.1)
+    chronicle-etl (0.1.2)
       colorize (~> 0.8.1)
       ruby-progressbar (~> 1.10)
       table_print
