@@ -1,5 +1,7 @@
 # Chronicle::Etl
 
+[![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl)
+
 Chronicle ETL is a utility tool for manipulating personal data. You can extract it from a variety of source, transform it, and load it to different APIs or file formats.
 
 ## Installation
