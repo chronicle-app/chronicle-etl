@@ -18,7 +18,7 @@ class Chronicle::Etl::Extractors::Csv < Chronicle::Etl::Extractors::Extractor
   end
 
   def results_count
-    CSV.read(@options[:filename], { headers: @options[:headers] }).count if read_from_file?
+    CSV.read(@options[:filename], headers: @options[:headers]).count if read_from_file?
   end
 
   private
@@ -33,7 +33,7 @@ class Chronicle::Etl::Extractors::Csv < Chronicle::Etl::Extractors::Extractor
     }
 
     stream = read_from_file? ? File.open(@options[:filename]) : @options[:filename]
-    CSV.new(stream, csv_options)
+    CSV.new(stream, **csv_options)
   end
 
   def read_from_file?
