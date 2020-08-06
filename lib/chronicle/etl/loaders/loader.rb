@@ -8,7 +8,7 @@ module Chronicle
 
         def start; end
 
-        def first_load; end
+        def first_load result; end
 
         def load
           raise NotImplementedError

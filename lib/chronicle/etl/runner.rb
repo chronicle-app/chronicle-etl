@@ -12,16 +12,19 @@ class Chronicle::Etl::Runner
   end
 
   def run!
-    progress_bar = Chronicle::Etl::Utils::ProgressBarWrapper.new(@extractor.results_count)
+    progress_bar = Chronicle::Etl::Utils::ProgressBar.new(title: "Running job", total: @extractor.results_count)
+    count = 0
+
     @loader.start
 
-    @extractor.extract do |result, i|
-      @loader.first_load(result) if i == 0
+    @extractor.extract do |result|
+      @loader.first_load(result) if count == 0
 
       transformed_data = @transformer.transform(result)
       @loader.load(transformed_data)
 
       progress_bar.increment
+      count += 1
     end
 
     progress_bar.finish
