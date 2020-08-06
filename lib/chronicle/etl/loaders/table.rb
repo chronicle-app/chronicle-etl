@@ -1,4 +1,4 @@
-require 'table_print'
+require 'tty/table'
 
 module Chronicle
   module Etl
@@ -6,15 +6,20 @@ module Chronicle
       class Table < Chronicle::Etl::Loaders::Loader
         def initialize(options)
           super(options)
-          @rows = []
+        end
+
+        # defer creating table until we get first result and can determine headers
+        def first_load(result)
+          headers = result.keys
+          @table = TTY::Table.new(header: headers)
         end
 
         def load(result)
-          @rows << result
+          @table << result
         end
 
         def finish
-          tp @rows
+          puts @table.render(:ascii)
         end
       end
     end
