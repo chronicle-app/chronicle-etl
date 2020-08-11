@@ -20,6 +20,6 @@ module Chronicle
   end
 end
 
-require_relative 'stdout'
-require_relative 'csv'
-require_relative 'table'
+require_relative 'stdout_loader'
+require_relative 'csv_loader'
+require_relative 'table_loader'

@@ -16,5 +16,6 @@ module Chronicle
   end
 end
 
-require_relative 'stdin'
-require_relative 'csv'
+require_relative 'stdin_extractor'
+require_relative 'csv_extractor'
+require_relative 'file_extractor'

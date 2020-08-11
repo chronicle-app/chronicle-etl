@@ -1,7 +1,7 @@
 module Chronicle
   module Etl
     module Transformers
-      class Null < Chronicle::Etl::Transformers::Transformer
+      class NullTransformer < Chronicle::Etl::Transformers::Transformer
         def transform data
           return data
         end

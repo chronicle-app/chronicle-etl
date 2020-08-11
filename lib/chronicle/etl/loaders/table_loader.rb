@@ -3,7 +3,7 @@ require 'tty/table'
 module Chronicle
   module Etl
     module Loaders
-      class Table < Chronicle::Etl::Loaders::Loader
+      class TableLoader < Chronicle::Etl::Loaders::Loader
         def initialize(options)
           super(options)
         end
