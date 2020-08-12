@@ -1,21 +1,24 @@
+require 'chronicle/etl'
+
 module Chronicle
   module Etl
-    module Extractors
-      class Extractor
-        def initialize(options = {})
-          @options = options.transform_keys!(&:to_sym) 
-        end
+    class Extractor
+      include Chronicle::Etl::Cataloguer
+      ETL_PHASE = :extractor
 
-        def extract
-          raise NotImplementedError
-        end
-
-        def results_count; end
+      def initialize(options = {})
+        @options = options.transform_keys!(&:to_sym) 
       end
+
+      def extract
+        raise NotImplementedError
+      end
+
+      def results_count; end
     end
   end
 end
 
-require_relative 'stdin_extractor'
 require_relative 'csv_extractor'
 require_relative 'file_extractor'
+require_relative 'stdin_extractor'

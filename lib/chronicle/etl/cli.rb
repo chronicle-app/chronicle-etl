@@ -33,6 +33,14 @@ module Chronicle
         runner = Runner.new(runner_options)
         runner.run!
       end
+
+      desc 'list', 'List all ETL classes'
+      def list
+        klasses = Chronicle::Etl::Cataloguer.available_classes
+      
+        table = TTY::Table.new(["name", "phase"], klasses.map(&:values))
+        puts table.render(:ascii)
+      end
     end
   end
 end

@@ -17,14 +17,18 @@ class Chronicle::Etl::Runner
 
     @loader.start
 
-    @extractor.extract do |result|
-      @loader.first_load(result) if count == 0
-
-      transformed_data = @transformer.transform(result)
+    @extractor.extract do |data, metadata|
+      transformed_data = @transformer.transform(data)
+      
+      @loader.first_load(transformed_data) if count == 0
       @loader.load(transformed_data)
 
       progress_bar.increment
       count += 1
+    # rescue StandardError => e
+    #   require 'pry'
+    #   binding.pry
+    #   progress_bar.log "Error processing; #{e.inspect}"
     end
 
     progress_bar.finish
@@ -41,7 +45,7 @@ class Chronicle::Etl::Runner
 
   def load_etl_class(phase, name)
     if BUILTIN[phase].include? name
-      klass_name = "Chronicle::Etl::#{phase.to_s.capitalize}s::#{name.capitalize}#{phase.to_s.capitalize}"
+      klass_name = "Chronicle::Etl::#{name.capitalize}#{phase.to_s.capitalize}"
     else
       # TODO: come up with syntax for specifying a particular extractor in a provider library
       # provider, extractor = name.split(":")

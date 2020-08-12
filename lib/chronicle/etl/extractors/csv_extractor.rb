@@ -1,5 +1,5 @@
 require 'csv'
-class Chronicle::Etl::Extractors::CsvExtractor < Chronicle::Etl::Extractors::Extractor
+class Chronicle::Etl::CsvExtractor < Chronicle::Etl::Extractor
   DEFAULT_OPTIONS = {
     headers: true,
     filename: $stdin
