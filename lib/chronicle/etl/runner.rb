@@ -19,16 +19,11 @@ class Chronicle::Etl::Runner
 
     @extractor.extract do |data, metadata|
       transformed_data = @transformer.transform(data)
-      
-      @loader.first_load(transformed_data) if count == 0
+
       @loader.load(transformed_data)
 
       progress_bar.increment
       count += 1
-    # rescue StandardError => e
-    #   require 'pry'
-    #   binding.pry
-    #   progress_bar.log "Error processing; #{e.inspect}"
     end
 
     progress_bar.finish

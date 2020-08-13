@@ -2,14 +2,12 @@ module Chronicle
   module Etl
     class Loader
       extend Chronicle::Etl::Catalog
-      
+
       def initialize(options = {})
         @options = options
       end
 
       def start; end
-
-      def first_load result; end
 
       def load
         raise NotImplementedError
