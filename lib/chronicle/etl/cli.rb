@@ -14,6 +14,7 @@ module Chronicle
       method_option :loader, aliases: '-l', desc: 'Loader class (available: stdout, csv, table)', default: 'stdout', banner: 'loader-name'
       method_option :'loader-opts', desc: 'Loader options', type: :hash, default: {}
       method_option :job, aliases: '-j', desc: 'Job configuration file'
+
       def job
         runner_options = {
           extractor: {
@@ -34,12 +35,13 @@ module Chronicle
         runner.run!
       end
 
+      # FIXME: namespace this differently
       desc 'list', 'List all ETL classes'
       def list
-        klasses = Chronicle::Etl::Cataloguer.available_classes
-      
-        table = TTY::Table.new(["name", "phase"], klasses.map(&:values))
-        puts table.render(:ascii)
+        klasses = Chronicle::Etl::Catalog.available_classes
+
+        table = TTY::Table.new(['class_name', 'built_in?', 'provider', 'phase'], klasses.map(&:values))
+        puts table.render
       end
     end
   end

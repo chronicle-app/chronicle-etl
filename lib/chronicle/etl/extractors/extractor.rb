@@ -3,7 +3,8 @@ require 'chronicle/etl'
 module Chronicle
   module Etl
     class Extractor
-      include Chronicle::Etl::Cataloguer
+      extend Chronicle::Etl::Catalog
+
       ETL_PHASE = :extractor
 
       def initialize(options = {})

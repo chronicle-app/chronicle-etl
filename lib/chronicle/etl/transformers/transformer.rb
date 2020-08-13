@@ -1,9 +1,8 @@
 module Chronicle
   module Etl
     class Transformer
-      include Chronicle::Etl::Cataloguer
-      ETL_PHASE = :transformer
-      
+      extend Chronicle::Etl::Catalog
+
       def initialize(options = {})
         @options = options
       end

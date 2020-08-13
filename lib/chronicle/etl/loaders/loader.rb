@@ -1,8 +1,8 @@
 module Chronicle
   module Etl
     class Loader
-      include Chronicle::Etl::Cataloguer
-      ETL_PHASE = :loader
+      extend Chronicle::Etl::Catalog
+      
       def initialize(options = {})
         @options = options
       end
