@@ -2,7 +2,9 @@
 
 [![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl)
 
-Chronicle ETL is a utility tool for manipulating personal data. You can extract it from a variety of source, transform it, and load it to different APIs or file formats.
+Chronicle ETL is a utility tool for archiving and processing personal data. You can extract it from a variety of source, transform it, and load it to different APIs or file formats.
+
+This project is an adaptation of Andrew Louis's experimental [Memex project](https://hyfen.net/memex).
 
 ## Installation
 
@@ -10,7 +12,7 @@ Chronicle ETL is a utility tool for manipulating personal data. You can extract 
 $ gem install chronicle-etl
 ```
 
-## Examples
+## Usage
 
 After installing the gem, `chronicle-etl` is available to run in your shell.
 
@@ -19,12 +21,43 @@ chronicle-etl --extractor csv --extractor-opts filename:test.csv --loader table
 cat test.csv | chronicle-etl --extractor csv --loader table
 ```
 
-## Full usage
+## Available importers
+
+### Extractors
+- `stdin` - (default) Load records from line-separated stdin
+- `csv`
+- `file` - load from a single file or directory (with a glob pattern)
+
+### Transformers
+- `null` - (default) Don't do anything
+
+### Loaders
+- `stdout` - (default) output transformed records to stdount
+- `csv` - Load records to a csv file
+- `table` - Output an ascii table of records. Useful for debugging.
+
+### Provider-specific importers
+
+In addition to the built-in importers, importers for third-party platforms are available. They are packaged as individual Ruby gems.
+
+- [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` files. Transformers for chronicle schema
+- [bash](https://github.com/chronicle-app/chronicle-bash). Extract bash history from `~/.bash_history`. Transform it for chronicle schema
+
+To install any of these, run `gem install chronicle-PROVIDER`. 
+
+If you don't want to use the available rubygem importers, `chronicle-etl` can use `stdin` as an Extractor source (newline separated records). You can also use `stdout` as a loader — transformed records will be outputted separated by newlines.
+
+I'll be open-sourcing more importers. Please [contact me](mailto:andrew@hyfen.net) to chat about what will be available!
+
+### Full commands
 
 ```
+$ chronicle-etl help 
+
 Commands:
   chronicle-etl help [COMMAND]  # Describe available commands or one specific command
   chronicle-etl job             # Runs an ETL job
+  chronicle-etl list            # List all ETL classes
 ```
 
 ### Job options
