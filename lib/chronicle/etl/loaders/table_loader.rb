@@ -9,11 +9,12 @@ module Chronicle
 
       def load(result)
         @table ||= TTY::Table.new(header: result.keys)
-        @table << result
+        values = result.values.map{|x| x.to_s[0..30]}
+        @table << values
       end
 
       def finish
-        puts @table.render(:ascii)
+        puts @table.render(:ascii, padding: [0, 1])
       end
     end
   end
