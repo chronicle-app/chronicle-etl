@@ -12,14 +12,14 @@ class Chronicle::Etl::Runner
   end
 
   def run!
-    progress_bar = Chronicle::Etl::Utils::ProgressBar.new(title: "Running job", total: @extractor.results_count)
+    total = @extractor.results_count
+    progress_bar = Chronicle::Etl::Utils::ProgressBar.new(title: 'Running job', total: total)
     count = 0
 
     @loader.start
 
     @extractor.extract do |data, metadata|
       transformed_data = @transformer.transform(data)
-
       @loader.load(transformed_data)
 
       progress_bar.increment
@@ -38,13 +38,13 @@ class Chronicle::Etl::Runner
     @loader = load_etl_class(:loader, @options[:loader][:name]).new(@options[:loader][:options])
   end
 
-  def load_etl_class(phase, name)
-    if BUILTIN[phase].include? name
-      klass_name = "Chronicle::Etl::#{name.capitalize}#{phase.to_s.capitalize}"
+  def load_etl_class(phase, x)
+    if BUILTIN[phase].include? x
+      klass_name = "Chronicle::Etl::#{x.capitalize}#{phase.to_s.capitalize}"
     else
       # TODO: come up with syntax for specifying a particular extractor in a provider library
-      # provider, extractor = name.split(":")
-      provider = name
+      provider, name = x.split(":")
+      provider = x unless provider
       begin
         require "chronicle/#{provider}"
       rescue LoadError => e
@@ -52,7 +52,7 @@ class Chronicle::Etl::Runner
         warn("  Perhaps you haven't installed it yet: `$ gem install chronicle-#{provider}`")
         exit(false)
       end
-      klass_name = "Chronicle::#{name.capitalize}::ChronicleTransformer"
+      klass_name = "Chronicle::#{provider.capitalize}::#{name&.capitalize}#{phase.capitalize}"
     end
     Object.const_get(klass_name)
   end
