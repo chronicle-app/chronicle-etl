@@ -47,7 +47,7 @@ module Chronicle
       def provider
         # TODO: needs better convention for a gem reporting its provider name
         provider = to_s.split('::')[1].downcase
-        return provider unless provider == 'etl'
+        provider == 'etl' ? 'chronicle' : provider
       end
 
       def built_in?
