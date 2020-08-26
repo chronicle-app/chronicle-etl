@@ -16,12 +16,24 @@ $ gem install chronicle-etl
 
 After installing the gem, `chronicle-etl` is available to run in your shell.
 
-```
-chronicle-etl --extractor csv --extractor-opts filename:test.csv --loader table
-cat test.csv | chronicle-etl --extractor csv --loader table
+```bash
+# read test.csv and display it as a table
+$ chronicle-etl jobs:run --extractor csv --extractor-opts filename:test.csv --loader table
+
+# Display help for the jobs:run command
+$ chronicle-etl jobs help run
 ```
 
-## Available importers
+## Connectors
+
+Connectors are available to read, process, and load data from different formats or external services.
+
+```bash
+# List all available connectors
+$ chronicle-etl connectors:list
+```
+
+Built in connectors:
 
 ### Extractors
 - `stdin` - (default) Load records from line-separated stdin
@@ -54,17 +66,23 @@ I'll be open-sourcing more importers. Please [contact me](mailto:andrew@hyfen.ne
 ```
 $ chronicle-etl help 
 
-Commands:
-  chronicle-etl help [COMMAND]  # Describe available commands or one specific command
-  chronicle-etl job             # Runs an ETL job
-  chronicle-etl list            # List all ETL classes
+ALL COMMANDS
+  help                       # This help menu
+  connectors help [COMMAND]  # Describe subcommands or one specific subcommand
+  connectors:install NAME    # Installs connector NAME
+  connectors:list            # Lists available connectors
+  jobs help [COMMAND]        # Describe subcommands or one specific subcommand
+  jobs:create                # Create a job
+  jobs:list                  # List all available jobs
+  jobs:run                   # Start a job
+  jobs:show                  # Show a job
 ```
 
 ### Job options
 
 ```
 Usage:
-  chronicle-etl job
+  chronicle-etl jobs:run
 
 Options:
   -e, [--extractor=extractor-name]      # Extractor class (available: stdin, csv, file)
