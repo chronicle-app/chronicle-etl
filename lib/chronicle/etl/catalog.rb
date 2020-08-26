@@ -1,30 +1,31 @@
 module Chronicle
   module Etl
     # Utility methods to catalogue which Extractor, Transformer, and
-    # Loader classes are available to chronicle-etl
+    # Loader connector classes are available to chronicle-etl
     module Catalog
-      def self.available_classes
-        parent_klasses = [
-          Chronicle::Etl::Extractor,
-          Chronicle::Etl::Transformer,
-          Chronicle::Etl::Loader
-        ]
+      PLUGINS = ['email', 'bash']
 
+      # Return which ETL connectors are available, both built in and externally-defined
+      def self.available_classes
         # TODO: have a registry of plugins
-        plugins = ['email', 'bash']
 
         # Attempt to load each chronicle plugin that we might know about so
         # that we can later search for subclasses to build our list of
         # available classes
-        plugins.each do |plugin|
+        PLUGINS.each do |plugin|
           require "chronicle/#{plugin}"
         rescue LoadError
           # this will happen if the gem isn't available globally 
         end
 
+        parent_klasses = [
+          ::Chronicle::Etl::Extractor,
+          ::Chronicle::Etl::Transformer,
+          ::Chronicle::Etl::Loader
+        ]
         klasses = []
-        parent_klasses.each do |parent|
-          klasses += ObjectSpace.each_object(Class).select { |klass| klass < parent }
+        parent_klasses.map do |parent|
+          klasses += ::ObjectSpace.each_object(::Class).select { |klass| klass < parent }
         end
 
         klasses.map do |klass|
@@ -37,6 +38,7 @@ module Chronicle
         end
       end
 
+      # Returns whether a class is an Extractor, Transformer, or Loader
       def phase
         ancestors = self.ancestors
         return :extractor if ancestors.include? Chronicle::Etl::Extractor
@@ -44,12 +46,14 @@ module Chronicle
         return :loader if ancestors.include? Chronicle::Etl::Loader
       end
 
+      # Returns which third-party provider this connector is associated wtih
       def provider
         # TODO: needs better convention for a gem reporting its provider name
         provider = to_s.split('::')[1].downcase
         provider == 'etl' ? 'chronicle' : provider
       end
 
+      # Returns whether this connector is a built-in one
       def built_in?
         to_s.include? 'Chronicle::Etl'
       end

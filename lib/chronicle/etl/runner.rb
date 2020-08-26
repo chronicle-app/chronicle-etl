@@ -48,7 +48,7 @@ class Chronicle::Etl::Runner
       begin
         require "chronicle/#{provider}"
       rescue LoadError => e
-        warn("Error loading #{phase} '#{provider}'")
+        warn("Error loading #{phase} '#{provider}'".red)
         warn("  Perhaps you haven't installed it yet: `$ gem install chronicle-#{provider}`")
         exit(false)
       end
