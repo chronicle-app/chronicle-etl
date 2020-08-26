@@ -1,0 +1,8 @@
+AllCops:
+  EnabledByDefault: true
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
