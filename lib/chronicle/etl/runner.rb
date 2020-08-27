@@ -2,7 +2,7 @@ class Chronicle::ETL::Runner
   BUILTIN = {
     extractor: ['stdin', 'json', 'csv', 'file'],
     transformer: ['null'],
-    loader: ['stdout', 'csv', 'table']
+    loader: ['stdout', 'csv', 'table', 'rest']
   }.freeze
 
   def initialize(options)
