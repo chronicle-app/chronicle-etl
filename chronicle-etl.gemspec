@@ -46,4 +46,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.9"
   spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency 'runcom', '~> 6.2'
+  spec.add_development_dependency 'redcarpet', '~> 3.5'
 end
