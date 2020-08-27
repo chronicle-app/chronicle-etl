@@ -27,5 +27,6 @@ module Chronicle
 end
 
 require_relative 'csv_loader'
+require_relative 'rest_loader'
 require_relative 'stdout_loader'
 require_relative 'table_loader'
