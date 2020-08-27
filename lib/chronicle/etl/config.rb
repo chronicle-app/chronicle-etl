@@ -1,7 +1,7 @@
 require 'runcom'
 
 module Chronicle
-  module Etl
+  module ETL
     # Utility methods to read, write, and access config files
     module Config
       # Loads a yml config file

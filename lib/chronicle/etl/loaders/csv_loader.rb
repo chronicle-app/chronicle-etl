@@ -1,8 +1,8 @@
 require 'csv'
 
 module Chronicle
-  module Etl
-    class CsvLoader < Chronicle::Etl::Loader
+  module ETL
+    class CsvLoader < Chronicle::ETL::Loader
       def initialize(options={})
         super(options)
         @rows = []

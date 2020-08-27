@@ -2,7 +2,7 @@ require 'tty/progressbar'
 require 'colorize'
 
 module Chronicle
-  module Etl
+  module ETL
     module Utils
 
       class ProgressBar

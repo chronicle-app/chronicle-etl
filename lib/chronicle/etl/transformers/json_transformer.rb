@@ -1,8 +1,8 @@
 require 'json'
 
 module Chronicle
-  module Etl
-    class JsonTransformer < Chronicle::Etl::Transformer
+  module ETL
+    class JsonTransformer < Chronicle::ETL::Transformer
       def transform data
         return JSON.parse(data)
       end

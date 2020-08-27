@@ -7,7 +7,7 @@ require 'chronicle/etl/cli/connectors'
 require 'chronicle/etl/cli/jobs'
 
 module Chronicle
-  module Etl
+  module ETL
     module CLI
       # Main entrypoint for CLI app
       class Main < Thor
@@ -59,7 +59,7 @@ module Chronicle
 
             list = []
 
-            Thor::Util.thor_classes_in(Chronicle::Etl::CLI).each do |thor_class|
+            Thor::Util.thor_classes_in(Chronicle::ETL::CLI).each do |thor_class|
               list += thor_class.printable_tasks(false)
             end
             list.sort! { |a, b| a[0] <=> b[0] }
@@ -70,7 +70,7 @@ module Chronicle
             shell.print_table(list, indent: 2, truncate: true)
             shell.say
             shell.say "VERSION".bold
-            shell.say "  #{Chronicle::Etl::VERSION}"
+            shell.say "  #{Chronicle::ETL::VERSION}"
             shell.say
             shell.say "FULL DOCUMENTATION".bold
             shell.say "  https://github.com/chronicle-app/chronicle-etl".blue

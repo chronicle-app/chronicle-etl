@@ -1,4 +1,4 @@
-class Chronicle::Etl::Runner
+class Chronicle::ETL::Runner
   BUILTIN = {
     extractor: ['stdin', 'json', 'csv', 'file'],
     transformer: ['null'],
@@ -13,7 +13,7 @@ class Chronicle::Etl::Runner
 
   def run!
     total = @extractor.results_count
-    progress_bar = Chronicle::Etl::Utils::ProgressBar.new(title: 'Running job', total: total)
+    progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
     count = 0
 
     @loader.start
@@ -40,7 +40,7 @@ class Chronicle::Etl::Runner
 
   def load_etl_class(phase, x)
     if BUILTIN[phase].include? x
-      klass_name = "Chronicle::Etl::#{x.capitalize}#{phase.to_s.capitalize}"
+      klass_name = "Chronicle::ETL::#{x.capitalize}#{phase.to_s.capitalize}"
     else
       # TODO: come up with syntax for specifying a particular extractor in a provider library
       provider, name = x.split(":")

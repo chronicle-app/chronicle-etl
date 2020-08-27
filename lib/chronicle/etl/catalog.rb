@@ -1,5 +1,5 @@
 module Chronicle
-  module Etl
+  module ETL
     # Utility methods to catalogue which Extractor, Transformer, and
     # Loader connector classes are available to chronicle-etl
     module Catalog
@@ -19,9 +19,9 @@ module Chronicle
         end
 
         parent_klasses = [
-          ::Chronicle::Etl::Extractor,
-          ::Chronicle::Etl::Transformer,
-          ::Chronicle::Etl::Loader
+          ::Chronicle::ETL::Extractor,
+          ::Chronicle::ETL::Transformer,
+          ::Chronicle::ETL::Loader
         ]
         klasses = []
         parent_klasses.map do |parent|
@@ -41,9 +41,9 @@ module Chronicle
       # Returns whether a class is an Extractor, Transformer, or Loader
       def phase
         ancestors = self.ancestors
-        return :extractor if ancestors.include? Chronicle::Etl::Extractor
-        return :transformer if ancestors.include? Chronicle::Etl::Transformer
-        return :loader if ancestors.include? Chronicle::Etl::Loader
+        return :extractor if ancestors.include? Chronicle::ETL::Extractor
+        return :transformer if ancestors.include? Chronicle::ETL::Transformer
+        return :loader if ancestors.include? Chronicle::ETL::Loader
       end
 
       # Returns which third-party provider this connector is associated wtih
@@ -55,7 +55,7 @@ module Chronicle
 
       # Returns whether this connector is a built-in one
       def built_in?
-        to_s.include? 'Chronicle::Etl'
+        to_s.include? 'Chronicle::ETL'
       end
     end
   end

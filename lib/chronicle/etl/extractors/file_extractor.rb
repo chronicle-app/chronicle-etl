@@ -1,8 +1,8 @@
 require 'pathname'
 
 module Chronicle
-  module Etl
-    class FileExtractor < Chronicle::Etl::Extractor
+  module ETL
+    class FileExtractor < Chronicle::ETL::Extractor
       def extract
         if file?
           extract_file do |data, metadata|

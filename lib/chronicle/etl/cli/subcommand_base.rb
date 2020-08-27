@@ -1,5 +1,5 @@
 module Chronicle
-  module Etl
+  module ETL
     module CLI
       # Base class for CLI subcommands. Overrides Thor methods so we can use command:subcommand syntax
       class SubcommandBase < Thor

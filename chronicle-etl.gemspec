@@ -5,7 +5,7 @@ require "chronicle/etl/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "chronicle-etl"
-  spec.version       = Chronicle::Etl::VERSION
+  spec.version       = Chronicle::ETL::VERSION
   spec.authors       = ["Andrew Louis"]
   spec.email         = ["andrew@hyfen.net"]
 

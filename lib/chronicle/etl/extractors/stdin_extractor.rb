@@ -1,6 +1,6 @@
 module Chronicle
-  module Etl
-    class StdinExtractor < Chronicle::Etl::Extractor
+  module ETL
+    class StdinExtractor < Chronicle::ETL::Extractor
       def extract
         $stdin.read.each_line do |line|
           yield line

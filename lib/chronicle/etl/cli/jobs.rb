@@ -2,7 +2,7 @@ require 'pp'
 require 'pry'
 
 module Chronicle
-  module Etl
+  module ETL
     module CLI
       # CLI commands for working with ETL jobs
       class Jobs < SubcommandBase
@@ -33,7 +33,7 @@ LONG_DESC
         # Run an ETL job
         def start
           runner_options = build_runner_options(options)
-          runner = Chronicle::Etl::Runner.new(runner_options)
+          runner = Chronicle::ETL::Runner.new(runner_options)
           runner.run!
         end
 
@@ -42,7 +42,7 @@ LONG_DESC
         def create
           runner_options = build_runner_options(options)
           path = File.join('chronicle', 'etl', 'jobs', options[:job])
-          Chronicle::Etl::Config.write(path, runner_options)
+          Chronicle::ETL::Config.write(path, runner_options)
         end
 
         desc "show", "Show details about a job"
@@ -55,10 +55,10 @@ LONG_DESC
         desc "list", "List all available jobs"
         # List available ETL jobs
         def list
-          jobs = Chronicle::Etl::Config.jobs
+          jobs = Chronicle::ETL::Config.jobs
 
           job_details = jobs.map do |job|
-            r = Chronicle::Etl::Config.load("chronicle/etl/jobs/#{job}.yml")
+            r = Chronicle::ETL::Config.load("chronicle/etl/jobs/#{job}.yml")
 
             extractor = r[:extractor][:name] if r[:extractor]
             transformer = r[:transformer][:name] if r[:transformer]
@@ -83,7 +83,7 @@ LONG_DESC
         end
 
         def load_job job
-          yml_config = Chronicle::Etl::Config.load("chronicle/etl/jobs/#{job}.yml")
+          yml_config = Chronicle::ETL::Config.load("chronicle/etl/jobs/#{job}.yml")
           # FIXME: use better trick to depely symbolize keys
           JSON.parse(yml_config.to_json, symbolize_names: true)
         end

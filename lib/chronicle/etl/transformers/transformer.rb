@@ -1,8 +1,8 @@
 module Chronicle
-  module Etl
+  module ETL
     # Abstract class representing an Transformer for an ETL job
     class Transformer
-      extend Chronicle::Etl::Catalog
+      extend Chronicle::ETL::Catalog
 
       # Construct a new instance of this transformer. Options are passed in from a Runner
       # == Paramters:

@@ -1,5 +1,5 @@
 module Chronicle
-  module Etl
+  module ETL
     module CLI
       # CLI commands for working with ETL connectors
       class Connectors < SubcommandBase
@@ -14,7 +14,7 @@ module Chronicle
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
-          klasses = Chronicle::Etl::Catalog.available_classes
+          klasses = Chronicle::ETL::Catalog.available_classes
           klasses = klasses.sort_by do |a|
             [a[:built_in].to_s, a[:provider], a[:phase]]
           end

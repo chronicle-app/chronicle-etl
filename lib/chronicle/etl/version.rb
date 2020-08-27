@@ -1,5 +1,5 @@
 module Chronicle
-  module Etl
+  module ETL
     VERSION = "0.1.4"
   end
 end

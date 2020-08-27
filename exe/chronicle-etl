@@ -2,4 +2,4 @@
 
 require "chronicle/etl/cli/main"
 
-Chronicle::Etl::CLI::Main.start(ARGV)
+Chronicle::ETL::CLI::Main.start(ARGV)
