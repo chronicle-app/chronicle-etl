@@ -8,12 +8,13 @@ module Chronicle
       # == Paramters:
       # options::
       #   Options for configuring this Transformer
-      def initialize(options = {})
+      def initialize(options = {}, data)
         @options = options
+        @data = data
       end
 
       # The main entrypoint for transforming a record. Called by a Runner on each extracted record
-      def transform data
+      def transform
         raise NotImplementedError
       end
 

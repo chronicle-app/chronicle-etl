@@ -1,5 +1,4 @@
 require 'pp'
-require 'pry'
 
 module Chronicle
   module ETL
