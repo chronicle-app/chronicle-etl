@@ -23,8 +23,16 @@ module Chronicle
       end
 
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
-      def jobs
+      def available_jobs
         job_directory = Runcom::Config.new('chronicle/etl/jobs').current
+        Dir.glob(File.join(job_directory, "*.yml")).map do |filename|
+          File.basename(filename, ".*")
+        end
+      end
+
+      # Returns all available credentials available in ~/.config/chronilce/etl/credenetials/*.yml
+      def available_credentials
+        job_directory = Runcom::Config.new('chronicle/etl/credentials').current
         Dir.glob(File.join(job_directory, "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
@@ -33,10 +41,12 @@ module Chronicle
       # Load a job definition from job config directory
       def load_job_from_config(job_name)
         definition = self.load("chronicle/etl/jobs/#{job_name}.yml")
-        # FIXME: use better trick to depely symbolize keys
-        JSON.parse(definition.to_json, symbolize_names: true)
         definition[:name] = job_name
         definition
+      end
+
+      def load_credentials(name)
+        config = self.load("chronicle/etl/credentials/#{name}.yml")
       end
     end
   end

@@ -1,5 +1,4 @@
 require 'pp'
-require 'deep_merge'
 module Chronicle
   module ETL
     module CLI
@@ -62,7 +61,7 @@ LONG_DESC
         desc "list", "List all available jobs"
         # List available ETL jobs
         def list
-          jobs = Chronicle::ETL::Config.jobs
+          jobs = Chronicle::ETL::Config.available_jobs
 
           job_details = jobs.map do |job|
             r = Chronicle::ETL::Config.load("chronicle/etl/jobs/#{job}.yml")
@@ -83,10 +82,11 @@ LONG_DESC
         private
 
         # Create job definition by reading config file and then overwriting with flag options
-        def build_job_definition options
-          definition_from_flags = process_flag_options(options)
-          definition_from_config = load_job_config(options[:name])
-          definition_from_config.deep_merge(definition_from_flags)
+        def build_job_definition(options)
+          definition = Chronicle::ETL::JobDefinition.new
+          definition.add_config(process_flag_options(options))
+          definition.add_config(load_job_config(options[:name]))
+          definition
         end
 
         def load_job_config name

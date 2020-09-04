@@ -3,6 +3,7 @@ module Chronicle
     # Utility methods to catalogue which Extractor, Transformer, and
     # Loader connector classes are available to chronicle-etl
     module Catalog
+      PHASES = [:extractor, :transformer, :loader]
       PLUGINS = ['email', 'bash']
       BUILTIN = {
         extractor: ['stdin', 'json', 'csv', 'file'],

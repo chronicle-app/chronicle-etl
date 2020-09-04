@@ -1,5 +1,3 @@
-require 'pry'
-
 module Chronicle
   module ETL
     class Job
@@ -12,10 +10,10 @@ module Chronicle
                     :loader_options
 
       # TODO: build a proper id system
-      alias :id :name
+      alias id name
 
       def initialize(definition)
-        validate_definition(definition)
+        definition = definition.definition # FIXME
         @name = definition[:name]
         @extractor_klass = load_klass(:extractor, definition[:extractor][:name])
         @extractor_options = definition[:extractor][:options] || {}
@@ -28,9 +26,6 @@ module Chronicle
 
         set_continuation
         yield self if block_given?
-      end
-
-      def validate_definition definition
       end
 
       def instantiate_extractor
