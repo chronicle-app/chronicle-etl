@@ -1,46 +1,32 @@
 require 'colorize'
 
 class Chronicle::ETL::Runner
-  def initialize(options = {})
-    @options = options
+  def initialize(job)
+    @job = job
+    @job_logger = Chronicle::ETL::JobLogger.new(@job)
   end
 
   def run!
-    extractor = instantiate_klass(:extractor)
-    loader = instantiate_klass(:loader)
+    extractor = @job.instantiate_extractor
+    loader = @job.instantiate_loader
+
+    @job_logger.start
+    loader.start
 
     total = extractor.results_count
     progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
 
-    loader.start
-
     extractor.extract do |data, metadata|
-      transformer = instantiate_klass(:transformer, data)
+      transformer = @job.instantiate_transformer(data)
       transformed_data = transformer.transform
-
+      @job_logger.log_transformation(transformer)
       loader.load(transformed_data)
       progress_bar.increment
     end
 
     progress_bar.finish
     loader.finish
-  end
-
-  private
-
-  def instantiate_klass(phase, *args)
-    klass = load_etl_class(phase, @options[phase][:name])
-    klass.new(@options[phase][:options], *args)
-  end
-
-  def load_etl_class(phase, identifier)
-    Chronicle::ETL::Catalog.identifier_to_klass(phase: phase, identifier: identifier)
-  rescue Chronicle::ETL::ProviderNotAvailableError => e
-    warn(e.message.red)
-    warn("  Perhaps you haven't installed it yet: `$ gem install chronicle-#{e.provider}`")
-    exit(false)
-  rescue Chronicle::ETL::ConnectorNotAvailableError => e
-    warn(e.message.red)
-    exit(false)
+    @job_logger.finish
+    @job_logger.save
   end
 end

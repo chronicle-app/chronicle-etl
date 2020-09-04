@@ -3,6 +3,8 @@ PATH
   specs:
     chronicle-etl (0.2.2)
       colorize (~> 0.8.1)
+      deep_merge (~> 1.2)
+      sequel (~> 5.35)
       thor (~> 0.20)
       tty-progressbar (~> 0.17)
       tty-table (~> 0.11)
@@ -13,6 +15,7 @@ GEM
     byebug (11.1.3)
     coderay (1.1.3)
     colorize (0.8.1)
+    deep_merge (1.2.1)
     diff-lcs (1.4.4)
     equatable (0.6.1)
     method_source (1.0.0)
@@ -45,6 +48,8 @@ GEM
     runcom (6.2.0)
       refinements (~> 7.4)
       xdg (~> 4.0)
+    sequel (5.36.0)
+    sqlite3 (1.4.2)
     strings (0.1.8)
       strings-ansi (~> 0.1)
       unicode-display_width (~> 1.5)
@@ -80,6 +85,7 @@ DEPENDENCIES
   redcarpet (~> 3.5)
   rspec (~> 3.9)
   runcom (~> 6.2)
+  sqlite3 (~> 1.4)
 
 BUNDLED WITH
    2.1.4

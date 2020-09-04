@@ -43,6 +43,11 @@ module Chronicle
         end
       end
 
+      # Take a phase (e, t, or l) and an identifier and return the right class
+      def self.phase_and_identifier_to_klass(phase, identifier)
+        Chronicle::ETL::Catalog.identifier_to_klass(phase: phase, identifier: identifier)
+      end
+
       # For a given connector identifier, return the class (either builtin, or from a 
       # external chronicle gem)
       def self.identifier_to_klass(identifier:, phase:)

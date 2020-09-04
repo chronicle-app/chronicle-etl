@@ -12,6 +12,7 @@ module Chronicle
       #   Options for configuring this Extractor
       def initialize(options = {})
         @options = options.transform_keys!(&:to_sym)
+        handle_continuation
       end
 
       # Entrypoint for this Extractor. Called by a Runner. Expects a series of records to be yielded
@@ -22,6 +23,12 @@ module Chronicle
       # An optional method to calculate how many records there are to extract. Used primarily for
       # building the progress bar
       def results_count; end
+
+      private
+
+      def handle_continuation
+        @options[:load_since] = @options[:continuation].highest_timestamp if @options[:continuation] && @options[:continuation].highest_timestamp
+      end
     end
   end
 end
