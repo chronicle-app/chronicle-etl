@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chronicle-etl (0.2.2)
+    chronicle-etl (0.2.3)
       colorize (~> 0.8.1)
       deep_merge (~> 1.2)
       sequel (~> 5.35)
