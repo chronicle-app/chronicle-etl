@@ -1,4 +1,4 @@
-require 'pry'
+require 'forwardable'
 
 module Chronicle
   module ETL
@@ -6,6 +6,8 @@ module Chronicle
     # tracking when it ran, if it was successful, and what the latest record
     # we found is (to use as a cursor for the next time)
     class JobLog
+      extend Forwardable
+
       attr_accessor :job,
                     :job_id,
                     :last_id,
@@ -14,6 +16,8 @@ module Chronicle
                     :started_at,
                     :finished_at,
                     :success
+
+      def_delegators :@job, :save_log?
 
       # Create a new JobLog for a given Job
       def initialize
@@ -63,6 +67,8 @@ module Chronicle
           success: @success
         }
       end
+
+      private
 
       # Create a new JobLog and set its instance variables from a serialized hash
       def self.build_from_serialized attrs

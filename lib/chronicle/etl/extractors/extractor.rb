@@ -27,7 +27,10 @@ module Chronicle
       private
 
       def handle_continuation
-        @options[:load_since] = @options[:continuation].highest_timestamp if @options[:continuation] && @options[:continuation].highest_timestamp
+        return unless @options[:continuation]
+
+        @options[:load_since] = @options[:continuation].highest_timestamp if @options[:continuation].highest_timestamp
+        @options[:load_after_id] = @options[:continuation].last_id if @options[:continuation].last_id
       end
     end
   end

@@ -20,6 +20,8 @@ module Chronicle
 
       # Save this JobLogger's JobLog to db
       def save
+        return unless @job_log.save_log?
+
         JobLogger.with_db_connection do |db|
           dataset = db[:job_logs]
           dataset.insert(@job_log.serialize)

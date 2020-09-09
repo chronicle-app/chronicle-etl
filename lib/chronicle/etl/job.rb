@@ -24,7 +24,7 @@ module Chronicle
         @loader_klass = load_klass(:loader, definition[:loader][:name])
         @loader_options = definition[:loader][:options] || {}
 
-        set_continuation
+        set_continuation if load_continuation?
         yield self if block_given?
       end
 
@@ -38,6 +38,11 @@ module Chronicle
 
       def instantiate_loader
         instantiate_klass(:loader)
+      end
+
+      def save_log?
+        # TODO: this needs more nuance
+        return !id.nil?
       end
 
       private
@@ -56,6 +61,10 @@ module Chronicle
       def set_continuation
         continuation = Chronicle::ETL::JobLogger.load_latest(@job_id)
         @extractor_options[:continuation] = continuation
+      end
+
+      def load_continuation?
+        save_log?
       end
     end
   end
