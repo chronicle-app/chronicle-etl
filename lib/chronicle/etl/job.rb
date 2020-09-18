@@ -32,7 +32,7 @@ module Chronicle
         instantiate_klass(:extractor)
       end
 
-      def instantiate_transformer data
+      def instantiate_transformer(data)
         instantiate_klass(:transformer, data)
       end
 

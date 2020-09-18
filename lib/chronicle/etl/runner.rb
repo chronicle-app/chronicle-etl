@@ -18,9 +18,14 @@ class Chronicle::ETL::Runner
 
     extractor.extract do |data, metadata|
       transformer = @job.instantiate_transformer(data)
-      transformed_data = transformer.transform
+      record = transformer.transform
+
+      unless record.is_a?(Chronicle::ETL::Models::Base)
+        raise Chronicle::ETL::InvalidTransformedRecordError, "Transformed data is not a type of Chronicle::ETL::Models"
+      end
+
       @job_logger.log_transformation(transformer)
-      loader.load(transformed_data)
+      loader.load(record)
       progress_bar.increment
     end
 

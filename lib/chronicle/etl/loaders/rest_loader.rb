@@ -9,7 +9,11 @@ module Chronicle
         super(options)
       end
 
-      def load(result)
+      def load(record)
+        payload = Chronicle::ETL::Utils::JSONAPI.serialize(record)
+        # have the outer data key that json-api expects
+        payload = { data: payload } unless payload[:data]
+
         uri = URI.parse("#{@options[:hostname]}#{@options[:endpoint]}")
 
         header = {
@@ -20,11 +24,7 @@ module Chronicle
 
         Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
           request = Net::HTTP::Post.new(uri.request_uri, header)
-
-          # have the outer data key that json-api expects
-          obj = { data: result } unless result[:data]
-          request.body = obj.to_json
-
+          request.body = payload.to_json
           http.request(request)
         end
       end

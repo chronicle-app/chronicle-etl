@@ -11,12 +11,12 @@ module Chronicle
       def initialize(options = {}, data)
         @options = options
         @data = data
+        @record = Chronicle::ETL::Models::Activity.new
       end
 
-      # The main entrypoint for transforming a record. Called by a Runner on each extracted record
-      def transform
-        raise NotImplementedError
-      end
+      # @abstract Subclass is expected to implement #transform
+      # @!method transform
+      #   The main entrypoint for transforming a record. Called by a Runner on each extracted record
 
       # The domain or provider-specific id of the record this transformer is working on.
       # Used for building a cursor so an extractor doesn't have to start from the beginning of a
@@ -31,5 +31,4 @@ module Chronicle
   end
 end
 
-require_relative 'json_transformer'
 require_relative 'null_transformer'
