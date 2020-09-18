@@ -2,9 +2,9 @@
 
 [![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl)
 
-Chronicle ETL is a utility tool for archiving and processing personal data. You can extract it from a variety of source, transform it, and load it to different APIs or file formats.
+Chronicle ETL is a utility that helps you archive and processes personal data. You can *extract* it from a variety of sources, *transform* it, and *load* it to an external API, file, or stdout.
 
-This project is an adaptation of Andrew Louis's experimental [Memex project](https://hyfen.net/memex).
+This tool is an adaptation of Andrew Louis's experimental [Memex project](https://hyfen.net/memex) and the dozens of existing importers are being migrated to Chronicle.
 
 ## Installation
 
@@ -52,7 +52,7 @@ Built in connectors:
 
 In addition to the built-in importers, importers for third-party platforms are available. They are packaged as individual Ruby gems.
 
-- [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` files. Transformers for chronicle schema
+- [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` and other email files. Transformers for chronicle schema
 - [bash](https://github.com/chronicle-app/chronicle-bash). Extract bash history from `~/.bash_history`. Transform it for chronicle schema
 
 To install any of these, run `gem install chronicle-PROVIDER`. 
