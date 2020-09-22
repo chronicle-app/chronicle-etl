@@ -5,7 +5,7 @@ module Chronicle
       extend Chronicle::ETL::Catalog
 
       # Construct a new instance of this loader. Options are passed in from a Runner
-      # == Paramters:
+      # == Parameters:
       # options::
       #   Options for configuring this Loader
       def initialize(options = {})

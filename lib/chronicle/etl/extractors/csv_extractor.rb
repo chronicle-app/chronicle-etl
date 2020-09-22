@@ -28,8 +28,7 @@ class Chronicle::ETL::CsvExtractor < Chronicle::ETL::Extractor
 
     csv_options = {
       headers: headers,
-      header_converters: :symbol,
-      converters: [:all]
+      converters: :all
     }
 
     stream = read_from_file? ? File.open(@options[:filename]) : @options[:filename]

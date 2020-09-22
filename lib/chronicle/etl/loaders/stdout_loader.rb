@@ -1,8 +1,8 @@
 module Chronicle
   module ETL
     class StdoutLoader < Chronicle::ETL::Loader
-      def load(result)
-        puts result.inspect
+      def load(record)
+        puts record.to_h
       end
     end
   end

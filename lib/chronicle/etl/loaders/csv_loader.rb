@@ -8,12 +8,8 @@ module Chronicle
         @rows = []
       end
 
-      def load(result)
-        if (result.is_a? Hash)
-          @rows << result.values
-        else
-          @rows << result
-        end
+      def load(record)
+        @rows << record.to_h_flattened.values
       end
 
       def finish

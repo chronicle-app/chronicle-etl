@@ -64,7 +64,7 @@ module Chronicle
         end
 
         def log(message)
-          @pbar.log message.inspect
+          @pbar.log message
         end
 
         def finish
