@@ -36,6 +36,8 @@ module Chronicle
   end
 end
 
+require_relative 'helpers/filesystem_reader'
 require_relative 'csv_extractor'
 require_relative 'file_extractor'
+require_relative 'json_extractor'
 require_relative 'stdin_extractor'

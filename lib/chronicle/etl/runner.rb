@@ -16,12 +16,16 @@ class Chronicle::ETL::Runner
     total = extractor.results_count
     progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
 
-    extractor.extract do |data, metadata|
-      transformer = @job.instantiate_transformer(data)
+    extractor.extract do | extraction |
+      unless extraction.is_a?(Chronicle::ETL::Extraction)
+        raise Chronicle::ETL::RunnerTypeError, "Extracted should be a Chronicle::ETL::Extraction"
+      end
+
+      transformer = @job.instantiate_transformer(extraction)
       record = transformer.transform
 
       unless record.is_a?(Chronicle::ETL::Models::Base)
-        raise Chronicle::ETL::InvalidTransformedRecordError, "Transformed data is not a type of Chronicle::ETL::Models"
+        raise Chronicle::ETL::RunnerTypeError, "Transformed data should be a type of Chronicle::ETL::Models"
       end
 
       @job_logger.log_transformation(transformer)

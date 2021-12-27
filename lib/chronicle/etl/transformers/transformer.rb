@@ -8,10 +8,9 @@ module Chronicle
       # == Paramters:
       # options::
       #   Options for configuring this Transformer
-      def initialize(options = {}, data)
+      def initialize(options = {}, extraction)
         @options = options
-        @data = data
-        @record = Chronicle::ETL::Models::Activity.new
+        @extraction = extraction
       end
 
       # @abstract Subclass is expected to implement #transform

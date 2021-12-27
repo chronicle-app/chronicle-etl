@@ -1,6 +1,7 @@
 require_relative 'etl/catalog'
 require_relative 'etl/config'
 require_relative 'etl/exceptions'
+require_relative 'etl/extraction'
 require_relative 'etl/extractors/extractor'
 require_relative 'etl/job_definition'
 require_relative 'etl/job_log'
