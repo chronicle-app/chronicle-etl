@@ -48,7 +48,7 @@ LONG_DESC
         def create
           job_definition = build_job_definition(options)
           path = File.join('chronicle', 'etl', 'jobs', options[:name])
-          Chronicle::ETL::Config.write(path, job_definition)
+          Chronicle::ETL::Config.write(path, job_definition.definition)
         end
 
         desc "show", "Show details about a job"
