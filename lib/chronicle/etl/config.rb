@@ -30,7 +30,7 @@ module Chronicle
         end
       end
 
-      # Returns all available credentials available in ~/.config/chronilce/etl/credenetials/*.yml
+      # Returns all available credentials available in ~/.config/chronicle/etl/credentials/*.yml
       def available_credentials
         job_directory = Runcom::Config.new('chronicle/etl/credentials').current
         Dir.glob(File.join(job_directory, "*.yml")).map do |filename|
