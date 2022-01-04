@@ -10,7 +10,7 @@ module Chronicle
       end
 
       def load(record)
-        payload = Chronicle::ETL::Utils::JSONAPI.serialize(record)
+        payload = Chronicle::ETL::JSONAPISerializer.serialize(record)
         # have the outer data key that json-api expects
         payload = { data: payload } unless payload[:data]
 
