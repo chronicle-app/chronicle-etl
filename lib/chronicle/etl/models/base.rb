@@ -6,7 +6,7 @@ module Chronicle
       # Represents a record that's been transformed by a Transformer and
       # ready to be loaded. Loosely based on ActiveModel.
       class Base
-        ATTRIBUTES = [:provider, :provider_id, :lat, :lng].freeze
+        ATTRIBUTES = [:provider, :provider_id, :lat, :lng, :metadata].freeze
         ASSOCIATIONS = [].freeze
 
         attr_accessor(:id, :dedupe_on, *ATTRIBUTES)
@@ -14,6 +14,7 @@ module Chronicle
         def initialize(attributes = {})
           assign_attributes(attributes) if attributes
           @dedupe_on = []
+          @metadata = {}
         end
 
         # A unique identifier for this model is formed from a type
@@ -36,6 +37,8 @@ module Chronicle
         # For a given set of fields of this model, generate a
         # unique local id by hashing the field values
         def generate_lid fields
+          raise ArgumentError.new("Must provide an array of symbolized fields") unless fields.is_a?(Array)
+
           values = fields.sort.map do |field|
             instance_variable = "@#{field.to_s}"
             self.instance_variable_get(instance_variable)
@@ -80,13 +83,21 @@ module Chronicle
           end]
         end
 
+        def meta_hash
+          {
+            meta: {
+              dedupe_on: @dedupe_on.map{|d| d.map(&:to_s).join(",")}
+            }
+          }
+        end
+
         # FIXME: move this to a Utils module
         def to_h_flattened
           Chronicle::ETL::Utils::HashUtilities.flatten_hash(to_h)
         end
 
         def to_h
-          identifier_hash.merge(attributes).merge(associations_hash)
+          identifier_hash.merge(attributes).merge(associations_hash).merge(meta_hash)
         end
 
         private
