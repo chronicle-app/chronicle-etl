@@ -7,7 +7,7 @@ module Chronicle
       PLUGINS = ['email', 'bash']
       BUILTIN = {
         extractor: ['stdin', 'json', 'csv', 'file'],
-        transformer: ['null'],
+        transformer: ['null', 'image'],
         loader: ['stdout', 'csv', 'table', 'rest']
       }.freeze
 

@@ -5,7 +5,7 @@ module Chronicle
       extend Chronicle::ETL::Catalog
 
       # Construct a new instance of this transformer. Options are passed in from a Runner
-      # == Paramters:
+      # == Parameters:
       # options::
       #   Options for configuring this Transformer
       def initialize(options = {}, extraction)
@@ -26,8 +26,13 @@ module Chronicle
       # Used for building a cursor so an extractor doesn't have to start from the beginning of a
       # data source from the beginning.
       def timestamp; end
+
+      def to_s
+        "#{timestamp}.#{id}"
+      end
     end
   end
 end
 
 require_relative 'null_transformer'
+require_relative 'image_transformer'

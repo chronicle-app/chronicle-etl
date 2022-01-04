@@ -6,9 +6,17 @@ module Chronicle
       include Extractors::Helpers::FilesystemReader
 
       def extract
-        read_from_filesystem(filename: @options[:filename]) do |data|
-          yield Chronicle::ETL::Extraction.new(data: data)
+        open_files_in_directory(
+          path: @options[:filename],
+          dir_glob_pattern: @options[:dir_glob_pattern],
+          load_since: @options[:load_since],
+          load_until: @options[:load_until]
+        ) do |file|
+          yield Chronicle::ETL::Extraction.new(data: file)
         end
+      end
+
+      def results_count
       end
     end
   end

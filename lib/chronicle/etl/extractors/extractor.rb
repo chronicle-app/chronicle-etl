@@ -12,6 +12,7 @@ module Chronicle
       #   Options for configuring this Extractor
       def initialize(options = {})
         @options = options.transform_keys!(&:to_sym)
+        sanitize_options
         handle_continuation
       end
 
@@ -25,6 +26,11 @@ module Chronicle
       def results_count; end
 
       private
+
+      def sanitize_options
+        @options[:load_since] = Time.parse(@options[:load_since]) if @options[:load_since] && @options[:load_since].is_a?(String)
+        @options[:load_until] = Time.parse(@options[:load_until]) if @options[:load_until] && @options[:load_until].is_a?(String)
+      end
 
       def handle_continuation
         return unless @options[:continuation]
