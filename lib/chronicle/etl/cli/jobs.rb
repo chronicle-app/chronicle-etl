@@ -54,8 +54,7 @@ LONG_DESC
         desc "show", "Show details about a job"
         # Show an ETL job
         def show
-          job_config = build_job_definition(options)
-          pp job_config
+          puts Chronicle::ETL::Job.new(build_job_definition(options))
         end
 
         desc "list", "List all available jobs"

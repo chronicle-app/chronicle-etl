@@ -1,6 +1,11 @@
+require 'forwardable'
 module Chronicle
   module ETL
     class Job
+      extend Forwardable
+
+      def_delegators :@job_definition, :log_each_transformation?
+
       attr_accessor :name,
                     :extractor_klass,
                     :extractor_options,
