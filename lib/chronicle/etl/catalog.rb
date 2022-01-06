@@ -3,6 +3,8 @@ module Chronicle
     # Utility methods to catalogue which Extractor, Transformer, and
     # Loader connector classes are available to chronicle-etl
     module Catalog
+      # FIXME: rename this to `Registry`
+
       PHASES = [:extractor, :transformer, :loader]
       PLUGINS = ['email', 'bash']
       BUILTIN = {
@@ -34,14 +36,7 @@ module Chronicle
           klasses += ::ObjectSpace.each_object(::Class).select { |klass| klass < parent }
         end
 
-        klasses.map do |klass|
-          {
-            name: klass.name,
-            built_in: klass.built_in?,
-            provider: klass.provider,
-            phase: klass.phase
-          }
-        end
+        klasses
       end
 
       # Take a phase (e, t, or l) and an identifier and return the right class
