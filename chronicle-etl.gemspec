@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tty-progressbar", "~> 0.17"
   spec.add_dependency 'sequel', '~> 5.35'
   spec.add_dependency 'marcel', '~> 1.0.2'
+  spec.add_dependency 'chronic_duration', '~> 0.10.6'
 
   spec.add_development_dependency "bundler", "~> 2.1"
   spec.add_development_dependency "rake", "~> 13.0"

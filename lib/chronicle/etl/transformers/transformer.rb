@@ -18,8 +18,10 @@ module Chronicle
       #   The main entrypoint for transforming a record. Called by a Runner on each extracted record
 
       # The domain or provider-specific id of the record this transformer is working on.
-      # Used for building a cursor so an extractor doesn't have to start from the beginning of a
-      # data source from the beginning.
+      # It is useful for: 
+      # - de-duping records that might exist in the loader's destination
+      # - building a cursor so an extractor doesn't have to start from the beginning of a 
+      #   a source 
       def id; end
 
       # The domain or provider-specific timestamp of the record this transformer is working on.
@@ -27,8 +29,15 @@ module Chronicle
       # data source from the beginning.
       def timestamp; end
 
+      # An optional, human-readable identifier for a transformation, intended for debugging or logging.
+      # By default, it is just the id.
+      def friendly_identifier
+        id
+      end
+
       def to_s
-        "#{timestamp}.#{id}"
+        prefix = "[#{timestamp.iso8601}] " if timestamp
+        "#{prefix}#{friendly_identifier}"
       end
     end
   end
