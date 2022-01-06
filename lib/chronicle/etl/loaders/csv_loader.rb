@@ -3,6 +3,8 @@ require 'csv'
 module Chronicle
   module ETL
     class CsvLoader < Chronicle::ETL::Loader
+      DESCRIPTION = 'CSV'
+
       def initialize(options={})
         super(options)
         @rows = []

@@ -5,6 +5,8 @@ module Chronicle
     class CsvExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
+      DESCRIPTION = 'input as CSV'
+
       DEFAULT_OPTIONS = {
         headers: true,
         filename: $stdin

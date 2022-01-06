@@ -43,6 +43,15 @@ module Chronicle
         return !id.nil?
       end
 
+      def to_s
+        output = "Job"
+        output += " '#{name}'".bold if name
+        output += "\n"
+        output += "  → Extracting from #{@job_definition.extractor_klass.description}\n"
+        output += "  → Transforming #{@job_definition.transformer_klass.description}\n"
+        output += "  → Loading to #{@job_definition.loader_klass.description}\n"
+      end
+
       private
 
       def set_continuation

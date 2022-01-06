@@ -3,6 +3,7 @@ module Chronicle
     class JsonExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
+      DESCRIPTION = 'input as JSON'
       DEFAULT_OPTIONS = {
         filename: $stdin,
 
@@ -19,6 +20,9 @@ module Chronicle
           parsed_data = parse_data(input)
           yield Chronicle::ETL::Extraction.new(data: parsed_data) if parsed_data
         end
+      end
+
+      def results_count
       end
 
       private

@@ -81,6 +81,28 @@ module Chronicle
         to_s.include? 'Chronicle::ETL'
       end
 
+      def identifier
+        # FIXME: this scheme needs re-thinking to be able to name classes better. e.g. JSONLoader instead of JsonLoader
+        name = to_s.split('::').last.gsub!(/(Extractor$|Loader$|Transformer$)/, '').downcase
+      end
+
+      def description
+        defined?(self::DESCRIPTION) ? self::DESCRIPTION : to_s.split('::').last
+      end
+
+      def descriptive_phrase
+        prefix = case phase
+        when :extractor
+          "Extracts from"
+        when :transformer
+          "Transforms into"
+        when :loader
+          "Loads to"
+        end
+
+        "#{prefix} #{description}"
+      end
+
       private
 
       def self.load_builtin_klass(name:, phase:)

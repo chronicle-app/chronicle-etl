@@ -4,6 +4,7 @@ require 'base64'
 module Chronicle
   module ETL
     class ImageTransformer < Chronicle::ETL::Transformer
+      DESCRIPTION = 'image file into an image'
       DEFAULT_OPTIONS = {
         timestamp_strategy: 'file_mtime',
         id_strategy: 'file_hash',
@@ -18,6 +19,10 @@ module Chronicle
 
       def transform
         record = build_created(@extraction.data)
+      end
+
+      def friendly_identifier
+        File.basename(@extraction.data)
       end
 
       def id

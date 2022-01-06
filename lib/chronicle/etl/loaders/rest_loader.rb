@@ -5,6 +5,8 @@ require 'json'
 module Chronicle
   module ETL
     class RestLoader < Chronicle::ETL::Loader
+      DESCRIPTION = 'a REST endpoint'
+
       def initialize( options={} )
         super(options)
       end
