@@ -55,6 +55,12 @@ module Chronicle
         @job_id = job.id
       end
 
+      def duration
+        return unless @finished_at
+
+        @finished_at - @started_at
+      end
+
       # Take a JobLog's instance variables and turn them into a hash representation
       def serialize
         {

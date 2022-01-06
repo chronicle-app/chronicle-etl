@@ -9,24 +9,8 @@ module Chronicle
     class JobLogger
       extend Forwardable
 
-      def_delegators :@job_log, :start, :finish, :log_transformation
-
-      # Create a new JobLogger
-      def initialize(job)
-        @job_log = JobLog.new do |job_log|
-          job_log.job = job
-        end
-      end
-
-      # Save this JobLogger's JobLog to db
-      def save
-        return unless @job_log.save_log?
-
-        JobLogger.with_db_connection do |db|
-          dataset = db[:job_logs]
-          dataset.insert(@job_log.serialize)
-        end
-      end
+      def_delegators :@job_log, :start, :finish, :log_transformation, :duration
+      attr_accessor :job_log
 
       # For a given `job_id`, return the last successful log
       def self.load_latest(job_id)
@@ -72,6 +56,27 @@ module Chronicle
           Time :started_at
           Time :finished_at
         end
+      end
+
+      # Create a new JobLogger
+      def initialize(job)
+        @job_log = JobLog.new do |job_log|
+          job_log.job = job
+        end
+      end
+
+      # Save this JobLogger's JobLog to db
+      def save
+        return unless @job_log.save_log?
+
+        JobLogger.with_db_connection do |db|
+          dataset = db[:job_logs]
+          dataset.insert(@job_log.serialize)
+        end
+      end
+
+      def summarize
+        @job_log.inspect
       end
     end
   end
