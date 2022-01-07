@@ -7,6 +7,9 @@
 /spec/reports/
 /tmp/
 
+# https://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
+Gemfile.lock
+
 # rspec failure tracking
 .rspec_status
 .DS_Store
