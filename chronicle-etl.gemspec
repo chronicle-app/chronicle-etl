@@ -36,19 +36,18 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "thor", "~> 0.20"
+  spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
-  spec.add_dependency "tty-table", "~> 0.11"
+  spec.add_dependency "marcel", "~> 1.0.2"
+  spec.add_dependency "runcom", "~> 6.2"
+  spec.add_dependency "sequel", "~> 5.35"
+  spec.add_dependency "sqlite3", "~> 1.4"
+  spec.add_dependency "thor", "~> 0.20"
   spec.add_dependency "tty-progressbar", "~> 0.17"
-  spec.add_dependency 'sequel', '~> 5.35'
-  spec.add_dependency 'marcel', '~> 1.0.2'
-  spec.add_dependency 'chronic_duration', '~> 0.10.6'
+  spec.add_dependency "tty-table", "~> 0.11"
 
   spec.add_development_dependency "bundler", "~> 2.1"
+  spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.9"
-  spec.add_development_dependency "pry-byebug", "~> 3.9"
-  spec.add_development_dependency 'runcom', '~> 6.2'
-  spec.add_development_dependency 'redcarpet', '~> 3.5'
-  spec.add_development_dependency 'sqlite3', '~> 1.4'
 end
