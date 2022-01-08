@@ -2,8 +2,6 @@ module Chronicle
   module ETL
     # Abstract class representing a Serializer for an ETL record
     class Serializer
-      extend Chronicle::ETL::Catalog
-
       # Construct a new instance of this serializer.
       # == Parameters:
       # options::

@@ -3,7 +3,9 @@ require 'tty/table'
 module Chronicle
   module ETL
     class TableLoader < Chronicle::ETL::Loader
-      DESCRIPTION = 'an ASCII table'
+      register_connector do |r|
+        r.description = 'an ASCII table'
+      end
 
       def initialize(options)
         super(options)

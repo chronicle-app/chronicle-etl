@@ -5,7 +5,9 @@ module Chronicle
     class CsvExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
-      DESCRIPTION = 'input as CSV'
+      register_connector do |r|
+        r.description = 'input as CSV'
+      end
 
       DEFAULT_OPTIONS = {
         headers: true,

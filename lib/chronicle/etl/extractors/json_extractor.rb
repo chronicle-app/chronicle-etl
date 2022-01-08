@@ -3,7 +3,10 @@ module Chronicle
     class JsonExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
-      DESCRIPTION = 'input as JSON'
+      register_connector do |r|
+        r.description = 'input as JSON'
+      end
+
       DEFAULT_OPTIONS = {
         filename: $stdin,
 

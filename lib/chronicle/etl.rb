@@ -1,4 +1,4 @@
-require_relative 'etl/catalog'
+require_relative 'etl/registry/registry'
 require_relative 'etl/config'
 require_relative 'etl/exceptions'
 require_relative 'etl/extraction'

@@ -67,11 +67,11 @@ module Chronicle
       private
 
       def load_klass phase, identifier
-        Chronicle::ETL::Catalog.phase_and_identifier_to_klass(phase, identifier)
+        Chronicle::ETL::Registry.phase_and_identifier_to_klass(phase, identifier)
       end
 
       def load_credentials
-        Chronicle::ETL::Catalog::PHASES.each do |phase|
+        Chronicle::ETL::Registry::PHASES.each do |phase|
           credentials_name = @definition[phase][:options][:credentials]
           if credentials_name
             credentials = Chronicle::ETL::Config.load_credentials(credentials_name)

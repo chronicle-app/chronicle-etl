@@ -1,7 +1,9 @@
 module Chronicle
   module ETL
     class StdinExtractor < Chronicle::ETL::Extractor
-      DESCRIPTION = 'stdin'
+      register_connector do |r|
+        r.description = 'stdin'
+      end
 
       def extract
         $stdin.read.each_line do |line|

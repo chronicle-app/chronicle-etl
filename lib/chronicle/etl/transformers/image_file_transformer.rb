@@ -3,8 +3,12 @@ require 'base64'
 
 module Chronicle
   module ETL
-    class ImageTransformer < Chronicle::ETL::Transformer
-      DESCRIPTION = 'image file into an image'
+    class ImageFileTransformer < Chronicle::ETL::Transformer
+      register_connector do |r|
+        r.identifier = 'image-file'
+        r.description = 'an image file'
+      end
+
       DEFAULT_OPTIONS = {
         timestamp_strategy: 'file_mtime',
         id_strategy: 'file_hash',

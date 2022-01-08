@@ -14,14 +14,14 @@ module Chronicle
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
-          connector_info = Chronicle::ETL::Catalog.available_classes.map do |klass|
+          connector_info = Chronicle::ETL::Registry.connectors.map do |connector_registration|
             {
-              identifier: klass.identifier,
-              phase: klass.phase,
-              description: klass.descriptive_phrase,
-              provider: klass.provider,
-              core: klass.built_in? ? '✓' : '',
-              class: klass.name
+              identifier: connector_registration.identifier,
+              phase: connector_registration.phase,
+              description: connector_registration.descriptive_phrase,
+              provider: connector_registration.provider,
+              core: connector_registration.built_in? ? '✓' : '',
+              class: connector_registration.klass_name
             }
           end
           connector_info = connector_info.sort_by do |a|

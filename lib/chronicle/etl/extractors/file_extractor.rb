@@ -5,7 +5,9 @@ module Chronicle
     class FileExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
-      DESCRIPTION = 'file or directory of files'
+      register_connector do |r|
+        r.description = 'file or directory of files'
+      end
 
       def extract
         open_files_in_directory(

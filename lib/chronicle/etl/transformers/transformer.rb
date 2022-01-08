@@ -2,7 +2,7 @@ module Chronicle
   module ETL
     # Abstract class representing an Transformer for an ETL job
     class Transformer
-      extend Chronicle::ETL::Catalog
+      extend Chronicle::ETL::Registry::SelfRegistering
 
       # Construct a new instance of this transformer. Options are passed in from a Runner
       # == Parameters:
@@ -44,4 +44,4 @@ module Chronicle
 end
 
 require_relative 'null_transformer'
-require_relative 'image_transformer'
+require_relative 'image_file_transformer'

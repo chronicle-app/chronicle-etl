@@ -3,7 +3,9 @@ require 'csv'
 module Chronicle
   module ETL
     class CsvLoader < Chronicle::ETL::Loader
-      DESCRIPTION = 'CSV'
+      register_connector do |r|
+        r.description = 'CSV'
+      end
 
       def initialize(options={})
         super(options)

@@ -2,7 +2,7 @@ module Chronicle
   module ETL
     # Abstract class representing a Loader for an ETL job
     class Loader
-      extend Chronicle::ETL::Catalog
+      extend Chronicle::ETL::Registry::SelfRegistering
 
       # Construct a new instance of this loader. Options are passed in from a Runner
       # == Parameters:

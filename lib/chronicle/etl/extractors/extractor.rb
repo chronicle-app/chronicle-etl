@@ -4,7 +4,7 @@ module Chronicle
   module ETL
     # Abstract class representing an Extractor for an ETL job
     class Extractor
-      extend Chronicle::ETL::Catalog
+      extend Chronicle::ETL::Registry::SelfRegistering
 
       # Construct a new instance of this extractor. Options are passed in from a Runner
       # == Paramters:
