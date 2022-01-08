@@ -83,8 +83,8 @@ LONG_DESC
         # Create job definition by reading config file and then overwriting with flag options
         def build_job_definition(options)
           definition = Chronicle::ETL::JobDefinition.new
-          definition.add_config(process_flag_options(options))
           definition.add_config(load_job_config(options[:name]))
+          definition.add_config(process_flag_options(options))
           definition
         end
 
