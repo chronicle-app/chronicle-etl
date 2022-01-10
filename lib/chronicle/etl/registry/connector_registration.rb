@@ -39,6 +39,10 @@ module Chronicle
           @description || @klass.to_s.split('::').last
         end
 
+        def provider
+          @provider || (built_in? ? 'chronicle' : '')
+        end
+
         def descriptive_phrase
           prefix = case phase
           when :extractor

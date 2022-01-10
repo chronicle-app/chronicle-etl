@@ -66,8 +66,8 @@ module Chronicle
 
       private
 
-      def load_klass phase, identifier
-        Chronicle::ETL::Registry.phase_and_identifier_to_klass(phase, identifier)
+      def load_klass(phase, identifier)
+        Chronicle::ETL::Registry.find_by_phase_and_identifier(phase, identifier).klass
       end
 
       def load_credentials

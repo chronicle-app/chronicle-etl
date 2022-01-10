@@ -7,13 +7,15 @@ module Chronicle
         namespace :connectors
 
         desc "install NAME", "Installs connector NAME"
-        def install
-          puts "Installing"
+        def install(name)
+          Chronicle::ETL::Registry.install_connector(name)
         end
 
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
+          Chronicle::ETL::Registry.load_all!
+
           connector_info = Chronicle::ETL::Registry.connectors.map do |connector_registration|
             {
               identifier: connector_registration.identifier,
@@ -24,6 +26,7 @@ module Chronicle
               class: connector_registration.klass_name
             }
           end
+
           connector_info = connector_info.sort_by do |a|
             [a[:core].to_s, a[:provider], a[:phase], a[:identifier]]
           end

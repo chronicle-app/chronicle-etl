@@ -52,10 +52,10 @@ module Chronicle
             shell.say "  $ chronicle-etl connectors:list"
             shell.say
             shell.say "  Run a simple job:".italic.light_black
-            shell.say "  $ chronicle-etl jobs:start --extractor stdin --transformer null --loader stdout"
+            shell.say "  $ chronicle-etl jobs:run --extractor stdin --transformer null --loader stdout"
             shell.say
             shell.say "  Show full job options:".italic.light_black
-            shell.say "  $ chronicle-etl jobs help start"
+            shell.say "  $ chronicle-etl jobs help run"
 
             list = []
 

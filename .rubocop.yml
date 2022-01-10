@@ -6,3 +6,6 @@ Style/StringLiterals:
 
 Style/MethodCallWithArgsParentheses:
   Enabled: false
+
+Lint/ConstantResolution:
+  Enabled: false

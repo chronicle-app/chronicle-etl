@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module Chronicle
   module ETL
     # A singleton class that acts as a registry of connector classes available for ETL jobs
@@ -7,18 +9,29 @@ module Chronicle
       class << self
         attr_accessor :connectors
 
-        # TODO: load all ETL classes from external gems and get them to self-register
+        def load_all!
+          load_connectors_from_gems
+        end
+
+        def load_connectors_from_gems
+          Gem::Specification.filter{|s| s.name.match(/^chronicle/) }.each do |gem|
+            require_str = gem.name.gsub('chronicle-', 'chronicle/')
+            require require_str rescue LoadError
+          end
+        end
+
+        def install_connector name
+          gem_name = "chronicle-#{name}"
+          Gem.install(gem_name)
+        end
 
         def register connector
           @connectors ||= []
           @connectors << connector
         end
 
-        def phase_and_identifier_to_klass(phase, identifier)
-          connector = @connectors.select do |connector| 
-            connector.phase == phase && connector.identifier == identifier
-          end.first
-          connector.klass
+        def find_by_phase_and_identifier(phase, identifier)
+          @connectors.find { |c| c.phase == phase && c.identifier == identifier } || raise(ConnectorNotAvailableError.new("Connector '#{identifier}' not found"))
         end
       end
     end
