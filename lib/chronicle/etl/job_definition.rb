@@ -5,15 +5,15 @@ module Chronicle
         incremental: false,
         log_each_transformation: false,
         extractor: {
-          name: nil,
+          name: 'stdin',
           options: {}
         },
         transformer: {
-          name: nil,
+          name: 'null',
           options: {}
         },
         loader: {
-          name: nil,
+          name: 'stdout',
           options: {}
         }
       }.freeze

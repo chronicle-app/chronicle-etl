@@ -7,11 +7,11 @@ module Chronicle
         default_task "start"
         namespace :jobs
 
-        class_option :extractor, aliases: '-e', desc: 'Extractor class (available: stdin, csv, file)', default: 'stdin', banner: 'extractor-name'
+        class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'extractor-name'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
-        class_option :transformer, aliases: '-t', desc: 'Transformer class (available: null)', default: 'null', banner: 'transformer-name'
+        class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'transformer-name'
         class_option :'transformer-opts', desc: 'Transformer options', type: :hash, default: {}
-        class_option :loader, aliases: '-l', desc: 'Loader class (available: stdout, csv, table)', default: 'stdout', banner: 'loader-name'
+        class_option :loader, aliases: '-l', desc: 'Loader class. Default: stdout', banner: 'loader-name'
         class_option :'loader-opts', desc: 'Loader options', type: :hash, default: {}
         class_option :name, aliases: '-j', desc: 'Job configuration name'
 
@@ -98,15 +98,15 @@ LONG_DESC
             extractor: {
               name: options[:extractor],
               options: options[:'extractor-opts']
-            },
+            }.compact,
             transformer: {
               name: options[:transformer],
               options: options[:'transformer-opts']
-            },
+            }.compact,
             loader: {
               name: options[:loader],
               options: options[:'loader-opts']
-            }
+            }.compact
           }
         end
       end
