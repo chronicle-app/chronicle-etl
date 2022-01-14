@@ -37,10 +37,12 @@ class Chronicle::ETL::Runner
       @progress_bar.log(tty_log_transformation(transformer)) if @job.log_each_transformation?
     end
 
+    @progress_bar.log("")
     @progress_bar.finish
     loader.finish
     @job_logger.finish
     @job_logger.save
+    @progress_bar.log("")
 
     tty_log_completion.split("\n").each do |line|
       @progress_bar.log(line)

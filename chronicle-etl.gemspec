@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "activesupport"
   spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
   spec.add_dependency "marcel", "~> 1.0.2"
