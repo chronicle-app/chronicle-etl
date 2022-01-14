@@ -78,9 +78,13 @@ module Chronicle
         end
 
         def associations_hash
-          Hash[associations.map do |k, v|
-            [k, v.to_h]
-          end]
+          associations.map do |k, v|
+            if v.is_a?(Array)
+              [k, v.map(&:to_h)]
+            else
+              [k, v.to_h]
+            end
+          end.to_h
         end
 
         def meta_hash
@@ -97,10 +101,11 @@ module Chronicle
         end
 
         def to_h
-          identifier_hash.merge(attributes).merge(associations_hash).merge(meta_hash)
+          identifier_hash
+            .merge(attributes)
+            .merge(associations_hash)
+            .merge(meta_hash)
         end
-
-        private
 
         def assign_attributes attributes
           attributes.each do |k, v|
