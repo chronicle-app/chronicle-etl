@@ -17,11 +17,12 @@ module Chronicle
     class ProviderConnectorNotAvailableError < ConnectorNotAvailableError; end
 
     class TransformationError < Error
-      def initialize(message, record: nil)
+      attr_reader :transformation
+
+      def initialize(message=nil, transformation:)
         super(message)
-        @record = record
+        @transformation = transformation
       end
-      attr_reader :record
     end
 
     class UntransformableRecordError < TransformationError; end

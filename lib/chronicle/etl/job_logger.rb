@@ -9,7 +9,7 @@ module Chronicle
     class JobLogger
       extend Forwardable
 
-      def_delegators :@job_log, :start, :finish, :log_transformation, :duration
+      def_delegators :@job_log, :start, :finish, :error, :log_transformation, :duration, :success
       attr_accessor :job_log
 
       # For a given `job_id`, return the last successful log

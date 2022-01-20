@@ -19,10 +19,10 @@ module Chronicle
 
       def initialize(options={})
         @options = options.reverse_merge(DEFAULT_OPTIONS)
+        @records = []
       end
 
       def load(record)
-        @records ||= []
         @records << record.to_h_flattened
       end
 

@@ -36,8 +36,19 @@ module Chronicle
       end
 
       def to_s
-        prefix = "[#{timestamp.iso8601}] " if timestamp
-        "#{prefix}#{friendly_identifier}"
+        ts = begin
+          timestamp.iso8601
+        rescue TransformationError
+          "???"
+        end
+
+        identifier = begin
+          friendly_identifier
+        rescue TransformationError
+          self.class.to_s
+        end
+
+        "[#{ts}] #{identifier}"
       end
     end
   end

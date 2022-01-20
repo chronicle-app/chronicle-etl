@@ -50,6 +50,10 @@ module Chronicle
         @success = true
       end
 
+      def error
+        @finished_at = Time.now
+      end
+
       def job= job
         @job = job
         @job_id = job.id
