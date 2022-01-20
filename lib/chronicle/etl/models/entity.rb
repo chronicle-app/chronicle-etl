@@ -6,7 +6,11 @@ module Chronicle
       class Entity < Chronicle::ETL::Models::Base
         TYPE = 'entities'.freeze
         ATTRIBUTES = [:title, :body, :represents, :slug, :myself, :metadata].freeze
-        ASSOCIATIONS = [:attachments].freeze  # TODO: add these to reflect Chronicle Schema
+        ASSOCIATIONS = [
+          :attachments,
+          :abouts,
+          :depicts
+        ].freeze  # TODO: add these to reflect Chronicle Schema
 
         attr_accessor(*ATTRIBUTES, *ASSOCIATIONS)
       end

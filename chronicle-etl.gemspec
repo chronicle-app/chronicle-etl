@@ -40,6 +40,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
   spec.add_dependency "marcel", "~> 1.0.2"
+  spec.add_dependency "mini_exiftool", "~> 2.10"
+  spec.add_dependency "nokogiri", "~> 1.13"
   spec.add_dependency "runcom", "~> 6.2"
   spec.add_dependency "sequel", "~> 5.35"
   spec.add_dependency "sqlite3", "~> 1.4"
