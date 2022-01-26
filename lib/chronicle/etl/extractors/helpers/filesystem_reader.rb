@@ -6,11 +6,10 @@ module Chronicle
       module Helpers
         module FilesystemReader
 
-          def open_files_in_directory(...)
+          def filenames_in_directory(...)
             filenames = gather_files(...)
             filenames.each do |filename|
-              file = File.open(filename)
-              yield file
+              yield filename
             end
           end
 

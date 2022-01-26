@@ -10,13 +10,13 @@ module Chronicle
       end
 
       def extract
-        open_files_in_directory(
+        filenames_in_directory(
           path: @options[:filename],
           dir_glob_pattern: @options[:dir_glob_pattern],
           load_since: @options[:load_since],
           load_until: @options[:load_until]
-        ) do |file|
-          yield Chronicle::ETL::Extraction.new(data: file)
+        ) do |filename|
+          yield Chronicle::ETL::Extraction.new(data: filename)
         end
       end
 

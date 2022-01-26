@@ -36,9 +36,10 @@ module Chronicle
       end
 
       def transform
-        @file = @extraction.data
-
-        build_created(@file)
+        @file = File.open(@extraction.data)
+        record = build_created(@file)
+        @file.close
+        record
       end
 
       def friendly_identifier
