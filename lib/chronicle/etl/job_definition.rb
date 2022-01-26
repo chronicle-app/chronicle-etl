@@ -3,7 +3,6 @@ module Chronicle
     class JobDefinition
       SKELETON_DEFINITION = {
         incremental: false,
-        log_each_transformation: false,
         extractor: {
           name: 'stdin',
           options: {}
@@ -34,10 +33,6 @@ module Chronicle
       # Is this job continuing from a previous run?
       def incremental?
         @definition[:incremental]
-      end
-
-      def log_each_transformation?
-        @definition[:log_each_transformation]
       end
 
       def extractor_klass

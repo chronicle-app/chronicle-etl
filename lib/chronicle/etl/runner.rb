@@ -15,10 +15,10 @@ class Chronicle::ETL::Runner
     loader.start
 
     total = extractor.results_count
-
     @progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
-    @progress_bar.log(tty_log_job_start)
+    Chronicle::ETL::Logger.attach_to_progress_bar(@progress_bar)
 
+    Chronicle::ETL::Logger.info(tty_log_job_start)
     extractor.extract do |extraction|
       unless extraction.is_a?(Chronicle::ETL::Extraction)
         raise Chronicle::ETL::RunnerTypeError, "Extracted should be a Chronicle::ETL::Extraction"
@@ -33,31 +33,23 @@ class Chronicle::ETL::Runner
 
       @job_logger.log_transformation(transformer)
       loader.load(record)
-      @progress_bar.log(tty_log_transformation(transformer)) if @job.log_each_transformation?
+      Chronicle::ETL::Logger.info(tty_log_transformation(transformer))
     rescue Chronicle::ETL::TransformationError => e
-      @progress_bar.log(tty_log_transformation_failure(e))
+      Chronicle::ETL::Logger.error(tty_log_transformation_failure(e))
     ensure
       @progress_bar.increment
     end
 
-    @progress_bar.log("")
-    @progress_bar.finish
-
     loader.finish
     @job_logger.finish
-
   rescue Interrupt
-    @progress_bar.finish
-    @progress_bar.log("")
-    @progress_bar.log("Job interrupted".red)
-    @progress_bar.log("")
+    Chronicle::ETL::Logger.error("\n#{'Job interrupted'.red}")
     @job_logger.error
-
   ensure
     @job_logger.save
-    tty_log_completion.split("\n").each do |line|
-      @progress_bar.log(line)
-    end
+    @progress_bar.finish
+    Chronicle::ETL::Logger.detach_from_progress_bar
+    Chronicle::ETL::Logger.info(tty_log_completion)
   end
 
   private
@@ -80,7 +72,7 @@ class Chronicle::ETL::Runner
 
   def tty_log_completion
     status = @job_logger.success ? 'Success' : 'Failed'
-    output = "Completed job "
+    output = "\nCompleted job "
     output += "'#{@job.name}'".bold if @job.name
     output += " in #{ChronicDuration.output(@job_logger.duration)}"
     output += "\n  Status:\t".light_black + status

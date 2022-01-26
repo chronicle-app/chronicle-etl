@@ -17,6 +17,8 @@ module Chronicle
 
         map run: :start  # Thor doesn't like `run` as a command name
         desc "run", "Start a job"
+        option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
+        option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
         long_desc <<-LONG_DESC
           This will run an ETL job. Each job needs three parts:
 
@@ -30,17 +32,11 @@ module Chronicle
 LONG_DESC
         # Run an ETL job
         def start
+          setup_log_level
           job_definition = build_job_definition(options)
           job = Chronicle::ETL::Job.new(job_definition)
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!
-        rescue Chronicle::ETL::ProviderNotAvailableError => e
-          warn(e.message.red)
-          warn("  Perhaps you haven't installed it yet: `$ gem install chronicle-#{e.provider}`")
-          exit(false)
-        rescue Chronicle::ETL::ConnectorNotAvailableError => e
-          warn(e.message.red)
-          exit(false)
         end
 
         desc "create", "Create a job"
@@ -79,6 +75,15 @@ LONG_DESC
         end
 
         private
+
+        def setup_log_level
+          if options[:verbose]
+            Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::DEBUG
+          elsif options[:log_level]
+            level = Chronicle::ETL::Logger.const_get(options[:log_level].upcase)
+            Chronicle::ETL::Logger.log_level = level 
+          end
+        end
 
         # Create job definition by reading config file and then overwriting with flag options
         def build_job_definition(options)

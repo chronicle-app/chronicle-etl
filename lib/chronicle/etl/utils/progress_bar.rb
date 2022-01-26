@@ -64,7 +64,9 @@ module Chronicle
         end
 
         def log(message)
-          @pbar.log message
+          message.split("\n").each do |line|
+            @pbar.log message
+          end
         end
 
         def finish
