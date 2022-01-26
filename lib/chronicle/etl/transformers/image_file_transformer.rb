@@ -5,6 +5,7 @@ require 'active_support'
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/time'
 require 'active_support/core_ext/hash/reverse_merge'
+require 'active_support/core_ext/string/inflections'
 
 module Chronicle
   module ETL
@@ -126,7 +127,8 @@ module Chronicle
           t.represents = 'topic'
           t.provider = @options[:involved][:provider]
           t.title = topic
-          t.dedupe_on = [[:provider, :represents, :title]]
+          t.slug = topic.parameterize
+          t.dedupe_on = [[:provider, :represents, :slug]]
           t
         end
       end
@@ -136,8 +138,9 @@ module Chronicle
           identity = ::Chronicle::ETL::Models::Entity.new
           identity.represents = 'identity'
           identity.provider = @options[:involved][:provider]
+          identity.slug = name.parameterize
           identity.title = name
-          identity.dedupe_on = [[:provider, :represents, :title]]
+          identity.dedupe_on = [[:provider, :represents, :slug]]
           identity
         end
       end

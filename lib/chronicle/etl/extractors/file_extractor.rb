@@ -10,17 +10,24 @@ module Chronicle
       end
 
       def extract
-        filenames_in_directory(
-          path: @options[:filename],
-          dir_glob_pattern: @options[:dir_glob_pattern],
-          load_since: @options[:load_since],
-          load_until: @options[:load_until]
-        ) do |filename|
+        filenames.each do |filename|
           yield Chronicle::ETL::Extraction.new(data: filename)
         end
       end
 
       def results_count
+        filenames.count
+      end
+
+      private
+
+      def filenames
+        @filenames ||= filenames_in_directory(
+          path: @options[:filename],
+          dir_glob_pattern: @options[:dir_glob_pattern],
+          load_since: @options[:load_since],
+          load_until: @options[:load_until]
+        )
       end
     end
   end

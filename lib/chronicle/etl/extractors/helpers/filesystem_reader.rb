@@ -8,8 +8,12 @@ module Chronicle
 
           def filenames_in_directory(...)
             filenames = gather_files(...)
-            filenames.each do |filename|
-              yield filename
+            if block_given?
+              filenames.each do |filename|
+                yield filename
+              end
+            else
+              filenames
             end
           end
 
