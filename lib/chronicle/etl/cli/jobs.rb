@@ -19,6 +19,7 @@ module Chronicle
         desc "run", "Start a job"
         option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
         option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
+        option :dry_run, desc: 'Only run the extraction and transform steps, not the loading', type: :boolean
         long_desc <<-LONG_DESC
           This will run an ETL job. Each job needs three parts:
 
@@ -26,7 +27,7 @@ module Chronicle
 
             2. #{'Transformer'.underline}: transforms data into a new format. If none is specified, we use the `null` transformer which does nothing to the data.
 
-            3. #{'Loader'.underline}: takes that transformed data and loads it externally. This can be an API, flat files, (or by default), stdout.
+            3. #{'Loader'.underline}: takes that transformed data and loads it externally. This can be an API, flat files, (or by default), stdout. With the --dry-run option, this step won't be run.
 
             If you do not want to use the command line flags, you can also configure a job with a .yml config file. You can either specify the path to this file or use the filename and place the file in ~/.config/chronicle/etl/jobs/NAME.yml and call it with `--job NAME`
 LONG_DESC
@@ -100,6 +101,7 @@ LONG_DESC
         # Takes flag options and turns them into a runner config
         def process_flag_options options
           {
+            dry_run: options[:dry_run],
             extractor: {
               name: options[:extractor],
               options: options[:'extractor-opts']

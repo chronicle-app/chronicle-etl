@@ -4,7 +4,7 @@ module Chronicle
     class Job
       extend Forwardable
 
-      def_delegators :@job_definition
+      def_delegators :@job_definition, :dry_run?
 
       attr_accessor :name,
                     :extractor_klass,

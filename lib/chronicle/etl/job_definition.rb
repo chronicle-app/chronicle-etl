@@ -35,6 +35,10 @@ module Chronicle
         @definition[:incremental]
       end
 
+      def dry_run?
+        @definition[:dry_run]
+      end
+
       def extractor_klass
         load_klass(:extractor, @definition[:extractor][:name])
       end

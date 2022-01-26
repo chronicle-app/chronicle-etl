@@ -31,9 +31,10 @@ class Chronicle::ETL::Runner
         raise Chronicle::ETL::RunnerTypeError, "Transformed data should be a type of Chronicle::ETL::Models"
       end
 
-      @job_logger.log_transformation(transformer)
-      loader.load(record)
       Chronicle::ETL::Logger.info(tty_log_transformation(transformer))
+      @job_logger.log_transformation(transformer)
+
+      loader.load(record) unless @job.dry_run?
     rescue Chronicle::ETL::TransformationError => e
       Chronicle::ETL::Logger.error(tty_log_transformation_failure(e))
     ensure
