@@ -5,7 +5,7 @@ module Chronicle
 
       def initialize(data: {}, meta: {})
         @data = data
-        @meta = @meta
+        @meta = meta
       end
     end
   end
