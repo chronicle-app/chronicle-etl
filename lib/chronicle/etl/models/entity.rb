@@ -9,7 +9,8 @@ module Chronicle
         ASSOCIATIONS = [
           :attachments,
           :abouts,
-          :depicts
+          :depicts,
+          :consumers
         ].freeze  # TODO: add these to reflect Chronicle Schema
 
         attr_accessor(*ATTRIBUTES, *ASSOCIATIONS)
