@@ -71,7 +71,7 @@ module Chronicle
 
       def load_credentials
         Chronicle::ETL::Registry::PHASES.each do |phase|
-          credentials_name = @definition[phase][:options][:credentials]
+          credentials_name = @definition[phase].dig(:options, :credentials)
           if credentials_name
             credentials = Chronicle::ETL::Config.load_credentials(credentials_name)
             @definition[phase][:options].deep_merge(credentials)
