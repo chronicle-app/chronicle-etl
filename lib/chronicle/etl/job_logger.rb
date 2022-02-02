@@ -1,8 +1,6 @@
 require 'sequel'
 require 'forwardable'
 
-require 'pry'
-
 module Chronicle
   module ETL
     # Saves JobLogs to db and loads previous ones
