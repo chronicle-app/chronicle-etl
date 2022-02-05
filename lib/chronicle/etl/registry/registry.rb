@@ -31,7 +31,17 @@ module Chronicle
         end
 
         def find_by_phase_and_identifier(phase, identifier)
-          @connectors.find { |c| c.phase == phase && c.identifier == identifier } || raise(ConnectorNotAvailableError.new("Connector '#{identifier}' not found"))
+          connector = find_within_loaded_connectors(phase, identifier)
+          unless connector
+            # Only load external connectors (slow) if not found in built-in connectors
+            load_all!
+            connector = find_within_loaded_connectors(phase, identifier)
+          end
+          connector || raise(ConnectorNotAvailableError.new("Connector '#{identifier}' not found"))
+        end
+
+        def find_within_loaded_connectors(phase, identifier)
+          @connectors.find { |c| c.phase == phase && c.identifier == identifier }
         end
       end
     end
