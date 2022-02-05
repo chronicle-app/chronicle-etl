@@ -41,11 +41,14 @@ class Chronicle::ETL::Runner
       @progress_bar.increment
     end
 
+    @progress_bar.finish
     loader.finish
     @job_logger.finish
   rescue Interrupt
     Chronicle::ETL::Logger.error("\n#{'Job interrupted'.red}")
     @job_logger.error
+  rescue StandardError => e
+    raise e
   ensure
     @job_logger.save
     @progress_bar.finish
@@ -75,7 +78,7 @@ class Chronicle::ETL::Runner
     status = @job_logger.success ? 'Success' : 'Failed'
     output = "\nCompleted job "
     output += "'#{@job.name}'".bold if @job.name
-    output += " in #{ChronicDuration.output(@job_logger.duration)}"
+    output += " in #{ChronicDuration.output(@job_logger.duration)}" if @job_logger.duration
     output += "\n  Status:\t".light_black + status
     output += "\n  Completed:\t".light_black + "#{@job_logger.job_log.num_records_processed}"
     output += "\n  Latest:\t".light_black + "#{@job_logger.job_log.highest_timestamp.iso8601}" if @job_logger.job_log.highest_timestamp
