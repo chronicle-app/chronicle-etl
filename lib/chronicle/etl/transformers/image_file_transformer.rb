@@ -1,5 +1,3 @@
-require 'marcel'
-require 'base64'
 require 'mini_exiftool'
 require 'active_support'
 require 'active_support/core_ext/object'
@@ -37,6 +35,7 @@ module Chronicle
       end
 
       def transform
+        # FIXME: set @filename; use block for reading file when necessary
         @file = File.open(@extraction.data)
         record = build_created(@file)
         @file.close
@@ -156,8 +155,7 @@ module Chronicle
       end
 
       def build_image_data
-        mimetype = Marcel::MimeType.for(@file)
-        "data:#{mimetype};base64,#{Base64.encode64(File.read(@file))}"
+        ::Chronicle::ETL::Utils::BinaryAttachments.filename_to_base64(filename: @file.path)
       end
 
       def build_title
