@@ -22,6 +22,11 @@ module Chronicle
 
         # Entrypoint for the CLI
         def self.start(given_args = ARGV, config = {})
+          if given_args[0] == "--version"
+            puts "#{Chronicle::ETL::VERSION}"
+            exit
+          end
+
           if given_args.none?
             abort "No command entered or job specified. To see commands, run `chronicle-etl help`".red
           end
@@ -71,6 +76,9 @@ module Chronicle
             shell.say
             shell.say "VERSION".bold
             shell.say "  #{Chronicle::ETL::VERSION}"
+            shell.say
+            shell.say "  Display current version:".italic.light_black
+            shell.say "  $ chronicle-etl --version"
             shell.say
             shell.say "FULL DOCUMENTATION".bold
             shell.say "  https://github.com/chronicle-app/chronicle-etl".blue
