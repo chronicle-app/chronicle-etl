@@ -9,6 +9,10 @@ module Chronicle
       def transform
         Chronicle::ETL::Models::Generic.new(@extraction.data)
       end
+
+      def timestamp; end
+
+      def id; end
     end
   end
 end

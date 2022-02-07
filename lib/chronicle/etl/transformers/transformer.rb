@@ -22,12 +22,16 @@ module Chronicle
       # - de-duping records that might exist in the loader's destination
       # - building a cursor so an extractor doesn't have to start from the beginning of a 
       #   a source 
-      def id; end
+      def id
+        raise NotImplementedError
+      end
 
       # The domain or provider-specific timestamp of the record this transformer is working on.
       # Used for building a cursor so an extractor doesn't have to start from the beginning of a
       # data source from the beginning.
-      def timestamp; end
+      def timestamp
+        raise NotImplementedError
+      end
 
       # An optional, human-readable identifier for a transformation, intended for debugging or logging.
       # By default, it is just the id.
@@ -37,15 +41,17 @@ module Chronicle
 
       def to_s
         ts = begin
-          timestamp.iso8601
-        rescue TransformationError
-          "???"
+          unknown = "???"
+          timestamp&.iso8601 || unknown
+        rescue TransformationError, NotImplementedError
+          unknown
         end
 
         identifier = begin
-          friendly_identifier
-        rescue TransformationError
-          self.class.to_s
+          unknown = self.class.to_s
+          friendly_identifier || self.class.to_s
+        rescue TransformationError, NotImplementedError
+          unknown
         end
 
         "[#{ts}] #{identifier}"
