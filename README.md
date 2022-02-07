@@ -31,6 +31,9 @@ Connectors are available to read, process, and load data from different formats 
 ```bash
 # List all available connectors
 $ chronicle-etl connectors:list
+
+# Install a connector
+$ chronicle-etl connectors:install imessage
 ```
 
 Built in connectors:
@@ -44,16 +47,18 @@ Built in connectors:
 - `null` - (default) Don't do anything
 
 ### Loaders
-- `stdout` - (default) output transformed records to stdount
+- `stdout` - (default) output records to stdout serialized as JSON
 - `csv` - Load records to a csv file
+- `rest` - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
 - `table` - Output an ascii table of records. Useful for debugging.
 
 ### Provider-specific importers
 
 In addition to the built-in importers, importers for third-party platforms are available. They are packaged as individual Ruby gems.
 
-- [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` and other email files. Transformers for chronicle schema
-- [bash](https://github.com/chronicle-app/chronicle-bash). Extract bash history from `~/.bash_history`. Transform it for chronicle schema
+- [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` and other email files
+- [bash](https://github.com/chronicle-app/chronicle-bash). Extract bash history from `~/.bash_history`
+- [imessage](https://github.com/chronicle-app/chronicle-imessage). Extract iMessage messages from a local macOS installation
 
 To install any of these, run `gem install chronicle-PROVIDER`. 
 
@@ -61,7 +66,7 @@ If you don't want to use the available rubygem importers, `chronicle-etl` can us
 
 I'll be open-sourcing more importers. Please [contact me](mailto:andrew@hyfen.net) to chat about what will be available!
 
-### Full commands
+## Full commands
 
 ```
 $ chronicle-etl help 
@@ -75,26 +80,28 @@ ALL COMMANDS
   jobs:create                # Create a job
   jobs:list                  # List all available jobs
   jobs:run                   # Start a job
-  jobs:show                  # Show a job
+  jobs:show                  # Show details about a job
 ```
 
-### Job options
+### Running a job
 
 ```
 Usage:
   chronicle-etl jobs:run
 
 Options:
-  -e, [--extractor=extractor-name]      # Extractor class (available: stdin, csv, file)
-                                        # Default: stdin
+      [--log-level=LOG_LEVEL]           # Log level (debug, info, warn, error, fatal)
+                                        # Default: info
+  -v, [--verbose], [--no-verbose]       # Set log level to verbose
+      [--dry-run], [--no-dry-run]       # Only run the extraction and transform steps, not the loading
+  -e, [--extractor=extractor-name]      # Extractor class. Default: stdin
       [--extractor-opts=key:value]      # Extractor options
-  -t, [--transformer=transformer-name]  # Transformer class (available: null)
-                                        # Default: null
+  -t, [--transformer=transformer-name]  # Transformer class. Default: null
       [--transformer-opts=key:value]    # Transformer options
-  -l, [--loader=loader-name]            # Loader class (available: stdout, csv, table)
-                                        # Default: stdout
+  -l, [--loader=loader-name]            # Loader class. Default: stdout
       [--loader-opts=key:value]         # Loader options
-  -j, [--job=JOB]                       # Job configuration file
+  -j, [--name=NAME]                     # Job configuration name
+
 
 Runs an ETL job
 ```
