@@ -57,7 +57,7 @@ Built in connectors:
 In addition to the built-in importers, importers for third-party platforms are available. They are packaged as individual Ruby gems.
 
 - [email](https://github.com/chronicle-app/chronicle-email). Extractors for `mbox` and other email files
-- [bash](https://github.com/chronicle-app/chronicle-bash). Extract bash history from `~/.bash_history`
+- [shell](https://github.com/chronicle-app/chronicle-shell). Extract shell history from Bash or Zsh`
 - [imessage](https://github.com/chronicle-app/chronicle-imessage). Extract iMessage messages from a local macOS installation
 
 To install any of these, run `gem install chronicle-PROVIDER`. 
