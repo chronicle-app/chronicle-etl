@@ -14,6 +14,7 @@ class Chronicle::ETL::Runner
     @job_logger.start
     loader.start
 
+    extractor.prepare
     total = extractor.results_count
     @progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
     Chronicle::ETL::Logger.attach_to_progress_bar(@progress_bar)

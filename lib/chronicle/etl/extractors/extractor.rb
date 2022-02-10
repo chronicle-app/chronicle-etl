@@ -16,14 +16,17 @@ module Chronicle
         handle_continuation
       end
 
-      # Entrypoint for this Extractor. Called by a Runner. Expects a series of records to be yielded
-      def extract
-        raise NotImplementedError
-      end
+      # Hook called before #extract. Useful for gathering data, initailizing proxies, etc
+      def prepare; end
 
       # An optional method to calculate how many records there are to extract. Used primarily for
       # building the progress bar
       def results_count; end
+
+      # Entrypoint for this Extractor. Called by a Runner. Expects a series of records to be yielded
+      def extract
+        raise NotImplementedError
+      end
 
       private
 
