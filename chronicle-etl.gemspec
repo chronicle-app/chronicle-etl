@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 2.7"
 
-  spec.add_dependency "activesupport"
+  spec.add_dependency "activesupport", "~> 7.0"
   spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
   spec.add_dependency "marcel", "~> 1.0.2"
