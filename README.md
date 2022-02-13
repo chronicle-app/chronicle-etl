@@ -1,6 +1,6 @@
 # Chronicle::ETL
 
-[![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl)
+[![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl) [![Ruby](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml/badge.svg)](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml)
 
 Chronicle ETL is a utility that helps you archive and processes personal data. You can *extract* it from a variety of sources, *transform* it, and *load* it to an external API, file, or stdout.
 
