@@ -2,7 +2,7 @@ require 'csv'
 
 module Chronicle
   module ETL
-    class CsvLoader < Chronicle::ETL::Loader
+    class CSVLoader < Chronicle::ETL::Loader
       register_connector do |r|
         r.description = 'CSV'
       end

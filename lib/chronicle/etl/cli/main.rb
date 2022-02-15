@@ -1,20 +1,14 @@
-require 'thor'
-require 'chronicle/etl'
 require 'colorize'
-
-require 'chronicle/etl/cli/subcommand_base'
-require 'chronicle/etl/cli/connectors'
-require 'chronicle/etl/cli/jobs'
 
 module Chronicle
   module ETL
     module CLI
       # Main entrypoint for CLI app
-      class Main < Thor
-        class_option "verbose", type: :boolean, default: false
+      class Main < ::Thor
         default_task "jobs"
 
         desc 'connectors:COMMAND', 'Connectors available for ETL jobs', hide: true
+
         subcommand 'connectors', Connectors
 
         desc 'jobs:COMMAND', 'Configure and run jobs', hide: true
@@ -22,15 +16,6 @@ module Chronicle
 
         # Entrypoint for the CLI
         def self.start(given_args = ARGV, config = {})
-          if given_args[0] == "--version"
-            puts "#{Chronicle::ETL::VERSION}"
-            exit
-          end
-
-          if given_args.none?
-            abort "No command entered or job specified. To see commands, run `chronicle-etl help`".red
-          end
-
           # take a subcommand:command and splits them so Thor knows how to hand off to the subcommand class
           if given_args.any? && given_args[0].include?(':')
             commands = given_args.shift.split(':')
@@ -40,10 +25,20 @@ module Chronicle
           super(given_args, config)
         end
 
+        def self.exit_on_failure?
+          true
+        end
+
+        desc "version", "Show version"
+        map %w(--version -v) => :version
+        def version
+          shell.say "chronicle-etl #{Chronicle::ETL::VERSION}"
+        end
+
         # Displays help options for chronicle-etl
         def help(meth = nil, subcommand = false)
           if meth && !respond_to?(meth)
-            klass, task = Thor::Util.find_class_and_task_by_namespace("#{meth}:#{meth}")
+            klass, task = ::Thor::Util.find_class_and_task_by_namespace("#{meth}:#{meth}")
             klass.start(['-h', task].compact, shell: shell)
           else
             shell.say "ABOUT".bold
@@ -64,7 +59,7 @@ module Chronicle
 
             list = []
 
-            Thor::Util.thor_classes_in(Chronicle::ETL::CLI).each do |thor_class|
+            ::Thor::Util.thor_classes_in(Chronicle::ETL::CLI).each do |thor_class|
               list += thor_class.printable_tasks(false)
             end
             list.sort! { |a, b| a[0] <=> b[0] }

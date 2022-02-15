@@ -2,7 +2,7 @@ require 'csv'
 
 module Chronicle
   module ETL
-    class CsvExtractor < Chronicle::ETL::Extractor
+    class CSVExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::FilesystemReader
 
       register_connector do |r|
