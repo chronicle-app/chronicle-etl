@@ -7,6 +7,8 @@ module Chronicle
         default_task "start"
         namespace :jobs
 
+        class_option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
+        class_option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
         class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'extractor-name'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
         class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'transformer-name'
@@ -17,8 +19,6 @@ module Chronicle
 
         map run: :start  # Thor doesn't like `run` as a command name
         desc "run", "Start a job"
-        option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
-        option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
         option :dry_run, desc: 'Only run the extraction and transform steps, not the loading', type: :boolean
         long_desc <<-LONG_DESC
           This will run an ETL job. Each job needs three parts:

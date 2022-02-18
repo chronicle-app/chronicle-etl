@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "runcom", ">= 6.0"
   spec.add_dependency "sequel", "~> 5.35"
   spec.add_dependency "sqlite3", "~> 1.4"
-  spec.add_dependency "thor", "~> 0.20"
+  spec.add_dependency "thor", "~> 1.2"
   spec.add_dependency "tty-progressbar", "~> 0.17"
   spec.add_dependency "tty-table", "~> 0.11"
 
@@ -54,4 +54,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.9"
+  spec.add_development_dependency "simplecov", "~> 0.21"
+  spec.add_development_dependency "guard-rspec", "~> 4.7.3"
 end

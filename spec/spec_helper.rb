@@ -1,14 +1,51 @@
+require 'simplecov'
+SimpleCov.start
+
+require 'pry'
+
 require "bundler/setup"
 require "chronicle/etl"
+require "chronicle/etl/cli"
+
+require_relative "support/invoke_cli"
 
 RSpec.configure do |config|
+  config.include Chronicle::ETL::SpecHelpers
+
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
+  config.mock_with :rspec
+
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  # Taken from https://github.com/rails/thor/blob/main/spec/helper.rb
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
+end
+
+# This monkeypatch is required because of weird interactions between the
+# `tty-screen` used for CLI output and the way rspec captures stdout
+# see: https://github.com/rspec/rspec-expectations/issues/1305
+# and: https://github.com/emsk/bundle_outdated_formatter/blob/v0.7.0/spec/spec_helper.rb#L16-L21
+require 'stringio'
+class StringIO
+  def ioctl(*)
+    0
   end
 end

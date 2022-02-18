@@ -2,11 +2,11 @@ module Chronicle
   module ETL
     module CLI
       # Base class for CLI subcommands. Overrides Thor methods so we can use command:subcommand syntax
-      class SubcommandBase < Thor
+      class SubcommandBase < ::Thor
         # Print usage instructions for a subcommand
         def self.help(shell, subcommand = false)
           list = printable_commands(true, subcommand)
-          Thor::Util.thor_classes_in(self).each do |klass|
+          ::Thor::Util.thor_classes_in(self).each do |klass|
             list += klass.printable_commands(false)
           end
           list.sort! { |a, b| a[0] <=> b[0] }

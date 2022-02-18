@@ -1,7 +1,11 @@
 AllCops:
   EnabledByDefault: true
+  TargetRubyVersion: 2.7
 
 Style/StringLiterals:
+  Enabled: false
+
+Layout/MultilineAssignmentLayout:
   Enabled: false
 
 Style/MethodCallWithArgsParentheses:
@@ -9,3 +13,7 @@ Style/MethodCallWithArgsParentheses:
 
 Lint/ConstantResolution:
   Enabled: false
+
+Style/MethodCalledOnDoEndBlock:
+  Exclude:
+    - 'spec/**/*'
