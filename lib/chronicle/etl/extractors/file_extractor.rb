@@ -9,6 +9,9 @@ module Chronicle
         r.description = 'file or directory of files'
       end
 
+      # TODO: consolidate this with @config.filename
+      setting :dir_glob_pattern
+
       def extract
         filenames.each do |filename|
           yield Chronicle::ETL::Extraction.new(data: filename)
@@ -23,10 +26,10 @@ module Chronicle
 
       def filenames
         @filenames ||= filenames_in_directory(
-          path: @options[:filename],
-          dir_glob_pattern: @options[:dir_glob_pattern],
-          load_since: @options[:load_since],
-          load_until: @options[:load_until]
+          path: @config.filename,
+          dir_glob_pattern: @config.dir_glob_pattern,
+          load_since: @config.since,
+          load_until: @config.until
         )
       end
     end

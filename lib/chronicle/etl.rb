@@ -1,5 +1,6 @@
 require_relative 'etl/registry/registry'
 require_relative 'etl/config'
+require_relative 'etl/configurable'
 require_relative 'etl/exceptions'
 require_relative 'etl/extraction'
 require_relative 'etl/extractors/extractor'

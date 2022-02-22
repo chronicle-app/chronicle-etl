@@ -35,7 +35,7 @@ module Chronicle
 
       def instantiate_transformer(extraction)
         @transformer_klass = @job_definition.transformer_klass
-        @transformer_klass.new(@transformer_options, extraction)
+        @transformer_klass.new(extraction, @transformer_options)
       end
 
       def instantiate_loader

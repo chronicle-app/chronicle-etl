@@ -16,7 +16,7 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
 
       args = ['jobs:run'] << csv_job_args
       output = invoke_cli(args)
-
+      
       expect(output.split("\n").count).to eql(file_record_count)
     end
   end

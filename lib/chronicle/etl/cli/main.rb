@@ -8,7 +8,6 @@ module Chronicle
         default_task "jobs"
 
         desc 'connectors:COMMAND', 'Connectors available for ETL jobs', hide: true
-
         subcommand 'connectors', Connectors
 
         desc 'jobs:COMMAND', 'Configure and run jobs', hide: true

@@ -3,6 +3,7 @@ module Chronicle
     module Registry
       # Records details about a connector such as its provider and a description
       class ConnectorRegistration
+        # FIXME: refactor custom accessor methods later in file
         attr_accessor :identifier, :provider, :klass, :description
 
         def initialize(klass)

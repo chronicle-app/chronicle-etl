@@ -9,20 +9,14 @@ module Chronicle
         r.description = 'an ASCII table'
       end
 
-      DEFAULT_OPTIONS = {
-        fields_limit: nil,
-        fields_exclude: ['lids', 'type'],
-        fields_include: [],
-        truncate_values_at: nil,
-        table_renderer: :basic
-      }.freeze
-
-      def initialize(options={})
-        @options = options.reverse_merge(DEFAULT_OPTIONS)
-        @records = []
-      end
+      setting :fields_limit, default: nil
+      setting :fields_exclude, default: ['lids', 'type']
+      setting :fields_include, default: []
+      setting :truncate_values_at
+      setting :table_renderer, default: :basic
 
       def load(record)
+        @records ||= []
         @records << record.to_h_flattened
       end
 
@@ -34,7 +28,7 @@ module Chronicle
 
         @table = TTY::Table.new(header: headers, rows: rows)
         puts @table.render(
-          @options[:table_renderer].to_sym,
+          @config.table_renderer.to_sym,
           padding: [0, 2, 0, 0]
         )
       end
@@ -43,15 +37,15 @@ module Chronicle
 
       def build_headers(records)
         headers =
-          if @options[:fields_include].any?
-            Set[*@options[:fields_include]]
+          if @config.fields_include.any?
+            Set[*@config.fields_include]
           else
             # use all the keys of the flattened record hash
             Set[*records.map(&:keys).flatten.map(&:to_s).uniq]
           end
 
-        headers = headers.delete_if { |header| header.end_with?(*@options[:fields_exclude]) } if @options[:fields_exclude].any?
-        headers = headers.first(@options[:fields_limit]) if @options[:fields_limit]
+        headers = headers.delete_if { |header| header.end_with?(*@config.fields_exclude) } if @config.fields_exclude.any?
+        headers = headers.first(@config.fields_limit) if @config.fields_limit
 
         headers.to_a.map(&:to_sym)
       end
@@ -60,8 +54,8 @@ module Chronicle
         records.map do |record|
           values = record.values_at(*headers).map{|value| value.to_s }
 
-          if @options[:truncate_values_at]
-            values = values.map{ |value| value.truncate(@options[:truncate_values_at]) }
+          if @config.truncate_values_at
+            values = values.map{ |value| value.truncate(@config.truncate_values_at) }
           end
 
           values

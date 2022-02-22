@@ -7,16 +7,8 @@ module Chronicle
         r.description = 'input as JSON'
       end
 
-      DEFAULT_OPTIONS = {
-        filename: $stdin,
-
-        # We're expecting line-separated json objects
-        jsonl: true
-      }.freeze
-
-      def initialize(options = {})
-        super(DEFAULT_OPTIONS.merge(options))
-      end
+      setting :filename, default: $stdin
+      setting :jsonl, default: true
 
       def extract
         load_input do |input|
