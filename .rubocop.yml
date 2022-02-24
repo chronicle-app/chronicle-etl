@@ -17,12 +17,12 @@ Layout/RedundantLineBreak:
 Style/MethodCallWithArgsParentheses:
   Enabled: false
 
-Lint/ConstantResolution:
-  Enabled: false
-
 Style/MethodCalledOnDoEndBlock:
   Exclude:
     - 'spec/**/*'
+
+Style/OpenStructUse:
+  Enabled: false
 
 Style/Copyright:
   Enabled: false
@@ -32,4 +32,7 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
+
+Lint/ConstantResolution:
+  Enabled: false
 
