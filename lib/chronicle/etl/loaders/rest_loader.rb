@@ -9,19 +9,19 @@ module Chronicle
         r.description = 'a REST endpoint'
       end
 
-      def initialize( options={} )
-        super(options)
-      end
+      setting :hostname, required: true
+      setting :endpoint, required: true
+      setting :access_token
 
       def load(record)
         payload = Chronicle::ETL::JSONAPISerializer.serialize(record)
         # have the outer data key that json-api expects
         payload = { data: payload } unless payload[:data]
 
-        uri = URI.parse("#{@options[:hostname]}#{@options[:endpoint]}")
+        uri = URI.parse("#{@config.hostname}#{@config.endpoint}")
 
         header = {
-          "Authorization" => "Bearer #{@options[:access_token]}",
+          "Authorization" => "Bearer #{@config.access_token}",
           "Content-Type": 'application/json'
         }
         use_ssl = uri.scheme == 'https'

@@ -19,20 +19,14 @@ module Chronicle
         r.description = 'an image file'
       end
 
-      DEFAULT_OPTIONS = {
-        timestamp_strategy: 'file_mtime',
-        id_strategy: 'file_hash',
-        verb: 'photographed',
-
-        # EXIF tags often don't have timezones
-        timezone_default: 'Eastern Time (US & Canada)',
-        include_image_data: true
-      }.freeze
-
-      def initialize(*args)
-        super(*args)
-        @options = @options.reverse_merge(DEFAULT_OPTIONS)
-      end
+      setting :timestamp_strategy, default: 'file_mtime'
+      setting :id_strategy, default: 'file_hash'
+      setting :verb, default: 'photographed'
+      # EXIF tags often don't have timezones
+      setting :timezone_default, default: 'Eastern Time (US & Canada)'
+      setting :include_image_data, default: true
+      setting :actor
+      setting :involved
 
       def transform
         # FIXME: set @filename; use block for reading file when necessary
@@ -48,7 +42,7 @@ module Chronicle
 
       def id
         @id ||= begin
-          id = build_with_strategy(field: :id, strategy: @options[:id_strategy])
+          id = build_with_strategy(field: :id, strategy: @config.id_strategy)
           raise UntransformableRecordError.new("Could not build id", transformation: self) unless id
 
           id
@@ -57,7 +51,7 @@ module Chronicle
 
       def timestamp
         @timestamp ||= begin
-          ts = build_with_strategy(field: :timestamp, strategy: @options[:timestamp_strategy])
+          ts = build_with_strategy(field: :timestamp, strategy: @config.timestamp_strategy)
           raise UntransformableRecordError.new("Could not build timestamp", transformation: self) unless ts
 
           ts
@@ -68,8 +62,8 @@ module Chronicle
 
       def build_created(file)
         record = ::Chronicle::ETL::Models::Activity.new
-        record.verb = @options[:verb]
-        record.provider = @options[:provider]
+        record.verb = @config.verb
+        record.provider = @config.provider
         record.provider_id = id
         record.end_at = timestamp
         record.dedupe_on = [[:provider_id, :verb, :provider]]
@@ -84,24 +78,24 @@ module Chronicle
       def build_actor
         actor = ::Chronicle::ETL::Models::Entity.new
         actor.represents = 'identity'
-        actor.provider = @options[:actor][:provider]
-        actor.slug = @options[:actor][:slug]
+        actor.provider = @config.actor[:provider]
+        actor.slug = @config.actor[:slug]
         actor.dedupe_on = [[:provider, :slug, :represents]]
         actor
       end
 
       def build_image
         image = ::Chronicle::ETL::Models::Entity.new
-        image.represents = @options[:involved][:represents]
+        image.represents = @config.involved[:represents]
         image.title = build_title
         image.body = exif['Description']
-        image.provider = @options[:involved][:provider]
+        image.provider = @config.involved[:provider]
         image.provider_id = id
         image.assign_attributes(build_gps)
         image.dedupe_on = [[:provider, :provider_id, :represents]]
 
-        if @options[:ocr_strategy]
-          ocr_text = build_with_strategy(field: :ocr, strategy: @options[:ocr_strategy])
+        if @config.ocr_strategy
+          ocr_text = build_with_strategy(field: :ocr, strategy: @config.ocr_strategy)
           image.metadata[:ocr_text] = ocr_text if ocr_text
         end
 
@@ -111,7 +105,7 @@ module Chronicle
         image.depicts = build_people_depicted(names)
         image.abouts = build_keywords(tags)
 
-        if @options[:include_image_data]
+        if @config.include_image_data
           attachment = ::Chronicle::ETL::Models::Attachment.new
           attachment.data = build_image_data
           image.attachments = [attachment]
@@ -124,7 +118,7 @@ module Chronicle
         topics.map do |topic|
           t = ::Chronicle::ETL::Models::Entity.new
           t.represents = 'topic'
-          t.provider = @options[:involved][:provider]
+          t.provider = @config.involved[:provider]
           t.title = topic
           t.slug = topic.parameterize
           t.dedupe_on = [[:provider, :represents, :slug]]
@@ -136,7 +130,7 @@ module Chronicle
         names.map do |name|
           identity = ::Chronicle::ETL::Models::Entity.new
           identity.represents = 'identity'
-          identity.provider = @options[:involved][:provider]
+          identity.provider = @config.involved[:provider]
           identity.slug = name.parameterize
           identity.title = name
           identity.dedupe_on = [[:provider, :represents, :slug]]
@@ -199,7 +193,7 @@ module Chronicle
         elsif false
           # TODO: support option of using GPS coordinates to determine timezone
         else
-          zone = ActiveSupport::TimeZone.new(@options[:timezone_default])
+          zone = ActiveSupport::TimeZone.new(@config.timezone_default)
           timestamp = zone.parse(timestamp.asctime)
         end
 

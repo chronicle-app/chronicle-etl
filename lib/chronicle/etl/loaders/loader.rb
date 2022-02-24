@@ -3,13 +3,16 @@ module Chronicle
     # Abstract class representing a Loader for an ETL job
     class Loader
       extend Chronicle::ETL::Registry::SelfRegistering
+      include Chronicle::ETL::Configurable
+
+      setting :output
 
       # Construct a new instance of this loader. Options are passed in from a Runner
       # == Parameters:
       # options::
       #   Options for configuring this Loader
       def initialize(options = {})
-        @options = options
+        apply_options(options)
       end
 
       # Called once before processing records

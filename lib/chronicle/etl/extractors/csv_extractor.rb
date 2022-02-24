@@ -9,14 +9,8 @@ module Chronicle
         r.description = 'input as CSV'
       end
 
-      DEFAULT_OPTIONS = {
-        headers: true,
-        filename: $stdin
-      }.freeze
-
-      def initialize(options = {})
-        super(DEFAULT_OPTIONS.merge(options))
-      end
+      setting :headers, default: true
+      setting :filename, default: $stdin
 
       def extract
         csv = initialize_csv
@@ -26,20 +20,20 @@ module Chronicle
       end
 
       def results_count
-        CSV.read(@options[:filename], headers: @options[:headers]).count unless stdin?(@options[:filename])
+        CSV.read(@config.filename, headers: @config.headers).count unless stdin?(@config.filename)
       end
 
       private
 
       def initialize_csv
-        headers = @options[:headers].is_a?(String) ? @options[:headers].split(',') : @options[:headers]
+        headers = @config.headers.is_a?(String) ? @config.headers.split(',') : @config.headers
 
         csv_options = {
           headers: headers,
           converters: :all
         }
 
-        open_from_filesystem(filename: @options[:filename]) do |file|
+        open_from_filesystem(filename: @config.filename) do |file|
           return CSV.new(file, **csv_options)
         end
       end

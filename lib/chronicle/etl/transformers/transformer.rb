@@ -3,14 +3,15 @@ module Chronicle
     # Abstract class representing an Transformer for an ETL job
     class Transformer
       extend Chronicle::ETL::Registry::SelfRegistering
+      include Chronicle::ETL::Configurable
 
       # Construct a new instance of this transformer. Options are passed in from a Runner
       # == Parameters:
       # options::
       #   Options for configuring this Transformer
-      def initialize(options = {}, extraction)
-        @options = options
+      def initialize(extraction, options = {})
         @extraction = extraction
+        apply_options(options)
       end
 
       # @abstract Subclass is expected to implement #transform
