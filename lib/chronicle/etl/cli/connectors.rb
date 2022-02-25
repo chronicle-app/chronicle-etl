@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Chronicle
   module ETL
     module CLI
@@ -36,6 +38,38 @@ module Chronicle
           end
 
           table = TTY::Table.new(headers, connector_info.map(&:values))
+          puts table.render(indent: 0, padding: [0, 2])
+        end
+
+        desc "show PHASE IDENTIFIER", "Show information about a connector"
+        def show(phase, identifier)
+          unless ['extractor', 'transformer', 'loader'].include?(phase)
+            puts "phase argument must be one of: [extractor, transformer, loader]"
+            return
+          end
+
+          begin
+            connector = Chronicle::ETL::Registry.find_by_phase_and_identifier(phase.to_sym, identifier)
+          rescue Chronicle::ETL::ConnectorNotAvailableError
+            puts "Could not find #{phase} #{identifier}"
+            return
+          end
+
+          puts connector.klass.to_s.bold
+          puts "  #{connector.descriptive_phrase}"
+          puts
+          puts "OPTIONS"
+
+          headers = ['name', 'default', 'required'].map{ |h| h.to_s.upcase.bold }
+
+          settings = connector.klass.settings.map do |name, setting|
+            [
+              name,
+              setting.default,
+              setting.required ? 'yes' : 'no'
+            ]
+          end
+          table = TTY::Table.new(headers, settings)
           puts table.render(indent: 0, padding: [0, 2])
         end
       end

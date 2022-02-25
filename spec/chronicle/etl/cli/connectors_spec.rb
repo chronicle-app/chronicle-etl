@@ -15,6 +15,29 @@ RSpec.describe Chronicle::ETL::CLI::Connectors do
     end
   end
 
+  describe "#show" do
+    context "with a a bad phase type" do
+      it "will show an error message" do
+        output = invoke_cli(%w[connectors:show transmorpher foo]).split("\n").map(&:uncolorize)
+        expect(output.first).to match(/must be one of/)
+      end
+    end
+
+    context "for a connector that does not exist" do
+      it "will show an error" do
+        output = invoke_cli(%w[connectors:show extractor unknown]).split("\n").map(&:uncolorize)
+        expect(output.first).to match(/Could not find/)
+      end
+    end
+
+    context "for a connector that exists" do
+      it "can show basic information a connector" do
+        output = invoke_cli(%w[connectors:show extractor csv]).split("\n").map(&:uncolorize)
+        expect(output.first).to eql("Chronicle::ETL::CSVExtractor")
+      end
+    end
+  end
+
   describe "#help" do
     it "outputs help for connectors" do
       expect(invoke_cli(%w[connectors help])).to match(/COMMANDS/)
