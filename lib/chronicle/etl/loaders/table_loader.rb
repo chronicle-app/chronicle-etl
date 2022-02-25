@@ -12,7 +12,7 @@ module Chronicle
       setting :fields_limit, default: nil
       setting :fields_exclude, default: ['lids', 'type']
       setting :fields_include, default: []
-      setting :truncate_values_at
+      setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
 
       def load(record)
