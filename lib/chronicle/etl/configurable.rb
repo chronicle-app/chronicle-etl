@@ -56,12 +56,10 @@ module Chronicle
           options.transform_keys!(&:to_sym)
 
           options.each do |name, value|
-            unless self.class.setting_exists?(name)
-              raise Chronicle::ETL::ConfigurationError,
-                    "Unrecognized setting: #{name}"
-            end
+            setting = self.class.all_settings[name]
+            raise(Chronicle::ETL::ConfigurationError, "Unrecognized setting: #{name}") unless setting
 
-            @config[name] = coerce_type_for_setting(name, value)
+            @config[name] = coerced_value(setting, value)
           end
           validate_config
           options
@@ -83,17 +81,22 @@ module Chronicle
           raise Chronicle::ETL::ConfigurationError, "Missing options: #{missing}" if missing.count.positive?
         end
 
-        def coerce_type_for_setting(_name, value)
-          # TODO: implement this
-          value
+        def coerced_value(setting, value)
+          setting.type ? __send__("coerce_#{setting.type}", value) : value
         end
 
-        # Was originally in Extractor
-        # Saving for use in type coercion system
-        # def sanitize_options
-        #   @config.since = Time.parse(@config.since) if @config.since && @config.since.is_a?(String)
-        #   @config.until = Time.parse(@config.until) if @config.until && @config.until.is_a?(String)
-        # end
+        def coerce_string(value)
+          value.to_s
+        end
+
+        def coerce_time(value)
+          # TODO: handle durations like '3h'
+          if value.is_a?(String)
+            Time.parse(value)
+          else
+            value
+          end
+        end
       end
 
       # Class methods for classes that have Configurable mixed in
@@ -109,7 +112,7 @@ module Chronicle
         #   setting :when, type: :date, required: true
         #
         # @see ::Chronicle::ETL::Configurable
-        def setting(name, default: nil, required: false, type: :string)
+        def setting(name, default: nil, required: false, type: nil)
           s = Setting.new(default, required, type)
           settings[name] = s
         end

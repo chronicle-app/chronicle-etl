@@ -4,9 +4,9 @@ RSpec.describe Chronicle::ETL::Configurable do
   let(:basic) do
     Class.new do
       include Chronicle::ETL::Configurable
-      
+
       setting :foo
-      
+
       def initialize(options={})
         apply_options(options)
       end
@@ -30,6 +30,12 @@ RSpec.describe Chronicle::ETL::Configurable do
   let(:with_default) do
     Class.new(basic) do
       setting :def, default: 'default value'
+    end
+  end
+
+  let(:with_type) do
+    Class.new(basic) do
+      setting :since, type: :time
     end
   end
 
@@ -89,6 +95,25 @@ RSpec.describe Chronicle::ETL::Configurable do
     it "can have a default value overriden by a subclass" do
       c = DefaultSettingSubclass.new(foo: 'bar')
       expect(c.config.def).to eql('new value')
+    end
+  end
+
+  describe "Typed settings" do
+    before do
+      stub_const("TypedSettingClass", with_type)
+    end
+
+    context "for type time" do
+      it "does not change values that do not have to be coerced" do
+        c = TypedSettingClass.new(since: Time.new(2022, 2, 24))
+        expect(c.config.since).to be_a_kind_of(Time)
+        expect(c.config.since.to_date.iso8601).to eq("2022-02-24")
+      end
+      it "coerces settings of type: time into Time objects" do
+        c = TypedSettingClass.new(since: '2022-02-24 14:00-0500')
+        expect(c.config.since).to be_a_kind_of(Time)
+        expect(c.config.since.iso8601).to eq("2022-02-24T14:00:00-05:00")
+      end
     end
   end
 end
