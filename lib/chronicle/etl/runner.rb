@@ -52,7 +52,7 @@ class Chronicle::ETL::Runner
     raise e
   ensure
     @job_logger.save
-    @progress_bar.finish
+    @progress_bar&.finish
     Chronicle::ETL::Logger.detach_from_progress_bar
     Chronicle::ETL::Logger.info(tty_log_completion)
   end
