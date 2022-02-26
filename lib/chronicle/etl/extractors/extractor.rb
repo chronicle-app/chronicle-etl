@@ -7,8 +7,8 @@ module Chronicle
       extend Chronicle::ETL::Registry::SelfRegistering
       include Chronicle::ETL::Configurable
 
-      setting :since, type: :date
-      setting :until, type: :date
+      setting :since, type: :time
+      setting :until, type: :time
       setting :limit
       setting :load_after_id
       setting :filename
