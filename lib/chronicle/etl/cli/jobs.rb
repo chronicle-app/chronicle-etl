@@ -28,6 +28,7 @@ module Chronicle
 
         class_option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
         class_option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
+        class_option :silent, desc: 'Silence all output', type: :boolean
 
         # Thor doesn't like `run` as a command name
         map run: :start
@@ -93,7 +94,9 @@ LONG_DESC
         private
 
         def setup_log_level
-          if options[:verbose]
+          if options[:silent]
+            Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::SILENT
+          elsif options[:verbose]
             Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::DEBUG
           elsif options[:log_level]
             level = Chronicle::ETL::Logger.const_get(options[:log_level].upcase)

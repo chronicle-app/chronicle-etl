@@ -8,6 +8,7 @@ module Chronicle
       WARN = 2
       ERROR = 3
       FATAL = 4
+      SILENT = 5
 
       attr_accessor :log_level
 
