@@ -89,6 +89,14 @@ module Chronicle
           value.to_s
         end
 
+        def coerce_boolean(value)
+          if value.is_a?(String)
+            value.downcase == "true"
+          else
+            value
+          end
+        end
+
         def coerce_time(value)
           # TODO: handle durations like '3h'
           if value.is_a?(String)
