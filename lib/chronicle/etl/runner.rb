@@ -28,9 +28,10 @@ class Chronicle::ETL::Runner
       transformer = @job.instantiate_transformer(extraction)
       record = transformer.transform
 
-      unless record.is_a?(Chronicle::ETL::Models::Base)
-        raise Chronicle::ETL::RunnerTypeError, "Transformed data should be a type of Chronicle::ETL::Models"
-      end
+      # TODO: rethink this
+      # unless record.is_a?(Chronicle::ETL::Models)
+      #   raise Chronicle::ETL::RunnerTypeError, "Transformed data should be a type of Chronicle::ETL::Models"
+      # end
 
       Chronicle::ETL::Logger.info(tty_log_transformation(transformer))
       @job_logger.log_transformation(transformer)

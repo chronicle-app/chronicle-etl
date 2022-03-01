@@ -1,8 +1,8 @@
 module Chronicle
   module ETL
-    class Error < StandardError; end;
+    class Error < StandardError; end
 
-    class ConfigurationError < Error; end;
+    class ConfigurationError < Error; end
 
     class RunnerTypeError < Error; end
 
@@ -17,6 +17,8 @@ module Chronicle
 
     class ProviderNotAvailableError < ConnectorNotAvailableError; end
     class ProviderConnectorNotAvailableError < ConnectorNotAvailableError; end
+
+    class SerializationError < Error; end
 
     class TransformationError < Error
       attr_reader :transformation

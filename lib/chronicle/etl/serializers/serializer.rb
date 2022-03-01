@@ -25,3 +25,4 @@ module Chronicle
 end
 
 require_relative 'jsonapi_serializer'
+require_relative 'raw_serializer'

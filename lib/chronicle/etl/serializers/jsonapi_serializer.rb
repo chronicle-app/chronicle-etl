@@ -1,6 +1,12 @@
 module Chronicle
   module ETL
     class JSONAPISerializer < Chronicle::ETL::Serializer
+      def initialize(*args)
+        super
+
+        raise(SerializationError, "Record must be a subclass of Chronicle::ETL::Model::Base") unless @record.is_a?(Chronicle::ETL::Models::Base)
+      end
+
       def serializable_hash
         @record
           .identifier_hash
