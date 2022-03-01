@@ -5,7 +5,7 @@ module Chronicle
     module Models
       class Entity < Chronicle::ETL::Models::Base
         TYPE = 'entities'.freeze
-        ATTRIBUTES = [:title, :body, :represents, :slug, :myself, :metadata].freeze
+        ATTRIBUTES = [:title, :body, :provider_url, :represents, :slug, :myself, :metadata].freeze
         ASSOCIATIONS = [
           :attachments,
           :abouts,

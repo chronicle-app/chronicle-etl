@@ -5,6 +5,9 @@ module Chronicle
     module Models
       # Represents a record that's been transformed by a Transformer and
       # ready to be loaded. Loosely based on ActiveModel.
+      #
+      # @todo Experiment with just mixing in ActiveModel instead of this
+      #   this reimplementation
       class Base
         ATTRIBUTES = [:provider, :provider_id, :lat, :lng, :metadata].freeze
         ASSOCIATIONS = [].freeze
