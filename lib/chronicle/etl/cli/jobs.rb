@@ -6,20 +6,20 @@ module Chronicle
       # CLI commands for working with ETL jobs
       class Jobs < SubcommandBase
         default_task "start"
-        namespace :jobs
+        namespace :jobs 
 
         class_option :name, aliases: '-j', desc: 'Job configuration name'
 
-        class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'extractor-name'
+        class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'NAME'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
-        class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'transformer-name'
+        class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'NAME'
         class_option :'transformer-opts', desc: 'Transformer options', type: :hash, default: {}
-        class_option :loader, aliases: '-l', desc: 'Loader class. Default: stdout', banner: 'loader-name'
+        class_option :loader, aliases: '-l', desc: 'Loader class. Default: table', banner: 'NAME'
         class_option :'loader-opts', desc: 'Loader options', type: :hash, default: {}
 
         # This is an array to deal with shell globbing
         class_option :input, aliases: '-i', desc: 'Input filename or directory', default: [], type: 'array', banner: 'FILENAME'
-        class_option :since, desc: "Load records SINCE this date. Overrides job's `load_since` configuration option in extractor's options", banner: 'DATE'
+        class_option :since, desc: "Load records SINCE this date", banner: 'DATE'
         class_option :until, desc: "Load records UNTIL this date", banner: 'DATE'
         class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
 
