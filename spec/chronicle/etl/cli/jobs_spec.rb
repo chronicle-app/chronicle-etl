@@ -7,7 +7,7 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
       --extractor csv
       --log-level fatal
       --extractor-opts
-    ] << "filename:#{csv_filename}"
+    ] << "input:#{csv_filename}"
   end
 
   describe "chronicle-etl jobs:run" do
@@ -16,8 +16,9 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
 
       args = ['jobs:run'] << csv_job_args
       output = invoke_cli(args)
-      
-      expect(output.split("\n").count).to eql(file_record_count)
+
+      # records + table header row
+      expect(output.split("\n").count).to eql(file_record_count + 1)
     end
   end
 

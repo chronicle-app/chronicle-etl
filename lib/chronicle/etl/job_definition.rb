@@ -14,7 +14,7 @@ module Chronicle
           options: {}
         },
         loader: {
-          name: 'stdout',
+          name: 'table',
           options: {}
         }
       }.freeze

@@ -17,7 +17,7 @@ RSpec.describe Chronicle::ETL::Runner do
         extractor: {
           name: 'csv',
           options: {
-           filename: filename
+           input: filename
           }
         }
       })
@@ -30,7 +30,8 @@ RSpec.describe Chronicle::ETL::Runner do
         r.run!
       end
 
-      expect(output.split("\n").count).to eql(file_record_count)
+      # records + table header row
+      expect(output.split("\n").count).to eql(file_record_count + 1)
     end
   end
 end
