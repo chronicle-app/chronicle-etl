@@ -24,3 +24,9 @@ require_relative 'etl/version'
 require_relative 'etl/extractors/extractor'
 require_relative 'etl/loaders/loader'
 require_relative 'etl/transformers/transformer'
+
+begin
+  require 'pry'
+rescue LoadError
+  # Pry not available
+end
