@@ -18,6 +18,8 @@ module Chronicle
     class ProviderNotAvailableError < ConnectorNotAvailableError; end
     class ProviderConnectorNotAvailableError < ConnectorNotAvailableError; end
 
+    class ExtractionError < Error; end
+
     class SerializationError < Error; end
 
     class TransformationError < Error

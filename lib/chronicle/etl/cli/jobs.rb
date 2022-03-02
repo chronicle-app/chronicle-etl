@@ -119,7 +119,7 @@ LONG_DESC
         # Takes flag options and turns them into a runner config
         def process_flag_options options
           extractor_options = options[:'extractor-opts'].merge({
-            filename: (options[:input] if options[:input].any?),
+            input: (options[:input] if options[:input].any?),
             since: options[:since],
             until: options[:until],
             limit: options[:limit],

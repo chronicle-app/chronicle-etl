@@ -40,17 +40,18 @@ Built in connectors:
 
 ### Extractors
 - `stdin` - (default) Load records from line-separated stdin
-- `csv`
+- `csv` - Load records from CSV fileds
+- `json` - Load JSON (either line-separated objects, or one object)
 - `file` - load from a single file or directory (with a glob pattern)
 
 ### Transformers
 - `null` - (default) Don't do anything
 
 ### Loaders
-- `stdout` - (default) output records to stdout serialized as JSON
-- `csv` - Load records to a csv file
+- `table` - (default) Output an ascii table of records. Useful for debugging.
+- `csv` - Load records to CSV
+- `json` - Load records serialized as JSON
 - `rest` - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
-- `table` - Output an ascii table of records. Useful for debugging.
 
 ### Provider-specific importers
 

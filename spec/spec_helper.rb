@@ -1,13 +1,12 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'pry'
-
 require "bundler/setup"
 require "chronicle/etl"
 require "chronicle/etl/cli"
 
 require_relative "support/invoke_cli"
+require_relative "support/run_extraction"
 
 RSpec.configure do |config|
   config.include Chronicle::ETL::SpecHelpers

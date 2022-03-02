@@ -30,5 +30,6 @@ module Chronicle
 end
 
 require_relative 'csv_loader'
+require_relative 'json_loader'
 require_relative 'rest_loader'
 require_relative 'table_loader'

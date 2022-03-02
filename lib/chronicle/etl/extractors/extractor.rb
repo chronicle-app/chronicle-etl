@@ -11,7 +11,7 @@ module Chronicle
       setting :until, type: :time
       setting :limit
       setting :load_after_id
-      setting :filename
+      setting :input
 
       # Construct a new instance of this extractor. Options are passed in from a Runner
       # == Parameters:
@@ -46,7 +46,7 @@ module Chronicle
   end
 end
 
-require_relative 'helpers/filesystem_reader'
+require_relative 'helpers/input_reader'
 require_relative 'csv_extractor'
 require_relative 'file_extractor'
 require_relative 'json_extractor'

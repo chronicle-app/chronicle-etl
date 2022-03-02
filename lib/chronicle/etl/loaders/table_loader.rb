@@ -11,20 +11,19 @@ module Chronicle
 
       setting :fields_limit, default: nil
       setting :fields_exclude, default: ['lids', 'type']
-      setting :fields_include, default: []
+      setting :fields, default: []
       setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
 
       def load(record)
-        @records ||= []
-        @records << record.to_h_flattened
+        records << record.to_h_flattened
       end
 
       def finish
-        return if @records.empty?
+        return if records.empty?
 
-        headers = build_headers(@records)
-        rows = build_rows(@records, headers)
+        headers = build_headers(records)
+        rows = build_rows(records, headers)
 
         @table = TTY::Table.new(header: headers, rows: rows)
         puts @table.render(
@@ -33,12 +32,16 @@ module Chronicle
         )
       end
 
+      def records
+        @records ||= []
+      end
+
       private
 
       def build_headers(records)
         headers =
-          if @config.fields_include.any?
-            Set[*@config.fields_include]
+          if @config.fields.any?
+            Set[*@config.fields]
           else
             # use all the keys of the flattened record hash
             Set[*records.map(&:keys).flatten.map(&:to_s).uniq]
@@ -52,7 +55,7 @@ module Chronicle
 
       def build_rows(records, headers)
         records.map do |record|
-          values = record.values_at(*headers).map{|value| value.to_s }
+          values = record.transform_keys(&:to_sym).values_at(*headers).map{|value| value.to_s }
 
           if @config.truncate_values_at
             values = values.map{ |value| value.truncate(@config.truncate_values_at) }
