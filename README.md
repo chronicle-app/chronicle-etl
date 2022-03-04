@@ -98,8 +98,8 @@ If you want to work together on a connector, please [get in touch](#get-in-touch
 | [imessage](https://github.com/chronicle-app/chronicle-imessage) | iMessage messages and attachments                                                           | Available                        |
 | [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (zsh support pending)  |
 | [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available (imap support pending) |
+| [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
 | github                                                          | Github user and repo activity                                                               | In progress                      |
-| pinboard                                                        | Bookmarks and tags                                                                          | Needs porting                    |
 | safari                                                          | Browser history from local sqlite db                                                        | Needs porting                    |
 | chrome                                                          | Browser history from local sqlite db                                                        | Needs porting                    |
 | whatsapp                                                        | Messaging history (via individual chat exports) or reverse-engineered local desktop install | Unstarted                        |
