@@ -89,6 +89,11 @@ module Chronicle
           value.to_s
         end
 
+        # TODO: think about whether to split up float, integer
+        def coerce_numeric(value)
+          value.to_f
+        end
+
         def coerce_boolean(value)
           if value.is_a?(String)
             value.downcase == "true"

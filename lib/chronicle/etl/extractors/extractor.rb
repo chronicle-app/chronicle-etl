@@ -9,7 +9,7 @@ module Chronicle
 
       setting :since, type: :time
       setting :until, type: :time
-      setting :limit
+      setting :limit, type: :numeric
       setting :load_after_id
       setting :input
 
