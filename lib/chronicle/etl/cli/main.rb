@@ -6,10 +6,12 @@ module Chronicle
       # Main entrypoint for CLI app
       class Main < ::Thor
         class_before :set_log_level
+        class_before :set_color_output
 
         class_option :log_level, desc: 'Log level (debug, info, warn, error, fatal, silent)', default: 'info'
         class_option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
         class_option :silent, desc: 'Silence all output', type: :boolean
+        class_option :'no-color', desc: 'Disable colour output', type: :boolean
 
         default_task "jobs"
 
@@ -87,6 +89,10 @@ module Chronicle
         end
 
         no_commands do
+          def set_color_output
+            String.disable_colorization true if options[:'no-color'] || ENV['NO_COLOR']
+          end
+
           def set_log_level
             if options[:silent]
               Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::SILENT
