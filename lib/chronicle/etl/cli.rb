@@ -1,4 +1,5 @@
 require 'thor'
+require 'thor/hollaback'
 require 'chronicle/etl'
 
 require 'chronicle/etl/cli/subcommand_base'

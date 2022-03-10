@@ -47,6 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sequel", "~> 5.35"
   spec.add_dependency "sqlite3", "~> 1.4"
   spec.add_dependency "thor", "~> 1.2"
+  spec.add_dependency "thor-hollaback", "~> 0.2"
   spec.add_dependency "tty-progressbar", "~> 0.17"
   spec.add_dependency "tty-table", "~> 0.11"
 

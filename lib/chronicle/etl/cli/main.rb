@@ -5,6 +5,12 @@ module Chronicle
     module CLI
       # Main entrypoint for CLI app
       class Main < ::Thor
+        class_before :set_log_level
+
+        class_option :log_level, desc: 'Log level (debug, info, warn, error, fatal, silent)', default: 'info'
+        class_option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
+        class_option :silent, desc: 'Silence all output', type: :boolean
+
         default_task "jobs"
 
         desc 'connectors:COMMAND', 'Connectors available for ETL jobs', hide: true
@@ -77,6 +83,19 @@ module Chronicle
             shell.say "FULL DOCUMENTATION".bold
             shell.say "  https://github.com/chronicle-app/chronicle-etl".blue
             shell.say
+          end
+        end
+
+        no_commands do
+          def set_log_level
+            if options[:silent]
+              Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::SILENT
+            elsif options[:verbose]
+              Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::DEBUG
+            elsif options[:log_level]
+              level = Chronicle::ETL::Logger.const_get(options[:log_level].upcase)
+              Chronicle::ETL::Logger.log_level = level
+            end
           end
         end
       end
