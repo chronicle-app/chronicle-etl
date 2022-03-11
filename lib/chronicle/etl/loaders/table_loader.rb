@@ -11,6 +11,7 @@ module Chronicle
 
       setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
+      setting :fields_exclude, default: ['lids', 'type']
 
       def load(record)
         records << record.to_h_flattened
