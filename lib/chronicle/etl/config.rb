@@ -23,18 +23,15 @@ module Chronicle
       end
 
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
-      # TODO: raise error if we can't read directory
       def available_jobs
-        job_directory = Runcom::Config.new('chronicle/etl/jobs').current
-        Dir.glob(File.join(job_directory, "*.yml")).map do |filename|
+        Dir.glob(File.join(config_directory("jobs"), "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
       end
 
       # Returns all available credentials available in ~/.config/chronicle/etl/credentials/*.yml
       def available_credentials
-        job_directory = Runcom::Config.new('chronicle/etl/credentials').current
-        Dir.glob(File.join(job_directory, "*.yml")).map do |filename|
+        Dir.glob(File.join(config_directory("credentials"), "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
       end
@@ -48,6 +45,11 @@ module Chronicle
 
       def load_credentials(name)
         config = self.load("chronicle/etl/credentials/#{name}.yml")
+      end
+
+      def config_directory(type)
+        path = "chronicle/etl/#{type}"
+        Runcom::Config.new(path).current || raise(Chronicle::ETL::ConfigError, "Could not access config directory (#{path})")
       end
     end
   end

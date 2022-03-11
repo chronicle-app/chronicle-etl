@@ -99,6 +99,10 @@ LONG_DESC
           puts "Available jobs:"
           table = TTY::Table.new(headers, job_details)
           puts table.render(indent: 0, padding: [0, 2])
+        rescue Chronicle::ETL::ConfigError => e
+          Chronicle::ETL::Logger.debug(e.full_message)
+          Chronicle::ETL::Logger.fatal("Error reading config. #{e.message}".red)
+          exit 1
         end
 
         private

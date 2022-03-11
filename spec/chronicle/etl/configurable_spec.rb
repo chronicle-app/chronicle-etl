@@ -62,7 +62,7 @@ RSpec.describe Chronicle::ETL::Configurable do
     end
 
     it "does not configure unrecognized settings" do
-      expect { BasicClass.new(arbitrary_setting: 'bar') }.to raise_error(Chronicle::ETL::ConfigurationError)
+      expect { BasicClass.new(arbitrary_setting: 'bar') }.to raise_error(Chronicle::ETL::ConnectorConfigurationError)
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe Chronicle::ETL::Configurable do
     end
 
     it "raises an exception if missing an option" do
-      expect { RequiredSettingClass.new(foo: 'bar') }.to raise_error(Chronicle::ETL::ConfigurationError)
+      expect { RequiredSettingClass.new(foo: 'bar') }.to raise_error(Chronicle::ETL::ConnectorConfigurationError)
     end
 
     it "can override parent class required setting" do

@@ -57,7 +57,7 @@ module Chronicle
 
           options.each do |name, value|
             setting = self.class.all_settings[name]
-            raise(Chronicle::ETL::ConfigurationError, "Unrecognized setting: #{name}") unless setting
+            raise(Chronicle::ETL::ConnectorConfigurationError, "Unrecognized setting: #{name}") unless setting
 
             @config[name] = coerced_value(setting, value)
           end
@@ -78,7 +78,7 @@ module Chronicle
 
         def validate_config
           missing = (self.class.all_required_settings.keys - @config.compacted_h.keys)
-          raise Chronicle::ETL::ConfigurationError, "Missing options: #{missing}" if missing.count.positive?
+          raise Chronicle::ETL::ConnectorConfigurationError, "Missing options: #{missing}" if missing.count.positive?
         end
 
         def coerced_value(setting, value)

@@ -2,7 +2,7 @@ module Chronicle
   module ETL
     class Error < StandardError; end
 
-    class ConfigurationError < Error; end
+    class ConfigError < Error; end
 
     class RunnerTypeError < Error; end
 
@@ -25,6 +25,8 @@ module Chronicle
 
     class PluginNotAvailableError < PluginError; end
     class PluginLoadError < PluginError; end
+
+    class ConnectorConfigurationError < Error; end
 
     class ConnectorNotAvailableError < Error
       def initialize(message, provider: nil, name: nil)
