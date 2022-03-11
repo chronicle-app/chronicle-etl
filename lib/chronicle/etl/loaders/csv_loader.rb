@@ -21,10 +21,12 @@ module Chronicle
       def finish
         return unless records.any?
 
+        headers = build_headers(records)
+
         csv_options = {}
         if @config.headers
           csv_options[:write_headers] = true
-          csv_options[:headers] = records.first.keys
+          csv_options[:headers] = headers
         end
 
         if @config.output.is_a?(IO)
@@ -38,7 +40,10 @@ module Chronicle
 
         output = CSV.generate(**csv_options) do |csv|
           records.each do |record|
-            csv << record.values.map { |value| force_utf8(value) }
+            csv << record
+              .transform_keys(&:to_sym)
+              .values_at(*headers)
+              .map { |value| force_utf8(value) }
           end
         end
 

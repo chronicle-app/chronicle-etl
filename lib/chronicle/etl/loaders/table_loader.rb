@@ -9,9 +9,6 @@ module Chronicle
         r.description = 'an ASCII table'
       end
 
-      setting :fields_limit, default: nil
-      setting :fields_exclude, default: ['lids', 'type']
-      setting :fields, default: []
       setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
 
@@ -37,21 +34,6 @@ module Chronicle
       end
 
       private
-
-      def build_headers(records)
-        headers =
-          if @config.fields.any?
-            Set[*@config.fields]
-          else
-            # use all the keys of the flattened record hash
-            Set[*records.map(&:keys).flatten.map(&:to_s).uniq]
-          end
-
-        headers = headers.delete_if { |header| header.end_with?(*@config.fields_exclude) } if @config.fields_exclude.any?
-        headers = headers.first(@config.fields_limit) if @config.fields_limit
-
-        headers.to_a.map(&:to_sym)
-      end
 
       def build_rows(records, headers)
         records.map do |record|
