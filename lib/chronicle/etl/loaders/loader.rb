@@ -1,9 +1,12 @@
+require_relative 'helpers/encoding_helper'
+
 module Chronicle
   module ETL
     # Abstract class representing a Loader for an ETL job
     class Loader
       extend Chronicle::ETL::Registry::SelfRegistering
       include Chronicle::ETL::Configurable
+      include Chronicle::ETL::Loaders::Helpers::EncodingHelper
 
       setting :output
 

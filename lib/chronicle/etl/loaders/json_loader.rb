@@ -25,7 +25,7 @@ module Chronicle
         encoded = serialized.transform_values do |value|
           next value unless value.is_a?(String)
 
-          value.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
+          force_utf8(value)
         end
         @output.puts encoded.to_json
       end

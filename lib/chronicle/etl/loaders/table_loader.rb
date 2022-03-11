@@ -56,7 +56,7 @@ module Chronicle
       def build_rows(records, headers)
         records.map do |record|
           values = record.transform_keys(&:to_sym).values_at(*headers).map{|value| value.to_s }
-
+          values = values.map { |value| force_utf8(value) }
           if @config.truncate_values_at
             values = values.map{ |value| value.truncate(@config.truncate_values_at) }
           end
