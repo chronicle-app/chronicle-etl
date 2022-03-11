@@ -77,6 +77,7 @@ LONG_DESC
         rescue Chronicle::ETL::JobDefinitionError => e
           Chronicle::ETL::Logger.debug(e.full_message)
           Chronicle::ETL::Logger.fatal("Job definition error".red)
+          exit 1
         end
 
         desc "list", "List all available jobs"
