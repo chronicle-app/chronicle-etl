@@ -88,7 +88,16 @@ Plugins provide access to data from third-party platforms, services, or formats.
 
 ```bash
 # Install a plugin
-$ chronicle-etl connectors:install NAME
+$ chronicle-etl plugins:install NAME
+
+# Install the imessage plugin
+$ chronicle-etl plugins:install imessage
+
+# List installed plugins
+$ chronicle-etl plugins:list
+
+# Uninstall a plugin
+$ chronicle-etl plugins:uninstall NAME
 ```
 
 A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and they’re being ported over to the Chronicle system. This table shows what’s available now and what’s coming. Rows are sorted in very rough order of priority.
