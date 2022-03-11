@@ -26,7 +26,7 @@ RSpec.describe Chronicle::ETL::Runner do
 
       r = Chronicle::ETL::Runner.new(job)
 
-      output = capture(:stdout) do 
+      output, = capture do
         r.run!
       end
 

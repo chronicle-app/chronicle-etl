@@ -49,7 +49,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor", "~> 1.2"
   spec.add_dependency "thor-hollaback", "~> 0.2"
   spec.add_dependency "tty-progressbar", "~> 0.17"
+  spec.add_dependency "tty-spinner"
   spec.add_dependency "tty-table", "~> 0.11"
+  spec.add_dependency "tty-prompt", "~> 0.23"
 
   spec.add_development_dependency "bundler", "~> 2.1"
   spec.add_development_dependency "pry-byebug", "~> 3.9"

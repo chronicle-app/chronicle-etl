@@ -8,11 +8,6 @@ module Chronicle
         default_task 'list'
         namespace :connectors
 
-        desc "install NAME", "Installs connector NAME"
-        def install(name)
-          Chronicle::ETL::Registry.install_connector(name)
-        end
-
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
@@ -44,21 +39,21 @@ module Chronicle
         desc "show PHASE IDENTIFIER", "Show information about a connector"
         def show(phase, identifier)
           unless ['extractor', 'transformer', 'loader'].include?(phase)
-            puts "phase argument must be one of: [extractor, transformer, loader]"
-            return
+            Chronicle::ETL::Logger.fatal("Phase argument must be one of: [extractor, transformer, loader]")
+            exit 1
           end
 
           begin
             connector = Chronicle::ETL::Registry.find_by_phase_and_identifier(phase.to_sym, identifier)
-          rescue Chronicle::ETL::ConnectorNotAvailableError
-            puts "Could not find #{phase} #{identifier}"
-            return
+          rescue Chronicle::ETL::ConnectorNotAvailableError, Chronicle::ETL::PluginError
+            Chronicle::ETL::Logger.fatal("Could not find #{phase} #{identifier}")
+            exit 1
           end
 
           puts connector.klass.to_s.bold
           puts "  #{connector.descriptive_phrase}"
           puts
-          puts "OPTIONS"
+          puts "Settings:"
 
           headers = ['name', 'default', 'required'].map{ |h| h.to_s.upcase.bold }
 

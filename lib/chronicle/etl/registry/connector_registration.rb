@@ -44,6 +44,11 @@ module Chronicle
           @provider || (built_in? ? 'chronicle' : '')
         end
 
+        # TODO: allow overriding here. Maybe through self-registration process
+        def plugin
+          @provider
+        end
+
         def descriptive_phrase
           prefix = case phase
           when :extractor
