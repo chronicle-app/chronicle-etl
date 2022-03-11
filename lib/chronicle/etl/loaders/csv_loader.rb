@@ -36,12 +36,13 @@ module Chronicle
           io = File.open(@config.output, "w+")
         end
 
-        output = CSV.generate(csv_options) do |csv|
+        output = CSV.generate(**csv_options) do |csv|
           records.each do |record|
             csv << record.values.map { |value| force_utf8(value) }
           end
         end
-        io.puts(output)
+
+        io.write(output)
         io.close
       end
     end
