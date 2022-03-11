@@ -19,11 +19,11 @@ RSpec.describe Chronicle::ETL::CSVLoader do
     l.load(record)
     l.load(record)
 
-    lines = capture do 
+    lines = capture do
       l.finish
     end.first.split("\n")
 
-    expect(lines.count).to eql(2)
+    expect(lines.count).to eql(3)
 
     # TODO: more rigorous test
   end

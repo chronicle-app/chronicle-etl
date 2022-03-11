@@ -27,6 +27,9 @@ Style/OpenStructUse:
 Style/Copyright:
   Enabled: false
 
+Style/MissingElse:
+  Enabled: false
+
 Style/SymbolArray:
   EnforcedStyle: brackets
 

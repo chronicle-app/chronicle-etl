@@ -7,21 +7,43 @@ module Chronicle
         r.description = 'CSV'
       end
 
-      def initialize(options={})
-        super(options)
-        @rows = []
+      setting :output, default: $stdout
+      setting :headers, default: true
+
+      def records
+        @records ||= []
       end
 
       def load(record)
-        @rows << record.to_h_flattened.values
+        records << record.to_h_flattened
       end
 
       def finish
-        z = $stdout
-        CSV(z) do |csv|
-          @rows.each do |row|
-            csv << row
+        return unless records.any?
+
+        csv_options = {}
+        if @config.headers
+          csv_options[:write_headers] = true
+          csv_options[:headers] = records.first.keys
+        end
+
+        if @config.output.is_a?(IO)
+          # This might seem like a duplication of the default value ($stdout)
+          # but it's because rspec overwrites $stdout (in helper #capture) to
+          # capture output.
+          io = $stdout.dup
+        else
+          io = File.open(@config.output, "w+")
+        end
+
+        begin
+          CSV(io, csv_options) do |csv|
+            records.each do |record|
+              csv << record.values.map { |value| force_utf8(value) }
+            end
           end
+        ensure
+          io.close
         end
       end
     end
