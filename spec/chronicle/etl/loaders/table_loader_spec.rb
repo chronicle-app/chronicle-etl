@@ -16,9 +16,9 @@ RSpec.describe Chronicle::ETL::TableLoader do
     l = Chronicle::ETL::TableLoader.new
 
     l.load(record)
-    lines = capture(:stdout) do 
+    lines = capture do
       l.finish
-    end.split("\n")
+    end.first.split("\n")
 
     # header + record
     expect(lines.count).to eql(2)

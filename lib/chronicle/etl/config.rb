@@ -23,6 +23,7 @@ module Chronicle
       end
 
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
+      # TODO: raise error if we can't read directory
       def available_jobs
         job_directory = Runcom::Config.new('chronicle/etl/jobs').current
         Dir.glob(File.join(job_directory, "*.yml")).map do |filename|

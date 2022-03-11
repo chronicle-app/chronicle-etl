@@ -1,4 +1,5 @@
 require 'pp'
+require 'tty-prompt'
 
 module Chronicle
   module ETL
@@ -6,7 +7,7 @@ module Chronicle
       # CLI commands for working with ETL jobs
       class Jobs < SubcommandBase
         default_task "start"
-        namespace :jobs 
+        namespace :jobs
 
         class_option :name, aliases: '-j', desc: 'Job configuration name'
 
@@ -26,15 +27,9 @@ module Chronicle
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
         class_option :fields, desc: 'Output only these fields', type: 'array', banner: 'field1 field2 ...'
 
-        class_option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
-        class_option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
-        class_option :silent, desc: 'Silence all output', type: :boolean
-
         # Thor doesn't like `run` as a command name
         map run: :start
         desc "run", "Start a job"
-        option :log_level, desc: 'Log level (debug, info, warn, error, fatal)', default: 'info'
-        option :verbose, aliases: '-v', desc: 'Set log level to verbose', type: :boolean
         option :dry_run, desc: 'Only run the extraction and transform steps, not the loading', type: :boolean
         long_desc <<-LONG_DESC
           This will run an ETL job. Each job needs three parts:
@@ -49,25 +44,39 @@ module Chronicle
 LONG_DESC
         # Run an ETL job
         def start
-          setup_log_level
-          job_definition = build_job_definition(options)
-          job = Chronicle::ETL::Job.new(job_definition)
-          runner = Chronicle::ETL::Runner.new(job)
-          runner.run!
+          run_job(options)
+        rescue Chronicle::ETL::JobDefinitionError => e
+          missing_plugins = e.job_definition.errors
+            .select { |error| error.is_a?(Chronicle::ETL::PluginLoadError) }
+            .map(&:name)
+            .uniq
+
+          install_missing_plugins(missing_plugins)
+          run_job(options)
         end
 
         desc "create", "Create a job"
         # Create an ETL job
         def create
           job_definition = build_job_definition(options)
+          job_definition.validate!
+
           path = File.join('chronicle', 'etl', 'jobs', options[:name])
           Chronicle::ETL::Config.write(path, job_definition.definition)
+        rescue Chronicle::ETL::JobDefinitionError => e
+          Chronicle::ETL::Logger.debug(e.full_message)
+          Chronicle::ETL::Logger.fatal("Job definition error".red)
         end
 
         desc "show", "Show details about a job"
         # Show an ETL job
         def show
-          puts Chronicle::ETL::Job.new(build_job_definition(options))
+          job_definition = build_job_definition(options)
+          job_definition.validate!
+          puts Chronicle::ETL::Job.new(job_definition)
+        rescue Chronicle::ETL::JobDefinitionError => e
+          Chronicle::ETL::Logger.debug(e.full_message)
+          Chronicle::ETL::Logger.fatal("Job definition error".red)
         end
 
         desc "list", "List all available jobs"
@@ -87,21 +96,39 @@ LONG_DESC
 
           headers = ['name', 'extractor', 'transformer', 'loader'].map { |h| h.upcase.bold }
 
+          puts "Available jobs:"
           table = TTY::Table.new(headers, job_details)
           puts table.render(indent: 0, padding: [0, 2])
         end
 
         private
 
-        def setup_log_level
-          if options[:silent]
-            Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::SILENT
-          elsif options[:verbose]
-            Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::DEBUG
-          elsif options[:log_level]
-            level = Chronicle::ETL::Logger.const_get(options[:log_level].upcase)
-            Chronicle::ETL::Logger.log_level = level 
+        def run_job(options)
+          job_definition = build_job_definition(options)
+          job = Chronicle::ETL::Job.new(job_definition)
+          runner = Chronicle::ETL::Runner.new(job)
+          runner.run!
+        end
+
+        # TODO: probably could merge this with something in cli/plugin
+        def install_missing_plugins(missing_plugins)
+          prompt = TTY::Prompt.new
+          message = "Plugin#{'s' if missing_plugins.count > 1} specified by job not installed.\n"
+          message += "Do you want to install "
+          message += missing_plugins.map { |name| "chronicle-#{name}".bold}.join(", ")
+          message += " and start the job?"
+          install = prompt.yes?(message)
+          return unless install
+
+          spinner = TTY::Spinner.new("[:spinner] Installing plugins...", format: :dots_2)
+          spinner.auto_spin
+          missing_plugins.each do |plugin|
+            Chronicle::ETL::Registry::PluginRegistry.install(plugin)
           end
+          spinner.success("(#{'successful'.green})")
+        rescue Chronicle::ETL::PluginNotAvailableError => e
+          spinner.error("Error".red)
+          Chronicle::ETL::Logger.fatal("Plugin '#{e.name}' could not be installed".red)
         end
 
         # Create job definition by reading config file and then overwriting with flag options

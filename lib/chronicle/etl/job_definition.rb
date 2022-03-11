@@ -19,10 +19,29 @@ module Chronicle
         }
       }.freeze
 
+      attr_reader :errors
       attr_accessor :definition
 
       def initialize()
         @definition = SKELETON_DEFINITION
+      end
+
+      def validate
+        @errors = []
+
+        Chronicle::ETL::Registry::PHASES.each do |phase|
+          __send__("#{phase}_klass".to_sym)
+        rescue Chronicle::ETL::PluginError => e
+          @errors << e
+        end
+
+        @errors.empty?
+      end
+
+      def validate!
+        raise(Chronicle::ETL::JobDefinitionError.new(self), "Job definition is invalid") unless validate
+
+        true
       end
 
       # Add config hash to this definition
@@ -79,10 +98,6 @@ module Chronicle
             @definition[phase][:options].deep_merge(credentials)
           end
         end
-      end
-
-      def validate
-        return true   # TODO
       end
     end
   end

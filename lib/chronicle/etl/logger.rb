@@ -13,7 +13,6 @@ module Chronicle
       attr_accessor :log_level
 
       @log_level = INFO
-      @destination = $stderr
 
       def output message, level
         return unless level >= @log_level
@@ -21,8 +20,12 @@ module Chronicle
         if @progress_bar
           @progress_bar.log(message)
         else
-          @destination.puts(message)
+          $stderr.puts(message)
         end
+      end
+
+      def fatal(message)
+        output(message, FATAL)
       end
 
       def error(message)

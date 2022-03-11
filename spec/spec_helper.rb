@@ -23,18 +23,25 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # Taken from https://github.com/rails/thor/blob/main/spec/helper.rb
-  def capture(stream)
-    begin
-      stream = stream.to_s
-      eval "$#{stream} = StringIO.new"
-      yield
-      result = eval("$#{stream}").string
-    ensure
-      eval("$#{stream} = #{stream.upcase}")
-    end
+  # Adapted from minitest
+  # https://github.com/seattlerb/minitest/blob/7d2134a1d386a068f1c7705889c7764a47413861/lib/minitest/assertions.rb#L514
+  def capture
+    require "stringio"
+    orig_stdout = $stdout
+    orig_stderr = $stderr
 
-    result
+    captured_stdout = StringIO.new
+    captured_stderr = StringIO.new
+
+    $stdout = captured_stdout
+    $stderr = captured_stderr
+
+    yield
+
+    return captured_stdout.string, captured_stderr.string
+  ensure
+    $stdout = orig_stdout
+    $stderr = orig_stderr
   end
 end
 

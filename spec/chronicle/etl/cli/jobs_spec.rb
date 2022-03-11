@@ -15,7 +15,7 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
       file_record_count = File.read(csv_filename).each_line.count - 1
 
       args = ['jobs:run'] << csv_job_args
-      output = invoke_cli(args)
+      output, = invoke_cli(args)
 
       # records + table header row
       expect(output.split("\n").count).to eql(file_record_count + 1)
@@ -25,7 +25,7 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
   describe "chronicle-etl jobs:show" do
     it "shows details about a simple job" do
       args = ['jobs:show'] << csv_job_args
-      output = invoke_cli(args)
+      output, = invoke_cli(args)
 
       expect(output).to match(/Extracting from/)
       expect(output).to match(/Transforming/)
@@ -36,18 +36,17 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
 
   describe "chronicle-etl jobs:show" do
     xit "lists available jobs" do
-      invoke_cli(['jobs:list'])
-      # TODO: have mock filesystem for job definitions
+      expect(invoke_cli(%w[jobs list]).first.split("\n").first).to match(/Available jobs/)
     end
   end
 
   describe "chronicle-etl jobs help" do
     it "outputs help for jobs" do
-      expect(invoke_cli(%w[jobs help])).to match(/COMMANDS/)
+      expect(invoke_cli(%w[jobs help]).first).to match(/COMMANDS/)
     end
 
     it "outputs help for a job subcommand" do
-      expect(invoke_cli(%w[jobs help show])).to match(/Usage:/)
+      expect(invoke_cli(%w[jobs help show]).first).to match(/Usage:/)
     end
   end
 end

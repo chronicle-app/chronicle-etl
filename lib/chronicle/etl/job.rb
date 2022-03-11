@@ -1,6 +1,11 @@
 require 'forwardable'
+
 module Chronicle
   module ETL
+    # A runner job
+    #
+    # TODO: this can probably be merged with JobDefinition. Not clear
+    # where the boundaries are
     class Job
       extend Forwardable
 
@@ -12,7 +17,8 @@ module Chronicle
                     :transformer_klass,
                     :transformer_options,
                     :loader_klass,
-                    :loader_options
+                    :loader_options,
+                    :job_definition
 
       # TODO: build a proper id system
       alias id name
