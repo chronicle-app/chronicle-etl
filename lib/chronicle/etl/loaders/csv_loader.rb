@@ -9,6 +9,7 @@ module Chronicle
 
       setting :output, default: $stdout
       setting :headers, default: true
+      setting :header_row, default: true
 
       def records
         @records ||= []
@@ -25,7 +26,7 @@ module Chronicle
 
         csv_options = {}
         if @config.headers
-          csv_options[:write_headers] = true
+          csv_options[:write_headers] = @config.header_row
           csv_options[:headers] = headers
         end
 

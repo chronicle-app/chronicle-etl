@@ -26,6 +26,7 @@ module Chronicle
 
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
         class_option :fields, desc: 'Output only these fields', type: 'array', banner: 'field1 field2 ...'
+        class_option :header_row, desc: 'Output the header row of tabular output', type: 'boolean'
 
         # Thor doesn't like `run` as a command name
         map run: :start
@@ -161,6 +162,7 @@ LONG_DESC
 
           loader_options = options[:'loader-opts'].merge({
             output: options[:output],
+            header_row: options[:header_row],
             fields: options[:fields]
           }.compact)
 

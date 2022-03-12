@@ -12,6 +12,7 @@ module Chronicle
       setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
       setting :fields_exclude, default: ['lids', 'type']
+      setting :header_row, default: true
 
       def load(record)
         records << record.to_h_flattened
@@ -23,7 +24,7 @@ module Chronicle
         headers = build_headers(records)
         rows = build_rows(records, headers)
 
-        @table = TTY::Table.new(header: headers, rows: rows)
+        @table = TTY::Table.new(header: (headers if @config.header_row), rows: rows)
         puts @table.render(
           @config.table_renderer.to_sym,
           padding: [0, 2, 0, 0]
