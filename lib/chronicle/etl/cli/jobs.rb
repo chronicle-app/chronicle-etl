@@ -65,8 +65,7 @@ LONG_DESC
           path = File.join('chronicle', 'etl', 'jobs', options[:name])
           Chronicle::ETL::Config.write(path, job_definition.definition)
         rescue Chronicle::ETL::JobDefinitionError => e
-          Chronicle::ETL::Logger.debug(e.full_message)
-          Chronicle::ETL::Logger.fatal("Job definition error".red)
+          cli_fail(message: "Job definition error", exception: e)
         end
 
         desc "show", "Show details about a job"
@@ -76,9 +75,7 @@ LONG_DESC
           job_definition.validate!
           puts Chronicle::ETL::Job.new(job_definition)
         rescue Chronicle::ETL::JobDefinitionError => e
-          Chronicle::ETL::Logger.debug(e.full_message)
-          Chronicle::ETL::Logger.fatal("Job definition error".red)
-          exit 1
+          cli_fail(message: "Job definition error", exception: e)
         end
 
         desc "list", "List all available jobs"
@@ -102,9 +99,7 @@ LONG_DESC
           table = TTY::Table.new(headers, job_details)
           puts table.render(indent: 0, padding: [0, 2])
         rescue Chronicle::ETL::ConfigError => e
-          Chronicle::ETL::Logger.debug(e.full_message)
-          Chronicle::ETL::Logger.fatal("Error reading config. #{e.message}".red)
-          exit 1
+          cli_fail(message: "Config error. #{e.message}", exception: e)
         end
 
         private

@@ -2,7 +2,7 @@ module Chronicle
   module ETL
     module CLI
       # Base class for CLI subcommands. Overrides Thor methods so we can use command:subcommand syntax
-      class SubcommandBase < ::Thor
+      class SubcommandBase < Chronicle::ETL::CLI::CLIBase
         # Print usage instructions for a subcommand
         def self.help(shell, subcommand = false)
           list = printable_commands(true, subcommand)

@@ -39,15 +39,13 @@ module Chronicle
         desc "show PHASE IDENTIFIER", "Show information about a connector"
         def show(phase, identifier)
           unless ['extractor', 'transformer', 'loader'].include?(phase)
-            Chronicle::ETL::Logger.fatal("Phase argument must be one of: [extractor, transformer, loader]")
-            exit 1
+            cli_fail(message: "Phase argument must be one of: [extractor, transformer, loader]")
           end
 
           begin
             connector = Chronicle::ETL::Registry.find_by_phase_and_identifier(phase.to_sym, identifier)
-          rescue Chronicle::ETL::ConnectorNotAvailableError, Chronicle::ETL::PluginError
-            Chronicle::ETL::Logger.fatal("Could not find #{phase} #{identifier}")
-            exit 1
+          rescue Chronicle::ETL::ConnectorNotAvailableError, Chronicle::ETL::PluginError => e
+            cli_fail(message: "Could not find #{phase} #{identifier}", exception: e)
           end
 
           puts connector.klass.to_s.bold

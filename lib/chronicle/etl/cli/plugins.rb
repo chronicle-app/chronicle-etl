@@ -20,9 +20,7 @@ module Chronicle
           spinner.success("(#{'successful'.green})")
         rescue Chronicle::ETL::PluginError => e
           spinner.error("Error".red)
-          Chronicle::ETL::Logger.debug(e.full_message)
-          Chronicle::ETL::Logger.fatal("Plugin '#{name}' could not be installed".red)
-          exit 1
+          cli_fail(message: "Plugin '#{name}' could not be installed", exception: e)
         end
 
         desc "uninstall", "Unintall a plugin"
@@ -33,9 +31,7 @@ module Chronicle
           spinner.success("(#{'successful'.green})")
         rescue Chronicle::ETL::PluginError => e
           spinner.error("Error".red)
-          Chronicle::ETL::Logger.debug(e.full_message)
-          Chronicle::ETL::Logger.fatal("Plugin '#{name}' could not be uninstalled (was it installed?)".red)
-          exit 1
+          cli_fail(message: "Plugin '#{name}' could not be uninstalled (was it installed?)", exception: e)
         end
 
         desc "list", "Lists available plugins"

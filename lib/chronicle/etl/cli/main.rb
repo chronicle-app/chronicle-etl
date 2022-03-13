@@ -4,7 +4,7 @@ module Chronicle
   module ETL
     module CLI
       # Main entrypoint for CLI app
-      class Main < ::Thor
+      class Main < Chronicle::ETL::CLI::CLIBase
         class_before :set_log_level
         class_before :set_color_output
 
@@ -92,6 +92,9 @@ module Chronicle
         end
 
         no_commands do
+          def testb
+            puts "hi"
+          end
           def set_color_output
             String.disable_colorization true if options[:'no-color'] || ENV['NO_COLOR']
           end
