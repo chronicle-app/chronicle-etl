@@ -3,7 +3,6 @@
 require "tty-prompt"
 require "tty-spinner"
 
-
 module Chronicle
   module ETL
     module CLI
