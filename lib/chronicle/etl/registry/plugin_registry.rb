@@ -36,8 +36,11 @@ module Chronicle
           # By default, activates the latest available version of a gem
           # so don't have to run Kernel#gem separately
           require "chronicle/#{name}"
-        rescue LoadError
-          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin #{name} couldn't be loaded" if exists?(name)
+        rescue Gem::ConflictError => e
+          # TODO: figure out if there's more we can do here
+          raise Chronicle::ETL::PluginConflictError.new(name), "Plugin '#{name}' couldn't be loaded. #{e.message}"
+        rescue LoadError => e
+          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{name}' couldn't be loaded" if exists?(name)
 
           raise Chronicle::ETL::PluginNotAvailableError.new(name), "Plugin #{name} doesn't exist"
         end
@@ -49,9 +52,11 @@ module Chronicle
 
           Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
           Gem.install(gem_name)
+
+          activate(name)
         rescue Gem::UnsatisfiableDependencyError
           # TODO: we need to catch a lot more than this here
-          raise Chronicle::ETL::PluginNotAvailableError.new(name), "Plugin #{name} doesn't exist"
+          raise Chronicle::ETL::PluginNotAvailableError.new(name), "Plugin #{name} could not be installed."
         end
 
         # Uninstall a plugin

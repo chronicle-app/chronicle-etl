@@ -13,14 +13,19 @@ module Chronicle
         namespace :plugins
 
         desc "install", "Install a plugin"
-        def install(name)
-          spinner = TTY::Spinner.new("[:spinner] Installing plugin #{name}...", format: :dots_2)
+        def install(*plugins)
+          cli_fail(message: "Please specify a plugin to install") unless plugins.any?
+
+          spinner = TTY::Spinner.new("[:spinner] Installing #{plugins.join(", ")}...", format: :dots_2)
           spinner.auto_spin
-          Chronicle::ETL::Registry::PluginRegistry.install(name)
+          plugins.each do |plugin|
+            spinner.update(title: "Installing #{plugin}")
+            Chronicle::ETL::Registry::PluginRegistry.install(plugin)
+          rescue Chronicle::ETL::PluginError => e
+            spinner.error("Error".red)
+            cli_fail(message: "Plugin '#{plugin}' could not be installed", exception: e)
+          end
           spinner.success("(#{'successful'.green})")
-        rescue Chronicle::ETL::PluginError => e
-          spinner.error("Error".red)
-          cli_fail(message: "Plugin '#{name}' could not be installed", exception: e)
         end
 
         desc "uninstall", "Unintall a plugin"

@@ -26,20 +26,32 @@ module Chronicle
         @definition = SKELETON_DEFINITION
       end
 
+      def valid?
+        validate
+        @errors.empty?
+      end
+
       def validate
-        @errors = []
+        @errors = {}
 
         Chronicle::ETL::Registry::PHASES.each do |phase|
           __send__("#{phase}_klass".to_sym)
         rescue Chronicle::ETL::PluginError => e
-          @errors << e
+          @errors[:plugins] ||= []
+          @errors[:plugins] << e
         end
+      end
 
-        @errors.empty?
+      def plugins_missing?
+        validate
+
+        @errors[:plugins] || []
+          .filter { |e| e.instance_of?(Chronicle::ETL::PluginLoadError) }
+          .any?
       end
 
       def validate!
-        raise(Chronicle::ETL::JobDefinitionError.new(self), "Job definition is invalid") unless validate
+        raise(Chronicle::ETL::JobDefinitionError.new(self), "Job definition is invalid") unless valid?
 
         true
       end
@@ -48,7 +60,6 @@ module Chronicle
       def add_config(config = {})
         @definition = @definition.deep_merge(config)
         load_credentials
-        validate
       end
 
       # Is this job continuing from a previous run?

@@ -23,6 +23,7 @@ module Chronicle
       end
     end
 
+    class PluginConflictError < PluginError; end
     class PluginNotAvailableError < PluginError; end
     class PluginLoadError < PluginError; end
 

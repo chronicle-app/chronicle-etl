@@ -45,15 +45,19 @@ module Chronicle
 LONG_DESC
         # Run an ETL job
         def start
-          run_job(options)
-        rescue Chronicle::ETL::JobDefinitionError => e
-          missing_plugins = e.job_definition.errors
-            .select { |error| error.is_a?(Chronicle::ETL::PluginLoadError) }
-            .map(&:name)
-            .uniq
+          job_definition = build_job_definition(options)
 
-          install_missing_plugins(missing_plugins)
-          run_job(options)
+          if job_definition.plugins_missing?
+            missing_plugins = job_definition.errors[:plugins]
+              .select { |error| error.is_a?(Chronicle::ETL::PluginLoadError) }
+              .map(&:name)
+              .uniq
+            install_missing_plugins(missing_plugins)
+          end
+
+          run_job(job_definition)
+        rescue Chronicle::ETL::JobDefinitionError => e
+          cli_fail(message: "Error running job.\n#{job_definition.errors}", exception: e)
         end
 
         desc "create", "Create a job"
@@ -104,8 +108,7 @@ LONG_DESC
 
         private
 
-        def run_job(options)
-          job_definition = build_job_definition(options)
+        def run_job(job_definition)
           job = Chronicle::ETL::Job.new(job_definition)
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!
@@ -118,18 +121,10 @@ LONG_DESC
           message += "Do you want to install "
           message += missing_plugins.map { |name| "chronicle-#{name}".bold}.join(", ")
           message += " and start the job?"
-          install = prompt.yes?(message)
-          return unless install
+          will_install = prompt.yes?(message)
+          cli_fail(message: "Must install #{missing_plugins.join(", ")} plugin to run job") unless will_install
 
-          spinner = TTY::Spinner.new("[:spinner] Installing plugins...", format: :dots_2)
-          spinner.auto_spin
-          missing_plugins.each do |plugin|
-            Chronicle::ETL::Registry::PluginRegistry.install(plugin)
-          end
-          spinner.success("(#{'successful'.green})")
-        rescue Chronicle::ETL::PluginNotAvailableError => e
-          spinner.error("Error".red)
-          Chronicle::ETL::Logger.fatal("Plugin '#{e.name}' could not be installed".red)
+          Chronicle::ETL::CLI::Plugins.new.install(*missing_plugins)
         end
 
         # Create job definition by reading config file and then overwriting with flag options
