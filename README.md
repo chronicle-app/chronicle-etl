@@ -2,7 +2,7 @@
 
 ![chronicle-etl-banner](https://user-images.githubusercontent.com/6291/157330518-0f934c9a-9ec4-43d9-9cc2-12f156d09b37.png)
 
-[![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl) [![Ruby](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml/badge.svg)](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml)
+[![Gem Version](https://badge.fury.io/rb/chronicle-etl.svg)](https://badge.fury.io/rb/chronicle-etl) [![Ruby](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml/badge.svg)](https://github.com/chronicle-app/chronicle-etl/actions/workflows/ruby.yml) [![Docs](https://img.shields.io/badge/docs-rubydoc.info-blue)](https://www.rubydoc.info/gems/chronicle-etl/)
 
 Are you trying to archive your digital history or incorporate it into your own projects? You’ve probably discovered how frustrating it is to get machine-readable access to your own data. While [building a memex](https://hyfen.net/memex/), I learned first-hand what great efforts must be made before you can begin using the data in interesting ways.
 
