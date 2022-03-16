@@ -55,7 +55,7 @@ class Chronicle::ETL::Runner
 
       @loader.load(record) unless @job.dry_run?
     rescue Chronicle::ETL::TransformationError => e
-      Chronicle::ETL::Logger.error(tty_log_transformation_failure(e))
+      Chronicle::ETL::Logger.error(tty_log_transformation_failure(e, transformer))
     ensure
       @progress_bar.increment
     end
@@ -83,14 +83,14 @@ class Chronicle::ETL::Runner
     output
   end
 
-  def tty_log_transformation transformer
+  def tty_log_transformation(transformer)
     output = "  ✓".green
     output += " #{transformer}"
   end
 
-  def tty_log_transformation_failure exception
+  def tty_log_transformation_failure(exception, transformer)
     output = "  ✖".red
-    output += " Failed to build #{exception.transformation}. #{exception.message}"
+    output += " Failed to build #{transformer}. #{exception.message}"
   end
 
   def tty_log_completion

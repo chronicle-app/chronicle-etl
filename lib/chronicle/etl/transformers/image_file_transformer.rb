@@ -43,7 +43,7 @@ module Chronicle
       def id
         @id ||= begin
           id = build_with_strategy(field: :id, strategy: @config.id_strategy)
-          raise UntransformableRecordError.new("Could not build id", transformation: self) unless id
+          raise(UntransformableRecordError, "Could not build id") unless id
 
           id
         end
@@ -52,7 +52,7 @@ module Chronicle
       def timestamp
         @timestamp ||= begin
           ts = build_with_strategy(field: :timestamp, strategy: @config.timestamp_strategy)
-          raise UntransformableRecordError.new("Could not build timestamp", transformation: self) unless ts
+          raise(UntransformableRecordError, "Could not build timestamp") unless ts
 
           ts
         end

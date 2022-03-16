@@ -45,14 +45,7 @@ module Chronicle
 
     class SerializationError < Error; end
 
-    class TransformationError < Error
-      attr_reader :transformation
-
-      def initialize(message=nil, transformation:)
-        super(message)
-        @transformation = transformation
-      end
-    end
+    class TransformationError < Error; end
 
     class UntransformableRecordError < TransformationError; end
   end
