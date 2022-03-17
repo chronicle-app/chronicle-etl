@@ -11,6 +11,9 @@ Style/StringLiterals:
 Layout/MultilineAssignmentLayout:
   Enabled: false
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
 Layout/RedundantLineBreak:
   Enabled: false
 

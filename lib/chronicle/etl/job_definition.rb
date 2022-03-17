@@ -45,8 +45,10 @@ module Chronicle
       def plugins_missing?
         validate
 
-        @errors[:plugins] || []
-          .filter { |e| e.instance_of?(Chronicle::ETL::PluginLoadError) }
+        return false unless @errors[:plugins]&.any?
+
+        @errors[:plugins]
+          .filter { |e| e.instance_of?(Chronicle::ETL::PluginNotInstalledError) }
           .any?
       end
 

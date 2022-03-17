@@ -49,7 +49,7 @@ LONG_DESC
 
           if job_definition.plugins_missing?
             missing_plugins = job_definition.errors[:plugins]
-              .select { |error| error.is_a?(Chronicle::ETL::PluginLoadError) }
+              .select { |error| error.is_a?(Chronicle::ETL::PluginNotInstalledError) }
               .map(&:name)
               .uniq
             install_missing_plugins(missing_plugins)
@@ -57,7 +57,11 @@ LONG_DESC
 
           run_job(job_definition)
         rescue Chronicle::ETL::JobDefinitionError => e
-          cli_fail(message: "Error running job.\n#{job_definition.errors}", exception: e)
+          message = ""
+          job_definition.errors.each_pair do |category, errors|
+            message << "Problem with #{category}:\n  - #{errors.map(&:to_s).join("\n  -")}"
+          end
+          cli_fail(message: "Error running job.\n#{message}", exception: e)
         end
 
         desc "create", "Create a job"

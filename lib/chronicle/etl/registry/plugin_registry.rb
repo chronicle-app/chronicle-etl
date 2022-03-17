@@ -13,8 +13,8 @@ module Chronicle
       module PluginRegistry
         # Does this plugin exist?
         def self.exists?(name)
-          # TODO: implement this. Could query rubygems.org or have a
-          # hardcoded approved list
+          # TODO: implement this. Could query rubygems.org or use a hardcoded
+          # list somewhere
           true
         end
 
@@ -31,6 +31,12 @@ module Chronicle
             .values
         end
 
+        # Check whether a given plugin is installed
+        def self.installed?(name)
+          gem_name = "chronicle-#{name}"
+          all_installed.map(&:name).include?(gem_name)
+        end
+
         # Activate a plugin with given name by `require`ing it
         def self.activate(name)
           # By default, activates the latest available version of a gem
@@ -39,14 +45,17 @@ module Chronicle
         rescue Gem::ConflictError => e
           # TODO: figure out if there's more we can do here
           raise Chronicle::ETL::PluginConflictError.new(name), "Plugin '#{name}' couldn't be loaded. #{e.message}"
-        rescue LoadError => e
-          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{name}' couldn't be loaded" if exists?(name)
-
-          raise Chronicle::ETL::PluginNotAvailableError.new(name), "Plugin #{name} doesn't exist"
+        rescue StandardError, LoadError => e
+          # StandardError to catch random non-loading problems that might occur
+          # when requiring the plugin (eg class macro invoked the wrong way)
+          # TODO: decide if this should be separated
+          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{name}' couldn't be loaded"
         end
 
         # Install a plugin to local gems
         def self.install(name)
+          return if installed?(name)
+
           gem_name = "chronicle-#{name}"
           raise(Chronicle::ETL::PluginNotAvailableError.new(gem_name), "Plugin #{name} doesn't exist") unless exists?(gem_name)
 

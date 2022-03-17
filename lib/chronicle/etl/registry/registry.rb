@@ -44,6 +44,8 @@ module Chronicle
             plugin = identifier
           end
 
+          raise(Chronicle::ETL::PluginNotInstalledError.new(plugin)) unless PluginRegistry.installed?(plugin)
+
           PluginRegistry.activate(plugin)
 
           candidates = connectors.select { |c| c.phase == phase && c.plugin == plugin }

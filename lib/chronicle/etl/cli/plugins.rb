@@ -15,15 +15,25 @@ module Chronicle
         def install(*plugins)
           cli_fail(message: "Please specify a plugin to install") unless plugins.any?
 
-          spinner = TTY::Spinner.new("[:spinner] Installing #{plugins.join(", ")}...", format: :dots_2)
+          installed, not_installed = plugins.partition do |plugin|
+            Chronicle::ETL::Registry::PluginRegistry.installed?(plugin)
+          end
+
+          puts "Already installed: #{installed.join(", ")}" if installed.any?
+          cli_exit unless not_installed.any?
+
+          spinner = TTY::Spinner.new("[:spinner] Installing #{not_installed.join(", ")}...", format: :dots_2)
           spinner.auto_spin
-          plugins.each do |plugin|
+
+          not_installed.each do |plugin|
             spinner.update(title: "Installing #{plugin}")
             Chronicle::ETL::Registry::PluginRegistry.install(plugin)
+
           rescue Chronicle::ETL::PluginError => e
             spinner.error("Error".red)
             cli_fail(message: "Plugin '#{plugin}' could not be installed", exception: e)
           end
+
           spinner.success("(#{'successful'.green})")
         end
 
