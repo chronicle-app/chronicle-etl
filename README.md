@@ -83,58 +83,52 @@ $ chronicle-etl connectors:list
 - [`json`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/json_loader.rb) - Load records serialized as JSON
 - [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
 
-### Plugins
-Plugins provide access to data from third-party platforms, services, or formats. 
+## Chronicle Plugins
+Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through `$ gem install` or through the CLI itself.
+
+### Plugin usage
 
 ```bash
 # Install a plugin
 $ chronicle-etl plugins:install NAME
 
-# Install the imessage plugin
-$ chronicle-etl plugins:install imessage
-
 # List installed plugins
 $ chronicle-etl plugins:list
+
+# Use a plugin
+$ chronicle-etl plugins:install shell
+$ chronicle-etl --extractor shell:history --limit 10
 
 # Uninstall a plugin
 $ chronicle-etl plugins:uninstall NAME
 ```
 
-A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and they’re being ported over to the Chronicle system. This table shows what’s available now and what’s coming. Rows are sorted in very rough order of priority.
+### Status
 
-If you want to work together on a connector, please [get in touch](#get-in-touch)!
+A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and I'm porting them over to the Chronicle system. The [Chronicle Plugin Tracker](https://github.com/orgs/github/projects/4247/views/1) lets you keep track what's available and what's coming soon.
+
+If you don't see a plugin for a third-party provider or data source that you're interested in using with `chronicle-etl`, [please open an issue](https://github.com/chronicle-app/chronicle-etl/issues/new). If you want to work together on a plugin, please [get in touch](#get-in-touch)!
+
+[![](https://user-images.githubusercontent.com/6291/159086930-17fd5687-0d78-4e24-ad4b-f7d9840b2891.png)](https://github.com/orgs/github/projects/4247/views/1)
+
+#### Currently available
 
 | Name                                                            | Description                                                                                 | Availability                     |
 |-----------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------|
 | [imessage](https://github.com/chronicle-app/chronicle-imessage) | iMessage messages and attachments                                                           | Available                        |
-| [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (zsh support pending)  |
-| [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available (imap support pending) |
+| [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (still needs zsh support)  |
+| [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available (still needs IMAP support) |
 | [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
 | [safari](https://github.com/chronicle-app/chronicle-safari)     | Browser history from local sqlite db                                                        | Available                        |
-| github                                                          | Github user and repo activity                                                               | In progress                      |
-| chrome                                                          | Browser history from local sqlite db                                                        | Needs porting                    |
-| whatsapp                                                        | Messaging history (via individual chat exports) or reverse-engineered local desktop install | Unstarted                        |
-| anki                                                            | Studying and card creation history                                                          | Needs porting                    |
-| facebook                                                        | Messaging and history posting via data export files                                         | Needs porting                    |
-| twitter                                                         | History via API or export data files                                                        | Needs porting                    |
-| foursquare                                                      | Location history via API                                                                    | Needs porting                    |
-| goodreads                                                       | Reading history via export csv (RIP goodreads API)                                          | Needs porting                    |
-| lastfm                                                          | Listening history via API                                                                   | Needs porting                    |
-| images                                                          | Process image files                                                                         | Needs porting                    |
-| arc                                                             | Location history from synced icloud backup files                                            | Needs porting                    |
-| firefox                                                         | Browser history from local sqlite db                                                        | Needs porting                    |
-| fitbit                                                          | Personal analytics via API                                                                  | Needs porting                    |
-| git                                                             | Commit history on a repo                                                                    | Needs porting                    |
-| google-calendar                                                 | Calendar events via API                                                                     | Needs porting                    |
-| instagram                                                       | Posting and messaging history via export data                                               | Needs porting                    |
-| shazam                                                          | Song tags via reverse-engineered API                                                        | Needs porting                    |
-| slack                                                           | Messaging history via API                                                                   | Need rethinking                  |
-| strava                                                          | Activity history via API                                                                    | Needs porting                    |
-| things                                                          | Task activity via local sqlite db                                                           | Needs porting                    |
-| bear                                                            | Note taking activity via local sqlite db                                                    | Needs porting                    |
-| youtube                                                         | Video activity via takeout data and API                                                     | Needs porting                    |
 
-### Writing your own connector
+#### Coming soon
+
+In summary, the following **are coming soon**:
+anki, arc, bear, chrome, facebook, firefox, fitbit, foursquare, git, github, goodreads, google-calendar, images, instagram, lastfm, shazam, slack, strava, things, twitter, whatsapp, youtube.
+
+Please check the [Chronicle Plugin Tracker](https://github.com/orgs/github/projects/4247/views/1) for details.
+
+### Writing your own plugin
 
 Additional connectors are packaged as separate ruby gems. You can view the [iMessage plugin](https://github.com/chronicle-app/chronicle-imessage) for an example.
 
@@ -149,7 +143,7 @@ module Chronicle
     class FooExtractor < Chronicle::ETL::Extractor
       register_connector do |r|
         r.identifier = 'foo'
-        r.description = 'From foo.com'
+        r.description = 'from foo.com'
       end
 
       setting :access_token, required: true
