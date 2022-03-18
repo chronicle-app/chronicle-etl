@@ -105,11 +105,9 @@ $ chronicle-etl plugins:uninstall NAME
 
 ### Status
 
-A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and I'm porting them over to the Chronicle system. The [Chronicle Plugin Tracker](https://github.com/orgs/github/projects/4247/views/1) lets you keep track what's available and what's coming soon.
+A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and I'm porting them over to the Chronicle system. The [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1/views/1) lets you keep track what's available and what's coming soon.
 
 If you don't see a plugin for a third-party provider or data source that you're interested in using with `chronicle-etl`, [please open an issue](https://github.com/chronicle-app/chronicle-etl/issues/new). If you want to work together on a plugin, please [get in touch](#get-in-touch)!
-
-[![](https://user-images.githubusercontent.com/6291/159086930-17fd5687-0d78-4e24-ad4b-f7d9840b2891.png)](https://github.com/orgs/github/projects/4247/views/1)
 
 #### Currently available
 
@@ -126,7 +124,7 @@ If you don't see a plugin for a third-party provider or data source that you're 
 In summary, the following **are coming soon**:
 anki, arc, bear, chrome, facebook, firefox, fitbit, foursquare, git, github, goodreads, google-calendar, images, instagram, lastfm, shazam, slack, strava, things, twitter, whatsapp, youtube.
 
-Please check the [Chronicle Plugin Tracker](https://github.com/orgs/github/projects/4247/views/1) for details.
+Please check the [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1/views/1) for details.
 
 ### Writing your own plugin
 
