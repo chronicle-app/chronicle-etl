@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "ostruct"
+require "chronic_duration"
 
 module Chronicle
   module ETL
@@ -83,6 +84,8 @@ module Chronicle
 
         def coerced_value(setting, value)
           setting.type ? __send__("coerce_#{setting.type}", value) : value
+        rescue StandardError
+          raise(Chronicle::ETL::ConnectorConfigurationError, "Could not coerce #{value} into a #{setting.type}")
         end
 
         def coerce_string(value)
@@ -103,11 +106,15 @@ module Chronicle
         end
 
         def coerce_time(value)
-          # TODO: handle durations like '3h'
-          if value.is_a?(String)
-            Time.parse(value)
+          return value unless value.is_a?(String)
+
+          # Hacky check for duration strings like "60m"
+          if value.match(/[a-z]+/)
+            ChronicDuration.raise_exceptions = true
+            duration_ago = ChronicDuration.parse(value)
+            Time.now - duration_ago
           else
-            value
+            Time.parse(value)
           end
         end
       end

@@ -34,28 +34,33 @@ $ chronicle-etl --extractor NAME --transformer NAME --loader NAME
 
 # Read test.csv and display it to stdout as a table 
 $ chronicle-etl --extractor csv --input ./data.csv --loader table
+
+# Retrieve shell commands run in the last 5 hours
+$ chronicle-etl -e shell --since 5h
 ```
 
 ### Common options
 ```sh
 Options:
-  -j, [--name=NAME]                    # Job configuration name
-  -e, [--extractor=EXTRACTOR-NAME]     # Extractor class. Default: stdin
-      [--extractor-opts=key:value]     # Extractor options
-  -t, [--transformer=TRANFORMER-NAME]  # Transformer class. Default: null
-      [--transformer-opts=key:value]   # Transformer options
-  -l, [--loader=LOADER-NAME]           # Loader class. Default: stdout
-      [--loader-opts=key:value]        # Loader options
-  -i, [--input=FILENAME]               # Input filename or directory
-      [--since=DATE]                   # Load records SINCE this date. Overrides job's `load_since` configuration option in extractor's options
-      [--until=DATE]                   # Load records UNTIL this date
-      [--limit=N]                      # Only extract the first LIMIT records
-  -o, [--output=OUTPUT]                # Output filename
-      [--fields=field1 field2 ...]     # Output only these fields
-      [--log-level=LOG_LEVEL]          # Log level (debug, info, warn, error, fatal)
-                                       # Default: info
-  -v, [--verbose], [--no-verbose]      # Set log level to verbose
-      [--silent], [--no-silent]        # Silence all output
+  -j, [--name=NAME]                      # Job configuration name
+  -e, [--extractor=NAME]                 # Extractor class. Default: stdin
+      [--extractor-opts=key:value]       # Extractor options
+  -t, [--transformer=NAME]               # Transformer class. Default: null
+      [--transformer-opts=key:value]     # Transformer options
+  -l, [--loader=NAME]                    # Loader class. Default: table
+      [--loader-opts=key:value]          # Loader options
+  -i, [--input=FILENAME]                 # Input filename or directory
+      [--since=DATE]                     # Load records SINCE this date (or fuzzy time duration)
+      [--until=DATE]                     # Load records UNTIL this date (or fuzzy time duration)
+      [--limit=N]                        # Only extract the first LIMIT records
+  -o, [--output=OUTPUT]                  # Output filename
+      [--fields=field1 field2 ...]       # Output only these fields
+      [--header-row], [--no-header-row]  # Output the header row of tabular output
+
+      [--log-level=LOG_LEVEL]            # Log level (debug, info, warn, error, fatal)
+                                         # Default: info
+  -v, [--verbose], [--no-verbose]        # Set log level to verbose
+      [--silent], [--no-silent]          # Silence all output
 ```
 
 ## Connectors
