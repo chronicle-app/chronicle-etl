@@ -33,7 +33,7 @@ RSpec.describe Chronicle::ETL::Configurable do
     end
   end
 
-  let(:with_type) do
+  let(:with_type_time) do
     Class.new(basic) do
       setting :since, type: :time
     end
@@ -99,20 +99,32 @@ RSpec.describe Chronicle::ETL::Configurable do
   end
 
   describe "Typed settings" do
-    before do
-      stub_const("TypedSettingClass", with_type)
-    end
-
     context "for type time" do
+      before do
+        stub_const("TypedSettingClass", with_type_time)
+      end
+
       it "does not change values that do not have to be coerced" do
         c = TypedSettingClass.new(since: Time.new(2022, 2, 24))
         expect(c.config.since).to be_a_kind_of(Time)
         expect(c.config.since.to_date.iso8601).to eq("2022-02-24")
       end
+
       it "coerces settings of type: time into Time objects" do
         c = TypedSettingClass.new(since: '2022-02-24 14:00-0500')
         expect(c.config.since).to be_a_kind_of(Time)
         expect(c.config.since.iso8601).to eq("2022-02-24T14:00:00-05:00")
+      end
+
+      it "interprets fuzzy time ranges correctly" do
+        c = TypedSettingClass.new(since: '1d3h')
+        expected_time = Time.now.to_i - 86_400 - 10_800
+        expect(c.config.since).to be_a_kind_of(Time)
+        expect(c.config.since.to_i).to be_within(100).of(expected_time)
+      end
+
+      it "returns an error when a range can't be parsed" do
+        expect { TypedSettingClass.new(since: 'foo') }.to raise_error(Chronicle::ETL::ConnectorConfigurationError)
       end
     end
   end
