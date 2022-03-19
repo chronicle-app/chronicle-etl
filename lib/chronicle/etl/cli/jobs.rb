@@ -20,8 +20,8 @@ module Chronicle
 
         # This is an array to deal with shell globbing
         class_option :input, aliases: '-i', desc: 'Input filename or directory', default: [], type: 'array', banner: 'FILENAME'
-        class_option :since, desc: "Load records SINCE this date", banner: 'DATE'
-        class_option :until, desc: "Load records UNTIL this date", banner: 'DATE'
+        class_option :since, desc: "Load records SINCE this date (or fuzzy time duration)", banner: 'DATE'
+        class_option :until, desc: "Load records UNTIL this date (or fuzzy time duration)", banner: 'DATE'
         class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
 
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
