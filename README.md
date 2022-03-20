@@ -37,6 +37,9 @@ $ chronicle-etl --extractor csv --input ./data.csv --loader table
 
 # Retrieve shell commands run in the last 5 hours
 $ chronicle-etl -e shell --since 5h
+
+# Get email senders from an .mbox email archive file
+$ chronicle-etl --extractor email:mbox -i sample-email-archive.mbox -t email --fields actor.slug
 ```
 
 ### Common options
