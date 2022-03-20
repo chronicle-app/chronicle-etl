@@ -167,6 +167,7 @@ end
 
 ## Roadmap
 
+- Add **homebrew formula** for easier installation. #13
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
 - Add a **secrets storage system** for third-party credentials, etc. #36
 - Add support for **incremental extractions** #37
