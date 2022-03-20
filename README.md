@@ -165,6 +165,14 @@ module Chronicle
 end
 ```
 
+## Roadmap
+
+- Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
+- Add a **secrets storage system** for third-party credentials, etc. #36
+- Add support for **incremental extractions** #37
+- **Improve stdin extractor and shell command transformer** (#5) so that users can easily integrate their own scripts/tools into jobs
+- **Add documentation for Chronicle Schema**. It's found throughout this project but never explained.
+
 ## Development
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
