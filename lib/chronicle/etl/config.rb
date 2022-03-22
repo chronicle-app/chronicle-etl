@@ -1,4 +1,5 @@
 require 'runcom'
+require 'fileutils'
 
 module Chronicle
   module ETL
@@ -16,9 +17,11 @@ module Chronicle
       # Writes a hash as a yml config file
       def write(path, data)
         config = Runcom::Config.new(path)
-        filename = config.all[0].to_s + '.yml'
+        filename = config.all[1].to_s
+        FileUtils.mkdir_p(File.dirname(filename))
         File.open(filename, 'w') do |f|
-          f << data.to_yaml
+          # Ruby likes to add --- separators when writing yaml files
+          f << data.to_yaml.gsub(/^-+\n/, '')
         end
       end
 
@@ -29,11 +32,25 @@ module Chronicle
         end
       end
 
-      # Returns all available credentials available in ~/.config/chronicle/etl/credentials/*.yml
-      def available_credentials
-        Dir.glob(File.join(config_directory("credentials"), "*.yml")).map do |filename|
+      # Returns all available secrets available in ~/.config/chronicle/etl/secrets/*.yml
+      def available_secret_namespaces
+        Dir.glob(File.join(config_directory("secrets"), "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
+      end
+
+      def write_secrets(namespace, secrets)
+        data = {
+          provider: namespace,
+          secrets: (secrets || {}).transform_keys(&:to_s),
+          chronicle_etl_version: Chronicle::ETL::VERSION
+        }.transform_keys(&:to_s) # Should I implement deeply_transform_keys ?
+        self.write("chronicle/etl/secrets/#{namespace}.yml", data)
+      end
+
+      def load_secrets_from_config(namespace)
+        definition = self.load("chronicle/etl/secrets/#{namespace}.yml")
+        definition[:secrets] || {}
       end
 
       # Load a job definition from job config directory
@@ -43,13 +60,9 @@ module Chronicle
         definition
       end
 
-      def load_credentials(name)
-        config = self.load("chronicle/etl/credentials/#{name}.yml")
-      end
-
       def config_directory(type)
         path = "chronicle/etl/#{type}"
-        Runcom::Config.new(path).current || raise(Chronicle::ETL::ConfigError, "Could not access config directory (#{path})")
+        Runcom::Config.new(path).all[1] || raise(Chronicle::ETL::ConfigError, "Could not access config directory (#{path})")
       end
     end
   end
