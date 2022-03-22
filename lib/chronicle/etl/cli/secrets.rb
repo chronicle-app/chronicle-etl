@@ -24,6 +24,7 @@ module Chronicle
           end
 
           Chronicle::ETL::Secrets.set(namespace, key, value.strip)
+          cli_exit(message: "Secret set")
         rescue TTY::Reader::InputInterrupt
           cli_fail(message: "\nSecret not set")
         end
@@ -33,11 +34,13 @@ module Chronicle
           validate_namespace(namespace)
 
           Chronicle::ETL::Secrets.unset(namespace, key)
+          cli_exit(message: "Secret unset")
         end
 
         desc "list", "List available secrets"
         def list(namespace=nil)
           all_secrets = Chronicle::ETL::Secrets.all(namespace)
+          cli_exit(message: "No secrets saved") unless all_secrets.any?
 
           rows = []
           all_secrets.each do |namespace, secrets|
