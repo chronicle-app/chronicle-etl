@@ -1,5 +1,5 @@
-require 'runcom'
 require 'fileutils'
+require 'yaml'
 
 module Chronicle
   module ETL
@@ -7,19 +7,20 @@ module Chronicle
     module Config
       module_function
 
-      # Loads a yml config file
-      def load(path)
-        config = Runcom::Config.new(path)
-        # FIXME: hack to deeply symbolize keys
-        JSON.parse(config.to_h.to_json, symbolize_names: true)
+      def load(type, identifier)
+        base = config_pathname_for_type(type)
+        path = base.join("#{identifier}.yml")
+        return {} unless path.exist?
+
+        YAML.safe_load(File.read(path), symbolize_names: true, permitted_classes: [Symbol, Date, Time])
       end
 
       # Writes a hash as a yml config file
-      def write(path, data)
-        config = Runcom::Config.new(path)
-        filename = config.all[1].to_s
-        FileUtils.mkdir_p(File.dirname(filename))
-        File.open(filename, 'w') do |f|
+      def write(type, identifier, data)
+        base = config_pathname_for_type(type)
+        path = base.join("#{identifier}.yml")
+        FileUtils.mkdir_p(File.dirname(path))
+        File.open(path, 'w') do |f|
           # Ruby likes to add --- separators when writing yaml files
           f << data.to_yaml.gsub(/^-+\n/, '')
         end
@@ -27,27 +28,29 @@ module Chronicle
 
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
       def available_jobs
-        Dir.glob(File.join(config_directory("jobs"), "*.yml")).map do |filename|
+        Dir.glob(File.join(config_pathname_for_type("jobs"), "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
       end
 
       def available_configs(type)
-        Dir.glob(File.join(config_directory(type), "*.yml")).map do |filename|
+        Dir.glob(File.join(config_pathname_for_type(type), "*.yml")).map do |filename|
           File.basename(filename, ".*")
         end
       end
 
       # Load a job definition from job config directory
       def read_job(job_name)
-        definition = self.load("chronicle/etl/jobs/#{job_name}.yml")
-        definition[:name] = job_name
-        definition
+        load('jobs', job_name)
       end
 
-      def config_directory(type)
-        path = "chronicle/etl/#{type}"
-        Runcom::Config.new(path).all[1] || raise(Chronicle::ETL::ConfigError, "Could not access config directory (#{path})")
+      def config_pathname
+        base = Pathname.new(XDG::Config.new.home)
+        base.join('chronicle', 'etl')
+      end
+
+      def config_pathname_for_type(type)
+        config_pathname.join(type)
       end
     end
   end

@@ -31,7 +31,7 @@ module Chronicle
 
       # Read secrets from a config file
       def self.read(namespace)
-        definition = Chronicle::ETL::Config.load("chronicle/etl/secrets/#{namespace}.yml")
+        definition = Chronicle::ETL::Config.load("secrets", namespace)
         definition[:secrets] || {}
       end
 
@@ -42,7 +42,7 @@ module Chronicle
           secrets: (secrets || {}).transform_keys(&:to_s),
           chronicle_etl_version: Chronicle::ETL::VERSION
         }.transform_keys(&:to_s) # Should I implement deeply_transform_keys ?
-        Chronicle::ETL::Config.write("chronicle/etl/secrets/#{namespace}.yml", data)
+        Chronicle::ETL::Config.write("secrets", namespace, data)
       end
 
       # Which config files are available in ~/.config/chronicle/etl/secrets

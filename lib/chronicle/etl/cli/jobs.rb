@@ -92,7 +92,7 @@ LONG_DESC
           jobs = Chronicle::ETL::Config.available_jobs
 
           job_details = jobs.map do |job|
-            r = Chronicle::ETL::Config.load("chronicle/etl/jobs/#{job}.yml")
+            r = Chronicle::ETL::Config.load("jobs", job)
 
             extractor = r[:extractor][:name] if r[:extractor]
             transformer = r[:transformer][:name] if r[:transformer]
@@ -140,7 +140,7 @@ LONG_DESC
         end
 
         def load_job_config name
-          Chronicle::ETL::Config.load_job_from_config(name)
+          Chronicle::ETL::Config.read_job(name)
         end
 
         # Takes flag options and turns them into a runner config
