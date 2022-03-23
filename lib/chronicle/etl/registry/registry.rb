@@ -9,18 +9,7 @@ module Chronicle
       class << self
         attr_accessor :connectors
 
-        def load_all!
-          load_connectors_from_gems
-        end
-
-        def load_connectors_from_gems
-          Gem::Specification.filter{|s| s.name.match(/^chronicle/) }.each do |gem|
-            require_str = gem.name.gsub('chronicle-', 'chronicle/')
-            require require_str rescue LoadError
-          end
-        end
-
-        def register connector
+        def register(connector)
           connectors << connector
         end
 
@@ -28,9 +17,14 @@ module Chronicle
           @connectors ||= []
         end
 
-        def find_by_phase_and_identifier(phase, identifier)
-          # Simple case: built in connector
+        # Find connector from amongst those currently loaded
+        def find_by_phase_and_identifier_local(phase, identifier)
           connector = connectors.find { |c| c.phase == phase && c.identifier == identifier }
+        end
+
+        # Find connector and load relevant plugin to find it if necessary
+        def find_by_phase_and_identifier(phase, identifier)
+          connector = find_by_phase_and_identifier_local(phase, identifier)
           return connector if connector
 
           # if not available in built-in connectors, try to activate a
