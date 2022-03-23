@@ -58,7 +58,9 @@ module Chronicle
 
           options.each do |name, value|
             setting = self.class.all_settings[name]
-            raise(Chronicle::ETL::ConnectorConfigurationError, "Unrecognized setting: #{name}") unless setting
+
+            # Do nothing with a given option if it's not a connector setting
+            next unless setting
 
             @config[name] = coerced_value(setting, value)
           end
