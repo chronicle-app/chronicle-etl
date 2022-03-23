@@ -20,7 +20,7 @@ module Chronicle
         base = config_pathname_for_type(type)
         path = base.join("#{identifier}.yml")
         FileUtils.mkdir_p(File.dirname(path))
-        File.open(path, 'w') do |f|
+        File.open(path, 'w', 0o600) do |f|
           # Ruby likes to add --- separators when writing yaml files
           f << data.to_yaml.gsub(/^-+\n/, '')
         end
