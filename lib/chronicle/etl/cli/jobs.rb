@@ -113,6 +113,9 @@ LONG_DESC
         private
 
         def run_job(job_definition)
+          # FIXME: clumsy to make CLI responsible for setting secrets here. Think about a better way to do this
+          job_definition.apply_default_secrets
+
           job = Chronicle::ETL::Job.new(job_definition)
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!

@@ -64,6 +64,22 @@ module Chronicle
         load_credentials
       end
 
+      # For each connector, if it's a plugin connector, reverse-merge in
+      # secrets from config file with same name as plugin name
+      def apply_default_secrets
+        Chronicle::ETL::Registry::PHASES.each do |phase|
+          # We don't want to do this for built-in connectors
+          next if __send__("#{phase}_klass".to_sym).connector_registration.built_in?
+
+          plugin_name = @definition[phase][:name].split(":").first
+          secrets = Chronicle::ETL::Secrets.read(plugin_name)
+
+          # Reverse merge secrets into connector's options (we want to preserve
+          # options that came from job file or CLI options)
+          @definition[phase][:options] = secrets.merge(@definition[phase][:options])
+        end
+      end
+
       # Is this job continuing from a previous run?
       def incremental?
         @definition[:incremental]
