@@ -1,5 +1,6 @@
-require 'sequel'
 require 'forwardable'
+require 'sequel'
+require 'xdg'
 
 module Chronicle
   module ETL
@@ -35,8 +36,8 @@ module Chronicle
       end
 
       def self.db_filename
-        data = Runcom::Data.new "chronicle/etl/job_log.db"
-        filename = data.all[0].to_s
+        base = Pathname.new(XDG::Data.new.home)
+        base.join('job_log.db')
       end
 
       def self.initialize_db

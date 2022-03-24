@@ -70,8 +70,7 @@ LONG_DESC
           job_definition = build_job_definition(options)
           job_definition.validate!
 
-          path = File.join('chronicle', 'etl', 'jobs', options[:name])
-          Chronicle::ETL::Config.write(path, job_definition.definition)
+          Chronicle::ETL::Config.write("jobs", options[:name], job_definition.definition)
         rescue Chronicle::ETL::JobDefinitionError => e
           cli_fail(message: "Job definition error", exception: e)
         end
@@ -92,7 +91,7 @@ LONG_DESC
           jobs = Chronicle::ETL::Config.available_jobs
 
           job_details = jobs.map do |job|
-            r = Chronicle::ETL::Config.load("chronicle/etl/jobs/#{job}.yml")
+            r = Chronicle::ETL::Config.load("jobs", job)
 
             extractor = r[:extractor][:name] if r[:extractor]
             transformer = r[:transformer][:name] if r[:transformer]
@@ -113,6 +112,9 @@ LONG_DESC
         private
 
         def run_job(job_definition)
+          # FIXME: clumsy to make CLI responsible for setting secrets here. Think about a better way to do this
+          job_definition.apply_default_secrets
+
           job = Chronicle::ETL::Job.new(job_definition)
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!
@@ -140,21 +142,22 @@ LONG_DESC
         end
 
         def load_job_config name
-          Chronicle::ETL::Config.load_job_from_config(name)
+          Chronicle::ETL::Config.read_job(name)
         end
 
         # Takes flag options and turns them into a runner config
+        # TODO: this needs a lot of refactoring
         def process_flag_options options
-          extractor_options = options[:'extractor-opts'].merge({
+          extractor_options = options[:'extractor-opts'].transform_keys(&:to_sym).merge({
             input: (options[:input] if options[:input].any?),
             since: options[:since],
             until: options[:until],
-            limit: options[:limit],
+            limit: options[:limit]
           }.compact)
 
-          transformer_options = options[:'transformer-opts']
+          transformer_options = options[:'transformer-opts'].transform_keys(&:to_sym)
 
-          loader_options = options[:'loader-opts'].merge({
+          loader_options = options[:'loader-opts'].transform_keys(&:to_sym).merge({
             output: options[:output],
             header_row: options[:header_row],
             fields: options[:fields]

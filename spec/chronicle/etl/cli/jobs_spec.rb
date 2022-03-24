@@ -20,6 +20,17 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
       # records + table header row
       expect(output.split("\n").count).to eql(file_record_count + 1)
     end
+
+    context "for jobs with required plugins not installed" do
+      include_context "mocked stdin"
+
+      it "will prompt to install plugin" do
+        args = %w[jobs:run -e unknown:extractor --log-level fatal]
+        load_stdin("n")
+        output, = invoke_cli(args)
+        expect(output).to match(/want to install/)
+      end
+    end
   end
 
   describe "chronicle-etl jobs:show" do
@@ -34,11 +45,23 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
     end
   end
 
-  describe "chronicle-etl jobs:show" do
+  describe "chronicle-etl jobs:create" do
+    include_context "mocked config directory"
+
+    it "can save a job file" do
+      args = %w[jobs:create -j new]
+      expect { invoke_cli(args) }
+        .to change { Chronicle::ETL::Config.available_jobs.count }
+        .by(1)
+    end
+  end
+
+  describe "chronicle-etl jobs:list" do
+    include_context "mocked config directory"
+
     it "lists available jobs" do
-      # TODO: write better tests here
-      # TODO: figure out how to mock config directories for CI
-      invoke_cli(%w[jobs list])
+      output, = invoke_cli(%w[jobs list])
+      expect(output.split("\n").last).to match('^  command')
     end
   end
 

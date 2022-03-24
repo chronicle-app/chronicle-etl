@@ -62,7 +62,8 @@ RSpec.describe Chronicle::ETL::Configurable do
     end
 
     it "does not configure unrecognized settings" do
-      expect { BasicClass.new(arbitrary_setting: 'bar') }.to raise_error(Chronicle::ETL::ConnectorConfigurationError)
+      c = BasicClass.new(arbitrary_setting: 'bar')
+      expect(c.config.arbitrary_setting).to be_nil
     end
   end
 

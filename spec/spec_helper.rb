@@ -7,9 +7,15 @@ require "chronicle/etl/cli"
 
 require_relative "support/invoke_cli"
 require_relative "support/run_extraction"
+require_relative "support/mocked_config_directory"
+require_relative "support/mocked_stdin"
+
+RSPEC_ROOT = File.dirname(__FILE__)
 
 RSpec.configure do |config|
   config.include Chronicle::ETL::SpecHelpers
+  config.include_context "mocked config directory", :include_shared => true
+  config.include_context "mocked stdin", :include_shared => true
 
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"

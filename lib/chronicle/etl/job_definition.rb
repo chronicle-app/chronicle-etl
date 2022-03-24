@@ -64,6 +64,30 @@ module Chronicle
         load_credentials
       end
 
+      # For each connector in this job, mix in secrets into the options
+      def apply_default_secrets
+        Chronicle::ETL::Registry::PHASES.each do |phase|
+          # If the option have a `secrets` key, we look up those secrets and
+          # mix them in. If not, use the connector's plugin name and look up 
+          # secrets with the same namespace
+          if @definition[phase][:options][:secrets]
+            namespace = @definition[phase][:options][:secrets]
+          else
+            # We don't want to do this lookup for built-in connectors
+            next if __send__("#{phase}_klass".to_sym).connector_registration.built_in?
+
+            # infer plugin name from connector name and use it for secrets
+            # namesepace
+            namespace = @definition[phase][:name].split(":").first
+          end
+
+          # Reverse merge secrets into connector's options (we want to preserve
+          # options that came from job file or CLI options)
+          secrets = Chronicle::ETL::Secrets.read(namespace)
+          @definition[phase][:options] = secrets.merge(@definition[phase][:options])
+        end
+      end
+
       # Is this job continuing from a previous run?
       def incremental?
         @definition[:incremental]

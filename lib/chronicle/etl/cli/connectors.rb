@@ -4,6 +4,8 @@ module Chronicle
   module ETL
     module CLI
       # CLI commands for working with ETL connectors
+      #
+      # @todo make this work with new plugin system (i.e. no loading of all plugins)
       class Connectors < SubcommandBase
         default_task 'list'
         namespace :connectors
@@ -11,8 +13,6 @@ module Chronicle
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
-          Chronicle::ETL::Registry.load_all!
-
           connector_info = Chronicle::ETL::Registry.connectors.map do |connector_registration|
             {
               identifier: connector_registration.identifier,

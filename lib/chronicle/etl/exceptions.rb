@@ -2,6 +2,8 @@ module Chronicle
   module ETL
     class Error < StandardError; end
 
+    class SecretsError < Error; end
+
     class ConfigError < Error; end
 
     class RunnerTypeError < Error; end
