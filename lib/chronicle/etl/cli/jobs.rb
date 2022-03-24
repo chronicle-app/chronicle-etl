@@ -70,8 +70,7 @@ LONG_DESC
           job_definition = build_job_definition(options)
           job_definition.validate!
 
-          path = File.join('chronicle', 'etl', 'jobs', options[:name])
-          Chronicle::ETL::Config.write(path, job_definition.definition)
+          Chronicle::ETL::Config.write("jobs", options[:name], job_definition.definition)
         rescue Chronicle::ETL::JobDefinitionError => e
           cli_fail(message: "Job definition error", exception: e)
         end

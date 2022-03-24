@@ -1,6 +1,6 @@
 require 'fakefs/spec_helpers'
 
-RSpec.shared_context "mocked config directory", :shared_context => :metadata do
+RSpec.shared_context "mocked config directory" do
   around(:each) do |example|
     include FakeFS::SpecHelpers
 

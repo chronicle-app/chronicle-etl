@@ -16,7 +16,7 @@ module Chronicle
 
           if value
             # came as argument
-          elsif $stdin.stat.pipe?
+          elsif $stdin.respond_to?(:stat) && $stdin.stat.pipe?
             value = $stdin.read
           else
             prompt = TTY::Prompt.new
@@ -40,7 +40,7 @@ module Chronicle
         desc "list", "List available secrets"
         def list(namespace=nil)
           all_secrets = Chronicle::ETL::Secrets.all(namespace)
-          cli_exit(message: "No secrets saved") unless all_secrets.any?
+          cli_exit(message: "No secrets are stored") unless all_secrets.any?
 
           rows = []
           all_secrets.each do |namespace, secrets|
