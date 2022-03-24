@@ -146,17 +146,18 @@ LONG_DESC
         end
 
         # Takes flag options and turns them into a runner config
+        # TODO: this needs a lot of refactoring
         def process_flag_options options
-          extractor_options = options[:'extractor-opts'].merge({
+          extractor_options = options[:'extractor-opts'].transform_keys(&:to_sym).merge({
             input: (options[:input] if options[:input].any?),
             since: options[:since],
             until: options[:until],
-            limit: options[:limit],
+            limit: options[:limit]
           }.compact)
 
-          transformer_options = options[:'transformer-opts']
+          transformer_options = options[:'transformer-opts'].transform_keys(&:to_sym)
 
-          loader_options = options[:'loader-opts'].merge({
+          loader_options = options[:'loader-opts'].transform_keys(&:to_sym).merge({
             output: options[:output],
             header_row: options[:header_row],
             fields: options[:fields]
