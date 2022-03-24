@@ -18,7 +18,7 @@ module Chronicle
 
       # Retrieve all secrets from all namespaces
       def self.all(namespace = nil)
-        namespaces = namespace.nil? ? available_configs : [namespace]
+        namespaces = namespace.nil? ? available_secrets : [namespace]
         namespaces
           .to_h { |namespace| [namespace.to_sym, read(namespace)] }
           .delete_if { |_, v| v.empty? }
@@ -46,7 +46,7 @@ module Chronicle
       end
 
       # Which config files are available in ~/.config/chronicle/etl/secrets
-      def self.available_configs
+      def self.available_secrets
         Chronicle::ETL::Config.available_configs('secrets')
       end
     end

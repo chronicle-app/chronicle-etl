@@ -5,7 +5,9 @@ module Chronicle
   module ETL
     # Utility methods to read, write, and access config files
     module Config
-      module_function
+      extend self
+
+      attr_accessor :xdg_environment
 
       def load(type, identifier)
         base = config_pathname_for_type(type)
@@ -45,12 +47,21 @@ module Chronicle
       end
 
       def config_pathname
-        base = Pathname.new(XDG::Config.new.home)
+        base = Pathname.new(xdg_config.config_home)
         base.join('chronicle', 'etl')
       end
 
       def config_pathname_for_type(type)
         config_pathname.join(type)
+      end
+
+      def xdg_config
+        # Only used for overriding ENV['HOME'] for XDG-related specs
+        if @xdg_environment
+          XDG::Environment.new(environment: @xdg_environment)
+        else
+          XDG::Environment.new
+        end
       end
     end
   end

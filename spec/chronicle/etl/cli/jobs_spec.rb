@@ -34,11 +34,12 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
     end
   end
 
-  describe "chronicle-etl jobs:show" do
+  describe "chronicle-etl jobs:list" do
+    include_context "mocked config directory"
+
     it "lists available jobs" do
-      # TODO: write better tests here
-      # TODO: figure out how to mock config directories for CI
-      invoke_cli(%w[jobs list])
+      output, = invoke_cli(%w[jobs list])
+      expect(output.split("\n").last).to match('^  command')
     end
   end
 

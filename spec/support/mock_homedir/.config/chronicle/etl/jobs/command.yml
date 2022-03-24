@@ -1,0 +1,14 @@
+extractor:
+  name: shell
+  options:
+    since: 2022-01-10
+transformer:
+  name: shell
+  options:
+loader:
+  name: table
+  options:
+    truncate_values_at: 50
+    fields_include:
+      - end_at
+      - involved.body
