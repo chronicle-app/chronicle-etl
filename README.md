@@ -173,7 +173,7 @@ module Chronicle
 end
 ```
 
-## Secrets
+## Secrets Management
 
 If your job needs secrets such as access tokens or passwords, `chronicle-etl` has a built-in secret management system. 
 
@@ -181,7 +181,7 @@ Secrets are organized in namespaces. Typically, you use one namespace per plugin
 
 Under the hood, secrets are stored in `~/.config/chronicle/etl/secrets/NAMESPACE.yml` with 0600 permissions on each file.
 
-### Usage
+### Using the secret manager
 
 ```sh
 # Save a secret under the 'pinboard' namespace
@@ -208,7 +208,6 @@ $ chronicle-etl secrets:unset pinboard access_token
 
 - Add **homebrew formula** for easier installation. #13
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
-- Add a **secrets storage system** for third-party credentials, etc. #36
 - Add support for **incremental extractions** #37
 - **Improve stdin extractor and shell command transformer** (#5) so that users can easily integrate their own scripts/tools into jobs
 - **Add documentation for Chronicle Schema**. It's found throughout this project but never explained.
