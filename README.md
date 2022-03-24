@@ -40,6 +40,11 @@ $ chronicle-etl -e shell --since 5h
 
 # Get email senders from an .mbox email archive file
 $ chronicle-etl --extractor email:mbox -i sample-email-archive.mbox -t email --fields actor.slug
+
+# Save an access token as a secret and use it in a job
+$ chronicle-etl secrets:set pinboard access_token username:foo123
+$ chronicle-etl secrets:list # Verify that's it's available
+$ chronicle-etl -e pinboard --since 1mo # Used automatically based on plugin name
 ```
 
 ### Common options
@@ -166,6 +171,37 @@ module Chronicle
     end
   end
 end
+```
+
+## Secrets
+
+If your job needs secrets such as access tokens or passwords, `chronicle-etl` has a built-in secret management system. 
+
+Secrets are organized in namespaces. Typically, you use one namespace per plugin (`pinboard` secrets for the `pinboard` plugin). When you run a job that uses the `pinboard` plugin extractor, for example, the secrets from that namespace will automatically be included in the extractor's options. To override which secrets get included, you can use do it in the connector options with `secrets: ALT-NAMESPACE`.
+
+Under the hood, secrets are stored in `~/.config/chronicle/etl/secrets/NAMESPACE.yml` with 0600 permissions on each file.
+
+### Usage
+
+```sh
+# Save a secret under the 'pinboard' namespace
+$ chronicle-etl secrets:set pinboard access_token username:foo123
+
+# Set a secret using stdin
+$ echo -n "username:foo123" | chronicle-etl secrets:set pinboard access_token
+
+# List available secretes
+$ chronicle-etl secrets:list
+
+# Use 'pinboard' secrets in the pinboard extractor's options (happens automatically)
+$ chronicle-etl -e pinboard --since 1mo
+
+# Use a custom secrets namespace
+$ chronicle-etl secrets:set pinboard-alt access_token different-username:foo123
+$ chronicle-etl -e pinboard --extractor-opts secrets:pinboard-alt --since 1mo
+
+# Remove a secret
+$ chronicle-etl secrets:unset pinboard access_token
 ```
 
 ## Roadmap
