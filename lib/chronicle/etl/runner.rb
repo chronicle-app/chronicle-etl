@@ -50,7 +50,7 @@ class Chronicle::ETL::Runner
       transformer = @job.instantiate_transformer(extraction)
       record = transformer.transform
 
-      Chronicle::ETL::Logger.info(tty_log_transformation(transformer))
+      Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))
       @job_logger.log_transformation(transformer)
 
       @loader.load(record) unless @job.dry_run?

@@ -59,7 +59,7 @@ LONG_DESC
         rescue Chronicle::ETL::JobDefinitionError => e
           message = ""
           job_definition.errors.each_pair do |category, errors|
-            message << "Problem with #{category}:\n  - #{errors.map(&:to_s).join("\n  -")}"
+            message << "Problem with #{category}:\n  - #{errors.map(&:to_s).join("\n  - ")}"
           end
           cli_fail(message: "Error running job.\n#{message}", exception: e)
         end
@@ -112,6 +112,8 @@ LONG_DESC
         private
 
         def run_job(job_definition)
+          # FIXME: have to validate here so next method can work. This is clumsy
+          job_definition.validate!
           # FIXME: clumsy to make CLI responsible for setting secrets here. Think about a better way to do this
           job_definition.apply_default_secrets
 
