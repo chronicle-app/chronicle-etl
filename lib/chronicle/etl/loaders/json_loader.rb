@@ -9,10 +9,13 @@ module Chronicle
       setting :output, default: $stdout
 
       def start
-        if @config.output == $stdout
-          @output = @config.output
+        if @config.output.is_a?(IO)
+          # This might seem like a duplication of the default value ($stdout)
+          # but it's because rspec overwrites $stdout (in helper #capture) to
+          # capture output.
+          @output = $stdout.dup
         else
-          @output = File.open(@config.output, "w")
+          @output = File.open(@config.output, "w+")
         end
       end
 
@@ -31,7 +34,7 @@ module Chronicle
       end
 
       def finish
-        @output.close
+        @output.close if @output.is_a?(IO)
       end
 
       private
