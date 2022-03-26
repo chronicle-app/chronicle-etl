@@ -28,6 +28,12 @@ module Chronicle
         end
       end
 
+      def exists?(type, identifier)
+        base = config_pathname_for_type(type)
+        path = base.join("#{identifier}.yml")
+        return path.exist?
+      end
+
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
       def available_jobs
         Dir.glob(File.join(config_pathname_for_type("jobs"), "*.yml")).map do |filename|

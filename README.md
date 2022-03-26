@@ -50,7 +50,6 @@ $ chronicle-etl -e pinboard --since 1mo # Used automatically based on plugin nam
 ### Common options
 ```sh
 Options:
-  -j, [--name=NAME]                      # Job configuration name
   -e, [--extractor=NAME]                 # Extractor class. Default: stdin
       [--extractor-opts=key:value]       # Extractor options
   -t, [--transformer=NAME]               # Transformer class. Default: null
@@ -69,6 +68,26 @@ Options:
                                          # Default: info
   -v, [--verbose], [--no-verbose]        # Set log level to verbose
       [--silent], [--no-silent]          # Silence all output
+```
+
+### Saving jobs
+
+You can save details about a job to a local config file (saved by default in `~/.config/chronicle/etl/jobs/job_name.yml`) to save yourself the trouble of setting the CLI flags for each run.
+
+```sh
+# Save a job named 'sample' to ~/.config/chronicle/etl/jobs/sample.yml
+$ chronicle-etl jobs:save sample --extractor pinboard --since 10d
+
+# Show details about the job
+$ chronicle-etl jobs:show sample
+
+# Run the job
+$ chronicle-etl jobs:run sample
+# Or more simply:
+$ chronicle-etl sample
+
+# Show all saved jobs
+$ chronicle-etl jobs:list
 ```
 
 ## Connectors

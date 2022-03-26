@@ -9,8 +9,6 @@ module Chronicle
         default_task "start"
         namespace :jobs
 
-        class_option :name, aliases: '-j', desc: 'Job configuration name'
-
         class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'NAME'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
         class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'NAME'
@@ -44,8 +42,8 @@ module Chronicle
             If you do not want to use the command line flags, you can also configure a job with a .yml config file. You can either specify the path to this file or use the filename and place the file in ~/.config/chronicle/etl/jobs/NAME.yml and call it with `--job NAME`
 LONG_DESC
         # Run an ETL job
-        def start
-          job_definition = build_job_definition(options)
+        def start(name = nil)
+          job_definition = build_job_definition(name, options)
 
           if job_definition.plugins_missing?
             missing_plugins = job_definition.errors[:plugins]
@@ -64,21 +62,39 @@ LONG_DESC
           cli_fail(message: "Error running job.\n#{message}", exception: e)
         end
 
-        desc "create", "Create a job"
+        option :'skip-confirmation', aliases: '-y', type: :boolean
+        desc "save", "Save a job"
         # Create an ETL job
-        def create
-          job_definition = build_job_definition(options)
+        def save(name)
+          write_config = true
+          job_definition = build_job_definition(name, options)
           job_definition.validate!
 
-          Chronicle::ETL::Config.write("jobs", options[:name], job_definition.definition)
+          if Chronicle::ETL::Config.exists?("jobs", name) && !options[:'skip-confirmation']
+            prompt = TTY::Prompt.new
+            write_config = false
+            message = "Job '#{name}' exists already. Ovewrite it?"
+            begin
+              write_config = prompt.yes?(message)
+            rescue TTY::Reader::InputInterrupt
+            end
+          end
+
+          if write_config
+            Chronicle::ETL::Config.write("jobs", name, job_definition.definition)
+            cli_exit(message: "Job saved. Run it with `$chronicle-etl jobs:run #{name}`")
+          else
+            cli_fail(message: "\nJob not saved")
+          end
+
         rescue Chronicle::ETL::JobDefinitionError => e
           cli_fail(message: "Job definition error", exception: e)
         end
 
         desc "show", "Show details about a job"
         # Show an ETL job
-        def show
-          job_definition = build_job_definition(options)
+        def show(name = nil)
+          job_definition = build_job_definition(name, options)
           job_definition.validate!
           puts Chronicle::ETL::Job.new(job_definition)
         rescue Chronicle::ETL::JobDefinitionError => e
@@ -136,9 +152,9 @@ LONG_DESC
         end
 
         # Create job definition by reading config file and then overwriting with flag options
-        def build_job_definition(options)
+        def build_job_definition(name, options)
           definition = Chronicle::ETL::JobDefinition.new
-          definition.add_config(load_job_config(options[:name]))
+          definition.add_config(load_job_config(name))
           definition.add_config(process_flag_options(options).transform_keys(&:to_sym))
           definition
         end

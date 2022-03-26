@@ -45,11 +45,11 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
     end
   end
 
-  describe "chronicle-etl jobs:create" do
+  describe "chronicle-etl jobs:save" do
     include_context "mocked config directory"
 
     it "can save a job file" do
-      args = %w[jobs:create -j new]
+      args = %w[jobs:save test-job]
       expect { invoke_cli(args) }
         .to change { Chronicle::ETL::Config.available_jobs.count }
         .by(1)
