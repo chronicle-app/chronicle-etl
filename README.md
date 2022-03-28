@@ -150,6 +150,7 @@ If you don't see a plugin for a third-party provider or data source that you're 
 | [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available (still needs IMAP support) |
 | [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
 | [safari](https://github.com/chronicle-app/chronicle-safari)     | Browser history from local sqlite db                                                        | Available                        |
+| [github](https://github.com/chronicle-app/chronicle-github)     | Github activity stream                                                                      | Available                        |
 
 #### Coming soon
 
