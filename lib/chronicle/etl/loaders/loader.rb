@@ -1,4 +1,5 @@
 require_relative 'helpers/encoding_helper'
+require_relative 'helpers/stdout_helper'
 
 module Chronicle
   module ETL

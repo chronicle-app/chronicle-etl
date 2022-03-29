@@ -1,22 +1,24 @@
+require 'tempfile'
+
 module Chronicle
   module ETL
     class JSONLoader < Chronicle::ETL::Loader
+      include Chronicle::ETL::Loaders::Helpers::StdoutHelper
+
       register_connector do |r|
         r.description = 'json'
       end
 
       setting :serializer
-      setting :output, default: $stdout
+      setting :output
 
       def start
-        if @config.output.is_a?(IO)
-          # This might seem like a duplication of the default value ($stdout)
-          # but it's because rspec overwrites $stdout (in helper #capture) to
-          # capture output.
-          @output = $stdout.dup
-        else
-          @output = File.open(@config.output, "w+")
-        end
+        @output_file =
+          if output_to_stdout?
+            create_stdout_temp_file
+          else
+            File.open(@config.output, "w+")
+          end
       end
 
       def load(record)
@@ -30,11 +32,14 @@ module Chronicle
 
           force_utf8(value)
         end
-        @output.puts encoded.to_json
+
+        @output_file.puts(encoded.to_json)
       end
 
       def finish
-        @output.close if @output.is_a?(IO)
+        write_to_stdout_from_temp_file(@output_file) if output_to_stdout?
+
+        @output_file.close
       end
 
       private

@@ -3,11 +3,13 @@ require 'csv'
 module Chronicle
   module ETL
     class CSVLoader < Chronicle::ETL::Loader
+      include Chronicle::ETL::Loaders::Helpers::StdoutHelper
+
       register_connector do |r|
         r.description = 'CSV'
       end
 
-      setting :output, default: $stdout
+      setting :output
       setting :headers, default: true
       setting :header_row, default: true
 
@@ -30,16 +32,7 @@ module Chronicle
           csv_options[:headers] = headers
         end
 
-        if @config.output.is_a?(IO)
-          # This might seem like a duplication of the default value ($stdout)
-          # but it's because rspec overwrites $stdout (in helper #capture) to
-          # capture output.
-          io = $stdout.dup
-        else
-          io = File.open(@config.output, "w+")
-        end
-
-        output = CSV.generate(**csv_options) do |csv|
+        csv_output = CSV.generate(**csv_options) do |csv|
           records.each do |record|
             csv << record
               .transform_keys(&:to_sym)
@@ -48,8 +41,12 @@ module Chronicle
           end
         end
 
-        io.write(output)
-        io.close
+        # TODO: just write to io directly
+        if output_to_stdout?
+          write_to_stdout(csv_output)
+        else
+          File.write(@config.output, csv_output)
+        end
       end
     end
   end
