@@ -16,12 +16,21 @@ If you don’t want to spend all your time writing scrapers, reverse-engineering
 * **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are stored in a common schema. Don’t want to use the schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.
 
 ## Installation
+
+Using homebrew:
 ```sh
-# Install chronicle-etl
-gem install chronicle-etl
+$ brew install chronicle-app/etl/chronicle-etl
+
+```
+Using rubygems:
+```sh
+$ gem install chronicle-etl
 ```
 
-After installation, the `chronicle-etl` command will be available in your shell. Homebrew support [is coming soon](https://github.com/chronicle-app/chronicle-etl/issues/13).
+Confirm it installed successfully:
+```sh
+$ chronicle-etl --version
+```
 
 ## Basic usage and running jobs
 
@@ -116,7 +125,7 @@ $ chronicle-etl connectors:list
 - [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
 
 ## Chronicle Plugins
-Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through `$ gem install` or through the CLI itself.
+Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through the CLI (which installs the Gems under the hood).
 
 ### Plugin usage
 
@@ -226,7 +235,6 @@ $ chronicle-etl secrets:unset pinboard access_token
 
 ## Roadmap
 
-- Add **homebrew formula** for easier installation. #13
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
 - Add support for **incremental extractions** #37
 - **Improve stdin extractor and shell command transformer** (#5) so that users can easily integrate their own scripts/tools into jobs
