@@ -12,6 +12,15 @@ module Chronicle
       setting :serializer
       setting :output
 
+      # If true, one JSON record per line. If false, output a single json
+      # object with an array of records
+      setting :line_separated, default: true, type: :boolean
+
+      def initialize(*args)
+        super
+        @first_line = true
+      end
+
       def start
         @output_file =
           if output_to_stdout?
@@ -19,6 +28,8 @@ module Chronicle
           else
             File.open(@config.output, "w+")
           end
+
+        @output_file.puts("[\n") unless @config.line_separated
       end
 
       def load(record)
@@ -33,10 +44,25 @@ module Chronicle
           force_utf8(value)
         end
 
-        @output_file.puts(encoded.to_json)
+        line = encoded.to_json
+        # For line-separated output, we just put json + newline
+        if @config.line_separated
+          line = "#{line}\n"
+        # Otherwise, we add a comma and newline and then add record to the
+        # array we created in #start (unless it's the first line).
+        else
+          line = ",\n#{line}" unless @first_line
+        end
+
+        @output_file.write(line)
+
+        @first_line = false
       end
 
       def finish
+        # Close the array unless we're doing line-separated JSON
+        @output_file.puts("\n]") unless @config.line_separated
+
         write_to_stdout_from_temp_file(@output_file) if output_to_stdout?
 
         @output_file.close
@@ -44,6 +70,7 @@ module Chronicle
 
       private
 
+      # TODO: implement this
       def serializer
         @config.serializer || Chronicle::ETL::RawSerializer
       end
