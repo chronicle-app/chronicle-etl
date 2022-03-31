@@ -154,12 +154,12 @@ If you don't see a plugin for a third-party provider or data source that you're 
 
 | Name                                                            | Description                                                                                 | Availability                     |
 |-----------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------|
+| [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available |
+| [github](https://github.com/chronicle-app/chronicle-github)     | Github activity stream                                                                      | Available                        |
 | [imessage](https://github.com/chronicle-app/chronicle-imessage) | iMessage messages and attachments                                                           | Available                        |
-| [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (still needs zsh support)  |
-| [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available (still needs IMAP support) |
 | [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
 | [safari](https://github.com/chronicle-app/chronicle-safari)     | Browser history from local sqlite db                                                        | Available                        |
-| [github](https://github.com/chronicle-app/chronicle-github)     | Github activity stream                                                                      | Available                        |
+| [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (still needs zsh support)  |
 
 #### Coming soon
 
