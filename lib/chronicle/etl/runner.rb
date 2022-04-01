@@ -1,5 +1,6 @@
 require 'colorize'
 require 'chronic_duration'
+require "tty-spinner"
 
 class Chronicle::ETL::Runner
   def initialize(job)
@@ -8,30 +9,54 @@ class Chronicle::ETL::Runner
   end
 
   def run!
+    begin_job
     validate_job
     instantiate_connectors
     prepare_job
     prepare_ui
     run_extraction
+  rescue Chronicle::ETL::ExtractionError => e
+    @job_logger&.error
+    raise(Chronicle::ETL::RunnerError, "Extraction failed. #{e.message}")
+  rescue Interrupt
+    @job_logger&.error
+    raise(Chronicle::ETL::RunInterruptedError, "Job interrupted.")
+  rescue StandardError => e
+    # Just throwing this in here until we have better exception handling in
+    # loaders, etc
+    @job_logger&.error
+    raise(Chronicle::ETL::RunInterruptedError, "Error running job. #{e.message}")
+  ensure
     finish_job
   end
 
   private
 
+  def begin_job
+    Chronicle::ETL::Logger.info(tty_log_job_initialize)
+    @initialization_spinner = TTY::Spinner.new("[:spinner] :title", format: :dots_2)
+  end
+
   def validate_job
+    @initialization_spinner.update(title: "Validating job")
     @job.job_definition.validate!
   end
 
   def instantiate_connectors
+    @initialization_spinner.update(title: "Initializing connectors")
     @extractor = @job.instantiate_extractor
     @loader = @job.instantiate_loader
   end
 
   def prepare_job
-    Chronicle::ETL::Logger.info(tty_log_job_start)
+    @initialization_spinner.update(title: "Preparing job")
     @job_logger.start
     @loader.start
+
+    @initialization_spinner.update(title: "Preparing extraction")
+    @initialization_spinner.auto_spin
     @extractor.prepare
+    @initialization_spinner.success("(#{'successful'.green})")
   end
 
   def prepare_ui
@@ -40,34 +65,34 @@ class Chronicle::ETL::Runner
     Chronicle::ETL::Logger.attach_to_progress_bar(@progress_bar)
   end
 
-  # TODO: refactor this further
   def run_extraction
     @extractor.extract do |extraction|
-      unless extraction.is_a?(Chronicle::ETL::Extraction)
-        raise Chronicle::ETL::RunnerTypeError, "Extracted should be a Chronicle::ETL::Extraction"
-      end
-
-      transformer = @job.instantiate_transformer(extraction)
-      record = transformer.transform
-
-      Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))
-      @job_logger.log_transformation(transformer)
-
-      @loader.load(record) unless @job.dry_run?
-    rescue Chronicle::ETL::TransformationError => e
-      Chronicle::ETL::Logger.error(tty_log_transformation_failure(e, transformer))
-    ensure
+      process_extraction(extraction)
       @progress_bar.increment
     end
 
     @progress_bar.finish
+
+    # This is typically a slow method (writing to stdout, writing a big file, etc)
+    # TODO: consider adding a spinner?
     @loader.finish
     @job_logger.finish
-  rescue Interrupt
-    Chronicle::ETL::Logger.error("\n#{'Job interrupted'.red}")
-    @job_logger.error
-  rescue StandardError => e
-    raise e
+  end
+
+  def process_extraction(extraction)
+    # For each extraction from our extractor, we create a new tarnsformer
+    transformer = @job.instantiate_transformer(extraction)
+
+    # And then transform that record, logging it if we're in debug log level
+    record = transformer.transform
+    Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))
+    @job_logger.log_transformation(transformer)
+
+    # Then send the results to the loader
+    @loader.load(record) unless @job.dry_run?
+  rescue Chronicle::ETL::TransformationError => e
+    # TODO: have an option to cancel job if we encounter an error
+    Chronicle::ETL::Logger.error(tty_log_transformation_failure(e, transformer))
   end
 
   def finish_job
@@ -77,7 +102,7 @@ class Chronicle::ETL::Runner
     Chronicle::ETL::Logger.info(tty_log_completion)
   end
 
-  def tty_log_job_start
+  def tty_log_job_initialize
     output = "Beginning job "
     output += "'#{@job.name}'".bold if @job.name
     output
@@ -95,8 +120,9 @@ class Chronicle::ETL::Runner
 
   def tty_log_completion
     status = @job_logger.success ? 'Success' : 'Failed'
-    output = "\nCompleted job "
-    output += "'#{@job.name}'".bold if @job.name
+    job_completion = @job_logger.success ? 'Completed' : 'Partially completed'
+    output = "\n#{job_completion} job"
+    output += " '#{@job.name}'".bold if @job.name
     output += " in #{ChronicDuration.output(@job_logger.duration)}" if @job_logger.duration
     output += "\n  Status:\t".light_black + status
     output += "\n  Completed:\t".light_black + "#{@job_logger.job_log.num_records_processed}"

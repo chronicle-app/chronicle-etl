@@ -6,6 +6,9 @@ module Chronicle
 
     class ConfigError < Error; end
 
+    class RunnerError < Error; end
+    class RunInterruptedError < RunnerError; end
+
     class RunnerTypeError < Error; end
 
     class JobDefinitionError < Error

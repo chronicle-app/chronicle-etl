@@ -10,6 +10,10 @@ module Chronicle
       # options::
       #   Options for configuring this Transformer
       def initialize(extraction, options = {})
+        unless extraction.is_a?(Chronicle::ETL::Extraction)
+          raise Chronicle::ETL::RunnerTypeError, "Extracted should be a Chronicle::ETL::Extraction"
+        end
+
         @extraction = extraction
         apply_options(options)
       end

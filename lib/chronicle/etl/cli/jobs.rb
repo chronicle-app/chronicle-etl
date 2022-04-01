@@ -136,6 +136,8 @@ LONG_DESC
           job = Chronicle::ETL::Job.new(job_definition)
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!
+        rescue RunnerError => e
+          cli_fail(message: "#{e.message}", exception: e)
         end
 
         # TODO: probably could merge this with something in cli/plugin
