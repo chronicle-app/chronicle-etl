@@ -42,7 +42,7 @@ $ chronicle-etl help
 $ chronicle-etl --extractor NAME --transformer NAME --loader NAME
 
 # Read test.csv and display it to stdout as a table 
-$ chronicle-etl --extractor csv --input ./data.csv --loader table
+$ chronicle-etl --extractor csv --input data.csv --loader table
 
 # Retrieve shell commands run in the last 5 hours
 $ chronicle-etl -e shell --since 5h

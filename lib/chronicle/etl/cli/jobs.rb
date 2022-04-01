@@ -43,6 +43,15 @@ module Chronicle
 LONG_DESC
         # Run an ETL job
         def start(name = nil)
+          # If someone runs `$ chronicle-etl` with no arguments, show help menu.
+          # TODO: decide if we should check that there's nothing in stdin pipe
+          # in case user wants to actually run this sort of job stdin->null->stdout
+          if name.nil? && options[:extractor].nil?
+            m = Chronicle::ETL::CLI::Main.new
+            m.help
+            cli_exit
+          end
+
           job_definition = build_job_definition(name, options)
 
           if job_definition.plugins_missing?
@@ -86,7 +95,6 @@ LONG_DESC
           else
             cli_fail(message: "\nJob not saved")
           end
-
         rescue Chronicle::ETL::JobDefinitionError => e
           cli_fail(message: "Job definition error", exception: e)
         end
