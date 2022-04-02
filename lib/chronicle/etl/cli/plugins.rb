@@ -61,7 +61,7 @@ module Chronicle
             }
           end
 
-          headers = ['name', 'description', 'latest version'].map{ |h| h.to_s.upcase.bold }
+          headers = ['name', 'description', 'version'].map{ |h| h.to_s.upcase.bold }
           table = TTY::Table.new(headers, info.map(&:values))
           puts "Installed plugins:"
           puts table.render(indent: 2, padding: [0, 0])

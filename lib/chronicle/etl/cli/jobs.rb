@@ -91,7 +91,7 @@ LONG_DESC
 
           if write_config
             Chronicle::ETL::Config.write("jobs", name, job_definition.definition)
-            cli_exit(message: "Job saved. Run it with `$chronicle-etl jobs:run #{name}`")
+            cli_exit(message: "Job saved. Run it with `$ chronicle-etl jobs:run #{name}`")
           else
             cli_fail(message: "\nJob not saved")
           end

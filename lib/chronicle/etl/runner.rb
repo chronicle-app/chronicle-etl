@@ -34,7 +34,7 @@ class Chronicle::ETL::Runner
 
   def begin_job
     Chronicle::ETL::Logger.info(tty_log_job_initialize)
-    @initialization_spinner = TTY::Spinner.new("[:spinner] :title", format: :dots_2)
+    @initialization_spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
   end
 
   def validate_job
@@ -57,6 +57,7 @@ class Chronicle::ETL::Runner
     @initialization_spinner.auto_spin
     @extractor.prepare
     @initialization_spinner.success("(#{'successful'.green})")
+    Chronicle::ETL::Logger.info("\n")
   end
 
   def prepare_ui
