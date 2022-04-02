@@ -15,6 +15,14 @@ If you don’t want to spend all your time writing scrapers, reverse-engineering
 * **Plugins for many third-party providers**. A plugin system allows you to access data from third-party providers and hook it into the shared CLI infrastructure.
 * **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are stored in a common schema. Don’t want to use the schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.
 
+## Demo
+
+<p align="center">
+  
+  <img width="600" src="https://user-images.githubusercontent.com/6291/161363262-c4286d0e-de04-4a6b-b4af-2edbe4d15c48.svg">
+  
+</p>
+
 ## Installation
 
 Using homebrew:
