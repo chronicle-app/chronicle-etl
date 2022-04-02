@@ -25,7 +25,7 @@ class Chronicle::ETL::Runner
     # Just throwing this in here until we have better exception handling in
     # loaders, etc
     @job_logger&.error
-    raise(Chronicle::ETL::RunInterruptedError, "Error running job. #{e.message}")
+    raise(Chronicle::ETL::RunnerError, "Error running job. #{e.message}")
   ensure
     finish_job
   end
