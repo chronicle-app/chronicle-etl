@@ -23,12 +23,13 @@ If you don’t want to spend all your time writing scrapers, reverse-engineering
   
 </p>
 
+*(Also viewable on [asciinema.org](https://asciinema.org/a/Qv10buxoM60evwtW4c09lxzP6))*
+
 ## Installation
 
 Using homebrew:
 ```sh
 $ brew install chronicle-app/etl/chronicle-etl
-
 ```
 Using rubygems:
 ```sh
