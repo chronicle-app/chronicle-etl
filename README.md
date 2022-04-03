@@ -8,22 +8,20 @@ Are you trying to archive your digital history or incorporate it into your own p
 
 If you don’t want to spend all your time writing scrapers, reverse-engineering APIs, or parsing takeout data, this project is for you! (*If you do enjoy these things, please see the [open issues](https://github.com/chronicle-app/chronicle-etl/issues).*)
 
-**`chronicle-etl` is a CLI tool that gives you a unified interface for accessing your personal data.** It uses the ETL pattern to *extract* it from a source (e.g. your local browser history, a directory of images, goodreads.com reading history), *transform* it (into a given schema), and *load* it to a source (e.g. a CSV file, JSON, external API).
+**`chronicle-etl` is a CLI tool that gives you a unified interface for accessing your personal data.** It uses the ETL pattern to *extract* it from a source (e.g. your local browser history, a directory of images, goodreads.com reading history), *transform* it (into a given schema), and *load* it to a destination (e.g. a CSV file, JSON, external API).
 
 ## What does `chronicle-etl` give you?
 * **CLI tool for working with personal data**. You can monitor progress of exports, manipulate the output, set up recurring jobs, manage credentials, and more.
 * **Plugins for many third-party providers**. A plugin system allows you to access data from third-party providers and hook it into the shared CLI infrastructure.
 * **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are stored in a common schema. Don’t want to use the schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.
 
-## Demo
+## Chronicle-ETL in action
 
-<p align="center">
-  
-  <img width="600" src="https://user-images.githubusercontent.com/6291/161363262-c4286d0e-de04-4a6b-b4af-2edbe4d15c48.svg">
-  
-</p>
+![demo](https://user-images.githubusercontent.com/6291/161410839-b5ce931a-2353-4585-b530-929f46e3f960.svg)
 
-*(Also viewable on [asciinema.org](https://asciinema.org/a/Qv10buxoM60evwtW4c09lxzP6))*
+### Longer screencast
+
+[![asciicast](https://asciinema.org/a/483455.svg)](https://asciinema.org/a/483455)
 
 ## Installation
 
