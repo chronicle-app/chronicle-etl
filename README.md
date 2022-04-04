@@ -167,6 +167,8 @@ If you don't see a plugin for a third-party provider or data source that you're 
 | [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
 | [safari](https://github.com/chronicle-app/chronicle-safari)     | Browser history from local sqlite db                                                        | Available                        |
 | [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (still needs zsh support)  |
+| [zulip](https://github.com/chronicle-app/chronicle-zulip)       | Zulip message history                                                                       | Available (for private messages) |
+
 
 #### Coming soon
 
