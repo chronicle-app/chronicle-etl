@@ -9,7 +9,7 @@ module Chronicle
       # @todo Experiment with just mixing in ActiveModel instead of this
       #   this reimplementation
       class Base
-        ATTRIBUTES = [:provider, :provider_id, :lat, :lng, :metadata].freeze
+        ATTRIBUTES = [:provider, :provider_id, :provider_namespace, :lat, :lng, :metadata].freeze
         ASSOCIATIONS = [].freeze
 
         attr_accessor(:id, :dedupe_on, *ATTRIBUTES)

@@ -10,7 +10,7 @@ module Chronicle
         # TODO: This desperately needs a validation system
         ASSOCIATIONS = [
           :involvements, # inverse of activity's `involved`
-
+          :analogous,
           :attachments,
           :abouts,
           :aboutables, # inverse of above
