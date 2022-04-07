@@ -245,8 +245,9 @@ $ chronicle-etl secrets:unset pinboard access_token
 ## Roadmap
 
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
-- Add support for **incremental extractions** #37
-- **Improve stdin extractor and shell command transformer** (#5) so that users can easily integrate their own scripts/tools into jobs
+- Add OAuth2 authenticator ([#48](https://github.com/chronicle-app/chronicle-etl/issues/48))
+- Add support for **incremental extractions** ([#37](https://github.com/chronicle-app/chronicle-etl/issues/37))
+- **Improve stdin extractor and shell command transformer** so that users can easily integrate their own scripts/tools into jobs ([#5](https://github.com/chronicle-app/chronicle-etl/issues/48))
 - **Add documentation for Chronicle Schema**. It's found throughout this project but never explained.
 
 ## Development
