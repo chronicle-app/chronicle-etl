@@ -27,6 +27,9 @@ module Chronicle
         desc 'secrets:COMMAND', 'Manage secrets', hide: true
         subcommand 'secrets', Secrets
 
+        desc 'authorizations', 'Authorize', hide: true
+        subcommand 'authorizations', Authorizations
+
         # Entrypoint for the CLI
         def self.start(given_args = ARGV, config = {})
           # take a subcommand:command and splits them so Thor knows how to hand off to the subcommand class

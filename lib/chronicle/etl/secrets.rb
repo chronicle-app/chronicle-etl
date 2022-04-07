@@ -11,6 +11,12 @@ module Chronicle
         write(namespace, config)
       end
 
+      def set_all(namespace, secrets)
+        config = read(namespace)
+        config = config.merge(secrets)
+        write(namespace, config)
+      end
+
       # Remove a setting from a namespaced config file
       def unset(namespace, key)
         config = read(namespace)
