@@ -52,6 +52,8 @@ LONG_DESC
             cli_exit
           end
 
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+
           job_definition = build_job_definition(name, options)
 
           if job_definition.plugins_missing?
@@ -102,6 +104,8 @@ LONG_DESC
         desc "show", "Show details about a job"
         # Show an ETL job
         def show(name = nil)
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+
           job_definition = build_job_definition(name, options)
           job_definition.validate!
           puts Chronicle::ETL::Job.new(job_definition)
