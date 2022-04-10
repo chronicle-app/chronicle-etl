@@ -6,14 +6,14 @@
 
 Are you trying to archive your digital history or incorporate it into your own projects? You’ve probably discovered how frustrating it is to get machine-readable access to your own data. While [building a memex](https://hyfen.net/memex/), I learned first-hand what great efforts must be made before you can begin using the data in interesting ways.
 
-If you don’t want to spend all your time writing scrapers, reverse-engineering APIs, or parsing takeout data, this project is for you! (*If you do enjoy these things, please see the [open issues](https://github.com/chronicle-app/chronicle-etl/issues).*)
+If you don’t want to spend all your time writing scrapers, reverse-engineering APIs, or parsing takeout data, this tool is for you! (*If you do enjoy these things, please see the [open issues](https://github.com/chronicle-app/chronicle-etl/issues).*)
 
-**`chronicle-etl` is a CLI tool that gives you a unified interface for accessing your personal data.** It uses the ETL pattern to *extract* it from a source (e.g. your local browser history, a directory of images, goodreads.com reading history), *transform* it (into a given schema), and *load* it to a destination (e.g. a CSV file, JSON, external API).
+**`chronicle-etl` is a CLI tool that gives you a unified interface to your personal data.** It uses the ETL pattern to *extract* data from a source (e.g. your local browser history, a directory of images, goodreads.com reading history), *transform* it (into a given schema), and *load* it to a destination (e.g. a CSV file, JSON, external API).
 
 ## What does `chronicle-etl` give you?
-* **CLI tool for working with personal data**. You can monitor progress of exports, manipulate the output, set up recurring jobs, manage credentials, and more.
-* **Plugins for many third-party providers**. A plugin system allows you to access data from third-party providers and hook it into the shared CLI infrastructure.
-* **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are stored in a common schema. Don’t want to use the schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.
+* **A CLI tool for working with personal data**. You can monitor progress of exports, manipulate the output, set up recurring jobs, manage credentials, and more.
+* **Plugins for many third-party providers**. This plugin system allows you to access data from dozens of third-party services, all accessible through a common CLI interface.
+* **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are represented in a common schema. (Don’t want to use this schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.)
 
 ## Chronicle-ETL in action
 
@@ -45,7 +45,7 @@ $ chronicle-etl --version
 # Display help
 $ chronicle-etl help
 
-# Basic job usage
+# Run a basic job 
 $ chronicle-etl --extractor NAME --transformer NAME --loader NAME
 
 # Read test.csv and display it to stdout as a table 
@@ -88,7 +88,7 @@ Options:
 
 ### Saving jobs
 
-You can save details about a job to a local config file (saved by default in `~/.config/chronicle/etl/jobs/job_name.yml`) to save yourself the trouble of setting the CLI flags for each run.
+You can save details about a job to a local config file (saved by default in `~/.config/chronicle/etl/jobs/JOB_NAME.yml`) to save yourself the trouble specifying options each time.
 
 ```sh
 # Save a job named 'sample' to ~/.config/chronicle/etl/jobs/sample.yml
@@ -99,8 +99,6 @@ $ chronicle-etl jobs:show sample
 
 # Run the job
 $ chronicle-etl jobs:run sample
-# Or more simply:
-$ chronicle-etl sample
 
 # Show all saved jobs
 $ chronicle-etl jobs:list
@@ -132,7 +130,7 @@ $ chronicle-etl connectors:list
 - [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
 
 ## Chronicle Plugins
-Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through the CLI (which installs the Gems under the hood).
+Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through the CLI (under the hood, it's a `gem install chronicle-PLUGINNAME`)
 
 ### Plugin usage
 
@@ -245,9 +243,9 @@ $ chronicle-etl secrets:unset pinboard access_token
 ## Roadmap
 
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
-- Add OAuth2 authenticator ([#48](https://github.com/chronicle-app/chronicle-etl/issues/48))
+- Add an **OAuth2 authorizer** for services that require this type of authorization ([#48](https://github.com/chronicle-app/chronicle-etl/issues/48))
 - Add support for **incremental extractions** ([#37](https://github.com/chronicle-app/chronicle-etl/issues/37))
-- **Improve stdin extractor and shell command transformer** so that users can easily integrate their own scripts/tools into jobs ([#5](https://github.com/chronicle-app/chronicle-etl/issues/48))
+- **Improve stdin extractor and shell command transformer** so that users can easily integrate their own scripts/languages/tools into jobs ([#5](https://github.com/chronicle-app/chronicle-etl/issues/48))
 - **Add documentation for Chronicle Schema**. It's found throughout this project but never explained.
 
 ## Development
