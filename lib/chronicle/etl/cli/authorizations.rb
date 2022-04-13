@@ -24,16 +24,15 @@ module Chronicle
           end
 
           begin
-            require "chronicle/#{provider}"
-          rescue LoadError => e
+            Chronicle::ETL::Registry::PluginRegistry.activate(provider)
+          rescue PluginError => e
             cli_fail(message: "Could not load plugin '#{provider}'.\n" + e.message, exception: e)
           end
 
           authorizer_klass = Authorizer.find_by_provider(provider.to_sym)
           authorizer = authorizer_klass.new(port: options[:port])
 
-          authorizer.authorize!
-          secrets = authorizer.secrets
+          secrets = authorizer.authorize!
 
           namespace = options[:secrets] || provider
           Chronicle::ETL::Secrets.set_all(namespace, secrets)

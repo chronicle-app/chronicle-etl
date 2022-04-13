@@ -11,6 +11,16 @@ module Chronicle
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module PluginRegistry
+        class << self
+          def register_standalone(name)
+            standalones << name
+          end
+
+          def standalones
+            @standalones ||= []
+          end
+        end
+
         # Does this plugin exist?
         def self.exists?(name)
           # TODO: implement this. Could query rubygems.org or use a hardcoded
@@ -34,7 +44,7 @@ module Chronicle
         # Check whether a given plugin is installed
         def self.installed?(name)
           gem_name = "chronicle-#{name}"
-          all_installed.map(&:name).include?(gem_name)
+          all_installed.map(&:name).include?(gem_name) || self.standalones.include?(name)
         end
 
         # Activate a plugin with given name by `require`ing it

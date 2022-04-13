@@ -56,10 +56,6 @@ module Chronicle
         spinner.success("(#{'successful'.green})")
 
         @authorization = @server.latest_authorization
-      end
-
-      def secrets
-        raise "Call authorize! before trying to get secrets" unless @authorization
 
         extract_secrets(self.class.authorization_to_secret_map, @authorization)
       end

@@ -15,6 +15,13 @@ module Chronicle
         end
       end
 
+      def initialize(args)
+      end
+
+      def authorize!
+        raise NotImplementedError
+      end
+
       def load_credentials
         Chronicle::ETL::Secrets.read(self.class.provider_name)
       end
