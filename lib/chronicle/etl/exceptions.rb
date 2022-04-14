@@ -4,6 +4,8 @@ module Chronicle
 
     class SecretsError < Error; end
 
+    class AuthorizationError < Error; end
+
     class ConfigError < Error; end
 
     class RunnerError < Error; end

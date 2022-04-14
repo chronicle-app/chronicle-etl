@@ -44,10 +44,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "marcel", "~> 1.0.2"
   spec.add_dependency "mini_exiftool", "~> 2.10"
   spec.add_dependency "nokogiri", "~> 1.13"
-  spec.add_dependency 'omniauth'
-  spec.add_dependency 'omniauth-google-oauth2'
+  spec.add_dependency 'omniauth', "~> 2"
   spec.add_dependency "sequel", "~> 5.35"
-  spec.add_dependency 'sinatra'
+  spec.add_dependency 'sinatra', "~> 2"
   spec.add_dependency "sqlite3", "~> 1.4"
   spec.add_dependency "thor", "~> 1.2"
   spec.add_dependency "thor-hollaback", "~> 0.2"

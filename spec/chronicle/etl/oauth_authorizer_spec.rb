@@ -26,7 +26,7 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
     stub_const("FooAuthorizer", authorizer)
   end
 
-  it "works" do
+  it "returs an authorization after oauth flow completed" do
     a = authorizer.new(port: port)
     thread = Thread.new do
       wait_until do
@@ -40,6 +40,11 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
     end
     thread.join
     expect(result).to eql({ token: 'abc' })
+  end
+
+  it "raises an exception if flow aborts early" do
+    # TODO: implement this somehow
+    # send signal to sinatra?
   end
 
   def booted?

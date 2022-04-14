@@ -12,6 +12,8 @@ module Chronicle
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module PluginRegistry
         class << self
+          # Start of a system for having non-gem plugins. Right now, we just
+          # make registry aware of existenc of name of non-gem plugin
           def register_standalone(name)
             standalones << name
           end
@@ -43,8 +45,7 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
-          gem_name = "chronicle-#{name}"
-          all_installed.map(&:name).include?(gem_name) || self.standalones.include?(name)
+          (standalones + all_installed.map { |gem| gem.name.gsub("chronicle-", "") }).include?(name)
         end
 
         # Activate a plugin with given name by `require`ing it

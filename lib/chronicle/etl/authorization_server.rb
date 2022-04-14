@@ -24,8 +24,6 @@ module Chronicle
         set :environment, ENV['APP_ENV'] == 'test' ? :test : :production
       end
 
-      puts self.environment
-
       use OmniAuth::Builder do
         Chronicle::ETL::OauthAuthorizer.all_omniauth_strategies.each do |klass|
           args = [klass.client_id, klass.client_secret, klass.options].compact
@@ -35,7 +33,6 @@ module Chronicle
           )
         end
       end
-
 
       OmniAuth.config.logger = Chronicle::ETL::Logger
       OmniAuth.config.silence_get_warning = true
@@ -48,6 +45,7 @@ module Chronicle
       end
 
       get '/auth/failure' do
+        # TODO: handle this
         erb "<h1>Authentication Failed:</h1><h3>message:<h3> <pre>#{params}</pre>"
       end
     end

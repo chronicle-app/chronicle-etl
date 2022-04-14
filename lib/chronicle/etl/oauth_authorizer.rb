@@ -5,7 +5,7 @@ module Chronicle
   module ETL
     class OauthAuthorizer < Authorizer
       class << self
-        attr_reader :strategy, :options, :provider_name, :authorization_to_secret_map
+        attr_reader :strategy, :provider_name, :authorization_to_secret_map
         attr_accessor :client_id, :client_secret
 
         def omniauth_strategy(strategy)
@@ -29,6 +29,8 @@ module Chronicle
         end
       end
 
+      attr_reader :authorization
+
       def initialize(port: )
         @port = port
         @credentials = load_credentials
@@ -39,6 +41,7 @@ module Chronicle
         associate_oauth_credentials
         @server = load_server
         spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
+        Chronicle::ETL::Logger.attach_to_ui(spinner)
         spinner.auto_spin
         spinner.update(title: "Starting temporary authorization server on port #{@port}""")
 
@@ -51,6 +54,10 @@ module Chronicle
         @server.quit!
         server_thread.join
         spinner.success("(#{'successful'.green})")
+        Chronicle::ETL::Logger.detach_from_ui
+
+        # TODO: properly handle failed authorizations
+        raise Chronicle::ETL::AuthorizationError unless @server.latest_authorization
 
         @authorization = @server.latest_authorization
 
