@@ -21,19 +21,21 @@ module Chronicle
         set :sessions, true
         set :quiet, true
         set :threaded, true
-        set :environment, :production
+        set :environment, ENV['APP_ENV'] == 'test' ? :test : :production
       end
+
+      puts self.environment
 
       use OmniAuth::Builder do
         Chronicle::ETL::OauthAuthorizer.all_omniauth_strategies.each do |klass|
+          args = [klass.client_id, klass.client_secret, klass.options].compact
           provider(
             klass.strategy,
-            klass.client_id,
-            klass.client_secret,
-            klass.options
+            *args
           )
         end
       end
+
 
       OmniAuth.config.logger = Chronicle::ETL::Logger
       OmniAuth.config.silence_get_warning = true

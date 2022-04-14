@@ -32,13 +32,12 @@ module Chronicle
       def initialize(port: )
         @port = port
         @credentials = load_credentials
-        super()
+        super
       end
 
       def authorize!
         associate_oauth_credentials
         @server = load_server
-
         spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
         spinner.auto_spin
         spinner.update(title: "Starting temporary authorization server on port #{@port}""")
@@ -47,9 +46,7 @@ module Chronicle
         start_oauth_flow
 
         spinner.update(title: "Waiting for authorization to complete in your browser")
-        while server_thread.status && !@server.latest_authorization
-          sleep 0.5
-        end
+        sleep 0.1 while authorization_pending?(server_thread)
 
         @server.quit!
         server_thread.join
@@ -61,6 +58,10 @@ module Chronicle
       end
 
       private
+
+      def authorization_pending?(server_thread)
+        server_thread.status && !@server.latest_authorization
+      end
 
       def associate_oauth_credentials
         self.class.client_id = @credentials[:client_id]
