@@ -17,7 +17,7 @@ module Chronicle
         option :credentials, desc: 'Secrets namespace for where to read credentials from (default: PROVIDER)', type: :string, banner: 'NAMESPACE'
         option :secrets, desc: 'Secrets namespace for where authorization should be saved to (default: PROVIDER)', type: :string, banner: 'NAMESPACE'
         option :print, desc: 'Show authorization results (instead of just saving secrets)', type: :boolean, default: false
-        def authorize(provider)
+        def new(provider)
           # TODO: this assumes provider:plugin one-to-one
           unless Chronicle::ETL::Registry::PluginRegistry.installed?(provider)
             cli_fail(message: "Plugin for #{provider} is not installed.")
@@ -30,7 +30,9 @@ module Chronicle
           end
 
           authorizer_klass = Authorizer.find_by_provider(provider.to_sym)
-          authorizer = authorizer_klass.new(port: options[:port])
+          cli_fail(message: "An authorizer for '#{provider}' could not be found.") unless authorizer_klass
+
+          authorizer = authorizer_klass.new(port: options[:port], credentials: options[:credentials])
 
           secrets = authorizer.authorize!
 

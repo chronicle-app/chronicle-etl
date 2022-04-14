@@ -6,11 +6,6 @@ module Chronicle
     class AuthorizationServer < Sinatra::Base
       class << self
         attr_accessor :latest_authorization
-
-        def initialize(*args)
-          @saved_authorization = false
-          super
-        end
       end
 
       configure do
@@ -25,7 +20,7 @@ module Chronicle
       end
 
       use OmniAuth::Builder do
-        Chronicle::ETL::OauthAuthorizer.all_omniauth_strategies.each do |klass|
+        Chronicle::ETL::OauthAuthorizer.all.each do |klass|
           args = [klass.client_id, klass.client_secret, klass.options].compact
           provider(
             klass.strategy,

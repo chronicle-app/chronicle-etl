@@ -3,40 +3,49 @@ require 'tty-spinner'
 
 module Chronicle
   module ETL
+    # An authorization strategy that uses oauth2 (and omniauth under the hood)
     class OauthAuthorizer < Authorizer
       class << self
         attr_reader :strategy, :provider_name, :authorization_to_secret_map
         attr_accessor :client_id, :client_secret
 
+        # Macro for specifying which omniauth strategy to use
         def omniauth_strategy(strategy)
           @strategy = strategy
         end
 
+        # Macro for specifying which omniauth scopes to request
         def scope(value)
           options[:scope] = value
         end
 
+        # Macro for specifying hash of returned authorization to secrets hash
         def pluck_secrets(map)
           @authorization_to_secret_map = map
         end
 
+        # # Macro for specifying options to pass to omniauth
         def options
           @options ||= {}
         end
 
-        def all_omniauth_strategies
+        # Returns all subclasses of OauthAuthorizer
+        # (Used by AuthorizationServer to build omniauth providers)
+        def all
           ObjectSpace.each_object(::Class).select { |klass| klass < self }
         end
       end
 
       attr_reader :authorization
 
-      def initialize(port: )
+      # Create a new instance of OauthAuthorizer
+      def initialize(port:, credentials: nil)
         @port = port
-        @credentials = load_credentials
+        @credentials = load_credentials(credentials)
         super
       end
 
+      # Start up an authorization server and handle the oauth flow
       def authorize!
         associate_oauth_credentials
         @server = load_server
@@ -119,10 +128,6 @@ module Chronicle
         map.each_with_object({}) do |(key, identifiers), secrets|
           secrets[key] = authorization.dig(*identifiers)
         end
-      end
-
-      def provider
-        self.class.provider_name
       end
 
       def omniauth_strategy

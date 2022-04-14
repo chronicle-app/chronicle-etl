@@ -10,7 +10,6 @@ ENV['APP_ENV'] = 'test'
 # Prevent Launchy from attempt to open windows in oauth_authorizer.rb
 ENV['LAUNCHY_DRY_RUN'] = 'true'
 
-
 RSpec.describe Chronicle::ETL::OauthAuthorizer do
   let(:port) { 5678 }
   let(:authorizer) do
@@ -45,6 +44,13 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
   it "raises an exception if flow aborts early" do
     # TODO: implement this somehow
     # send signal to sinatra?
+  end
+
+  context "with custom credential source" do
+    it "raises an exception if namespace does not exist" do
+      expect { authorizer.new(port: port, credentials: 'nonexistent') }
+        .to raise_error(Chronicle::ETL::AuthorizationError)
+    end
   end
 
   def booted?
