@@ -46,13 +46,6 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
     # send signal to sinatra?
   end
 
-  context "with custom credential source" do
-    it "raises an exception if namespace does not exist" do
-      expect { authorizer.new(port: port, credentials: 'nonexistent') }
-        .to raise_error(Chronicle::ETL::AuthorizationError)
-    end
-  end
-
   def booted?
     fetch("http://localhost:#{port}/")
     true

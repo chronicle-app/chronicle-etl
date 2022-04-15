@@ -30,21 +30,6 @@ module Chronicle
       def authorize!
         raise NotImplementedError
       end
-
-      private
-
-      def load_credentials(source)
-        namespace = source || default_credentials_source
-        unless Chronicle::ETL::Secrets.exists?(namespace)
-          raise(AuthorizationError.new, "Oauth credentials specified as '#{source}' but a secrets namespace with that name does not exist.")
-        end
-
-        Chronicle::ETL::Secrets.read(namespace)
-      end
-
-      def default_credentials_source
-        self.class.provider_name
-      end
     end
   end
 end

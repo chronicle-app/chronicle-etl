@@ -39,9 +39,9 @@ module Chronicle
       attr_reader :authorization
 
       # Create a new instance of OauthAuthorizer
-      def initialize(port:, credentials: nil)
+      def initialize(port:, credentials: {})
         @port = port
-        @credentials = load_credentials(credentials)
+        @credentials = credentials
         super
       end
 
@@ -107,6 +107,8 @@ module Chronicle
       def start_oauth_flow
         url = "http://localhost:#{@port}/auth/#{omniauth_strategy}"
         Launchy.open(url)
+      rescue Launchy::CommandNotFoundError
+        Chronicle::ETL::Logger.info("Please open #{url} in a browser to continue")
       end
 
       def suppress_webrick_logging(server)

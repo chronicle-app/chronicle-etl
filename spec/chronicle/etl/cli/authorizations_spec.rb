@@ -28,6 +28,19 @@ RSpec.describe Chronicle::ETL::CLI::Authorizations do
       end
     end
 
+    context "for credentials specified that don't exist" do
+      it "will exit with an error" do
+        expect do 
+          invoke_cli(%w[authorizations:new foo --credentials fake123], false)
+        end.to raise_error(SystemExit) { |exit| expect(exit.status).to be(1) }
+      end
+
+      it "will show an error message" do
+        _, stderr = invoke_cli(%w[authorizations:new foo --credentials fake123])
+        expect(stderr.split("\n").map(&:uncolorize).first).to match(/name does not exist/)
+      end
+    end
+
     context "for a plugin that can't be loaded" do
       it "will exit with an error" do
         expect do 
@@ -50,7 +63,7 @@ RSpec.describe Chronicle::ETL::CLI::Authorizations do
 
       it "will show an error message" do
         _, stderr = invoke_cli(%w[authorizations:new empty])
-        expect(stderr.split("\n").map(&:uncolorize).first).to match(/could not be found/)
+        expect(stderr.split("\n").map(&:uncolorize).first).to match(/No authorizer available/)
       end
     end
 
