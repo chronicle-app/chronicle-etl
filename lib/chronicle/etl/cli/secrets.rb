@@ -46,7 +46,7 @@ module Chronicle
           all_secrets.each do |namespace, secrets|
             rows += secrets.map do |key, value|
               # hidden_value = (value[0..5] + ("*" * [0, [value.length - 5, 30].min].max)).truncate(30)
-              truncated_value = value.truncate(30)
+              truncated_value = value&.truncate(30)
               [namespace, key, truncated_value]
             end
           end
