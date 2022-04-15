@@ -1,4 +1,5 @@
 require_relative 'etl/registry/registry'
+require_relative 'etl/authorizer'
 require_relative 'etl/config'
 require_relative 'etl/configurable'
 require_relative 'etl/exceptions'

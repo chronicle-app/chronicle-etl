@@ -4,10 +4,22 @@ module Chronicle
     module Secrets
       module_function
 
+      # Whether a given namespace exists
+      def exists?(namespace)
+        Chronicle::ETL::Config.exists?("secrets", namespace)
+      end
+
       # Save a setting to a namespaced config file
       def set(namespace, key, value)
         config = read(namespace)
         config[key.to_sym] = value
+        write(namespace, config)
+      end
+
+      # Save a hash to a secrets namespace
+      def set_all(namespace, secrets)
+        config = read(namespace)
+        config = config.merge(secrets)
         write(namespace, config)
       end
 

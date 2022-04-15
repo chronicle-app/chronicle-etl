@@ -63,7 +63,7 @@ class Chronicle::ETL::Runner
   def prepare_ui
     total = @extractor.results_count
     @progress_bar = Chronicle::ETL::Utils::ProgressBar.new(title: 'Running job', total: total)
-    Chronicle::ETL::Logger.attach_to_progress_bar(@progress_bar)
+    Chronicle::ETL::Logger.attach_to_ui(@progress_bar)
   end
 
   def run_extraction
@@ -99,7 +99,7 @@ class Chronicle::ETL::Runner
   def finish_job
     @job_logger.save
     @progress_bar&.finish
-    Chronicle::ETL::Logger.detach_from_progress_bar
+    Chronicle::ETL::Logger.detach_from_ui
     Chronicle::ETL::Logger.info(tty_log_completion)
   end
 

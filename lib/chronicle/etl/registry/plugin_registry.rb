@@ -11,6 +11,18 @@ module Chronicle
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module PluginRegistry
+        class << self
+          # Start of a system for having non-gem plugins. Right now, we just
+          # make registry aware of existenc of name of non-gem plugin
+          def register_standalone(name)
+            standalones << name
+          end
+
+          def standalones
+            @standalones ||= []
+          end
+        end
+
         # Does this plugin exist?
         def self.exists?(name)
           # TODO: implement this. Could query rubygems.org or use a hardcoded
@@ -33,8 +45,7 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
-          gem_name = "chronicle-#{name}"
-          all_installed.map(&:name).include?(gem_name)
+          (standalones + all_installed.map { |gem| gem.name.gsub("chronicle-", "") }).include?(name)
         end
 
         # Activate a plugin with given name by `require`ing it

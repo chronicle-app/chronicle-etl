@@ -17,8 +17,8 @@ module Chronicle
       def output message, level
         return unless level >= @log_level
 
-        if @progress_bar
-          @progress_bar.log(message)
+        if @ui_element
+          @ui_element.log(message)
         else
           $stderr.puts(message)
         end
@@ -40,12 +40,12 @@ module Chronicle
         output(message, DEBUG)
       end
 
-      def attach_to_progress_bar(progress_bar)
-        @progress_bar = progress_bar
+      def attach_to_ui(ui_element)
+        @ui_elemenet = ui_element
       end
 
-      def detach_from_progress_bar
-        @progress_bar = nil
+      def detach_from_ui
+        @ui_element = nil
       end
     end
   end

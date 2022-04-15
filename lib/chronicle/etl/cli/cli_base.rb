@@ -6,7 +6,10 @@ module Chronicle
         no_commands do
           # Shorthand for cli_exit(status: :failure)
           def cli_fail(message: nil, exception: nil)
-            message += "\nRe-run the command with --verbose to see details." if Chronicle::ETL::Logger.log_level > Chronicle::ETL::Logger::DEBUG
+            if exception && Chronicle::ETL::Logger.log_level > Chronicle::ETL::Logger::DEBUG
+              message += "\nRe-run the command with --verbose to see details."
+            end
+
             cli_exit(status: :failure, message: message, exception: exception)
           end
 

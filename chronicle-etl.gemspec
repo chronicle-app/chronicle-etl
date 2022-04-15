@@ -40,10 +40,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", "~> 7.0"
   spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
+  spec.add_dependency 'launchy'
   spec.add_dependency "marcel", "~> 1.0.2"
   spec.add_dependency "mini_exiftool", "~> 2.10"
   spec.add_dependency "nokogiri", "~> 1.13"
+  spec.add_dependency 'omniauth', "~> 2"
   spec.add_dependency "sequel", "~> 5.35"
+  spec.add_dependency 'sinatra', "~> 2"
   spec.add_dependency "sqlite3", "~> 1.4"
   spec.add_dependency "thor", "~> 1.2"
   spec.add_dependency "thor-hollaback", "~> 0.2"
@@ -54,8 +57,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "xdg", ">= 4.0"
 
   spec.add_development_dependency "bundler", "~> 2.1"
-  spec.add_development_dependency "guard-rspec", "~> 4.7.3"
   spec.add_development_dependency "fakefs"
+  spec.add_development_dependency "guard-rspec", "~> 4.7.3"
   spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.9"
