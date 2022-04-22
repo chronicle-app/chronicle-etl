@@ -1,3 +1,5 @@
+require "active_support/core_ext/hash/keys"
+
 module Chronicle
   module ETL
     # Secret management module
@@ -19,7 +21,7 @@ module Chronicle
       # Save a hash to a secrets namespace
       def set_all(namespace, secrets)
         config = read(namespace)
-        config = config.merge(secrets)
+        config = config.merge(secrets.deep_stringify_keys)
         write(namespace, config)
       end
 
@@ -54,7 +56,7 @@ module Chronicle
         data = {
           secrets: (secrets || {}).transform_keys(&:to_s),
           chronicle_etl_version: Chronicle::ETL::VERSION
-        }.transform_keys(&:to_s) # Should I implement deeply_transform_keys...?
+        }.deep_stringify_keys
         Chronicle::ETL::Config.write("secrets", namespace, data)
       end
 
