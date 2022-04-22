@@ -16,6 +16,8 @@ module Chronicle
           :aboutables, # inverse of above
           :depicts,
           :consumers,
+          :creators,
+          :creations,
           :contains,
           :containers # inverse of above
         ].freeze  # TODO: add these to reflect Chronicle Schema
