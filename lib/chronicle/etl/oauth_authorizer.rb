@@ -70,7 +70,7 @@ module Chronicle
 
         @authorization = @server.latest_authorization
 
-        extract_secrets(self.class.authorization_to_secret_map, @authorization)
+        extract_secrets(authorization: @authorization, pluck_values: self.class.authorization_to_secret_map)
       end
 
       private
@@ -126,8 +126,10 @@ module Chronicle
         # no worries if we're not using WEBrick
       end
 
-      def extract_secrets(map, authorization)
-        map.each_with_object({}) do |(key, identifiers), secrets|
+      def extract_secrets(authorization:, pluck_values:)
+        return authorization unless pluck_values&.any?
+
+        pluck_values.each_with_object({}) do |(key, identifiers), secrets|
           secrets[key] = authorization.dig(*identifiers)
         end
       end
