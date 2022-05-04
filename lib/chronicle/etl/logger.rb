@@ -41,7 +41,7 @@ module Chronicle
       end
 
       def attach_to_ui(ui_element)
-        @ui_elemenet = ui_element
+        @ui_element = ui_element
       end
 
       def detach_from_ui
