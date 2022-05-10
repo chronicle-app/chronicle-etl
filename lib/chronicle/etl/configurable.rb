@@ -108,6 +108,10 @@ module Chronicle
         end
 
         def coerce_time(value)
+          # parsing yml files might result in us getting Date objects
+          # we convert to DateTime first to to ensure UTC
+          return value.to_datetime.to_time if value.is_a?(Date)
+
           return value unless value.is_a?(String)
 
           # Hacky check for duration strings like "60m"

@@ -117,6 +117,12 @@ RSpec.describe Chronicle::ETL::Configurable do
         expect(c.config.since.iso8601).to eq("2022-02-24T14:00:00-05:00")
       end
 
+      it "coerces Date values into Time objects" do
+        c = TypedSettingClass.new(since: Date.new(2022, 4, 1))
+        expect(c.config.since).to be_a_kind_of(Time)
+        expect(c.config.since.iso8601).to eq("2022-04-01T00:00:00+00:00")
+      end
+
       it "interprets fuzzy time ranges correctly" do
         c = TypedSettingClass.new(since: '1d3h')
         expected_time = Time.now.to_i - 86_400 - 10_800
