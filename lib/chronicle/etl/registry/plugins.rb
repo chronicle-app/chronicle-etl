@@ -133,9 +133,9 @@ module Chronicle
         # Install a plugin to local gems
         def self.install(name)
           return if installed?(name)
+          raise(Chronicle::ETL::PluginNotAvailableError.new(name), "Plugin #{name} doesn't exist") unless exists?(name)
 
           gem_name = "chronicle-#{name}"
-          raise(Chronicle::ETL::PluginNotAvailableError.new(gem_name), "Plugin #{name} doesn't exist") unless exists?(gem_name)
 
           Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
           Gem.install(gem_name)
