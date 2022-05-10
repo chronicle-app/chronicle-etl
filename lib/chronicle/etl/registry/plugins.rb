@@ -12,7 +12,7 @@ module Chronicle
       #
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
-      module PluginRegistry
+      module Plugins
         KNOWN_PLUGINS = [
           'email',
           'github',

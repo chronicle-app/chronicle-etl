@@ -7,7 +7,7 @@ RSpec.describe Chronicle::ETL::CLI::Authorizations do
         ['foo', 'empty', 'error'].each do |plugin|
           path = File.expand_path(File.join(RSPEC_ROOT, "support/mock_plugins/chronicle-#{plugin}"))
           $LOAD_PATH.unshift(path)
-          Chronicle::ETL::Registry::PluginRegistry.register_standalone(name: plugin)
+          Chronicle::ETL::Registry::Plugins.register_standalone(name: plugin)
         end
       end
 

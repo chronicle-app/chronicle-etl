@@ -37,12 +37,12 @@ module Chronicle
 
         def find_authorizer_klass(provider)
           # TODO: this assumes provider:plugin one-to-one
-          unless Chronicle::ETL::Registry::PluginRegistry.installed?(provider)
+          unless Chronicle::ETL::Registry::Plugins.installed?(provider)
             cli_fail(message: "Plugin for #{provider} is not installed.")
           end
 
           begin
-            Chronicle::ETL::Registry::PluginRegistry.activate(provider)
+            Chronicle::ETL::Registry::Plugins.activate(provider)
           rescue PluginError => e
             cli_fail(message: "Could not load plugin '#{provider}'.\n" + e.message, exception: e)
           end

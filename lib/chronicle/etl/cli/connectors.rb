@@ -13,7 +13,7 @@ module Chronicle
         desc "list", "Lists available connectors"
         # Display all available connectors that chronicle-etl has access to
         def list
-          connector_info = Chronicle::ETL::Registry.connectors.map do |connector_registration|
+          connector_info = Chronicle::ETL::Registry::Connectors.connectors.map do |connector_registration|
             {
               identifier: connector_registration.identifier,
               phase: connector_registration.phase,
@@ -43,7 +43,7 @@ module Chronicle
           end
 
           begin
-            connector = Chronicle::ETL::Registry.find_by_phase_and_identifier(phase.to_sym, identifier)
+            connector = Chronicle::ETL::Registry::Connectors.find_by_phase_and_identifier(phase.to_sym, identifier)
           rescue Chronicle::ETL::ConnectorNotAvailableError, Chronicle::ETL::PluginError => e
             cli_fail(message: "Could not find #{phase} #{identifier}", exception: e)
           end

@@ -17,7 +17,7 @@ module Chronicle
         def register_connector
           @connector_registration ||= ::Chronicle::ETL::Registry::ConnectorRegistration.new(self)
           yield @connector_registration if block_given?
-          ::Chronicle::ETL::Registry.register(@connector_registration)
+          ::Chronicle::ETL::Registry::Connectors.register(@connector_registration)
         end
       end
     end

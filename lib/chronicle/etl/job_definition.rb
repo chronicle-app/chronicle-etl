@@ -34,7 +34,7 @@ module Chronicle
       def validate
         @errors = {}
 
-        Chronicle::ETL::Registry::PHASES.each do |phase|
+        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
           __send__("#{phase}_klass".to_sym)
         rescue Chronicle::ETL::PluginError => e
           @errors[:plugins] ||= []
@@ -66,7 +66,7 @@ module Chronicle
 
       # For each connector in this job, mix in secrets into the options
       def apply_default_secrets
-        Chronicle::ETL::Registry::PHASES.each do |phase|
+        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
           # If the option have a `secrets` key, we look up those secrets and
           # mix them in. If not, use the connector's plugin name and look up 
           # secrets with the same namespace
@@ -124,11 +124,11 @@ module Chronicle
       private
 
       def load_klass(phase, identifier)
-        Chronicle::ETL::Registry.find_by_phase_and_identifier(phase, identifier).klass
+        Chronicle::ETL::Registry::Connectors.find_by_phase_and_identifier(phase, identifier).klass
       end
 
       def load_credentials
-        Chronicle::ETL::Registry::PHASES.each do |phase|
+        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
           credentials_name = @definition[phase].dig(:options, :credentials)
           if credentials_name
             credentials = Chronicle::ETL::Config.load_credentials(credentials_name)

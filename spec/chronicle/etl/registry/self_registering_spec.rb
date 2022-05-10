@@ -9,9 +9,9 @@ RSpec.describe Chronicle::ETL::CLI::Connectors do
             r.description = 'foobar'
           end
         end
-      end.to change { Chronicle::ETL::Registry.connectors.count }.by(1)
+      end.to change { Chronicle::ETL::Registry::Connectors.connectors.count }.by(1)
 
-      expect(Chronicle::ETL::Registry.connectors.map(&:description))
+      expect(Chronicle::ETL::Registry::Connectors.connectors.map(&:description))
         .to include('foobar')
     end
   end
