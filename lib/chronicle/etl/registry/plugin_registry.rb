@@ -2,6 +2,8 @@ require 'rubygems'
 require 'rubygems/command'
 require 'rubygems/commands/install_command'
 require 'rubygems/uninstaller'
+require 'gems'
+require 'active_support/core_ext/hash/deep_merge'
 
 module Chronicle
   module ETL
@@ -11,41 +13,106 @@ module Chronicle
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module PluginRegistry
-        class << self
-          # Start of a system for having non-gem plugins. Right now, we just
-          # make registry aware of existenc of name of non-gem plugin
-          def register_standalone(name)
-            standalones << name
+        KNOWN_PLUGINS = [
+          'email',
+          'github',
+          'imessage',
+          'pinboard',
+          'safari',
+          'shell',
+          'spotify',
+          'zulip'
+        ].freeze
+        public_constant :KNOWN_PLUGINS
+
+        # Start of a system for having non-gem plugins. Right now, we just
+        # make registry aware of existence of name of non-gem plugin
+        def self.register_standalone(name:)
+          plugin = Chronicle::ETL::Registry::PluginRegistration.new do |p|
+            p.name = name
+            p.installed = true
           end
 
-          def standalones
-            @standalones ||= []
+          installed_standalone << plugin
+        end
+
+        # Plugins either installed as gems or manually loaded/registered
+        def self.installed
+          installed_standalone + installed_as_gem
+        end
+
+        # Check whether a given plugin is installed
+        def self.installed?(name)
+          installed.map(&:name).include?(name)
+        end
+
+        # List of plugins installed as standalone
+        def self.installed_standalone
+          @standalones ||= []
+        end
+
+        # List of plugins installed as gems
+        def self.installed_as_gem
+          installed_gemspecs_latest.map do |gem|
+            Chronicle::ETL::Registry::PluginRegistration.new do |p|
+              p.name = gem.name.sub("chronicle-", "")
+              p.gem = gem.name
+              p.description = gem.description
+              p.version = gem.version.to_s
+              p.installed = true
+            end
           end
         end
 
-        # Does this plugin exist?
+        # List of all plugins available to chronicle-etl
+        def self.available
+          available_as_gem
+        end
+
+        # List of plugins available through rubygems
+        # TODO: make this concurrent
+        def self.available_as_gem
+          KNOWN_PLUGINS.map do |name|
+            info = gem_info(name)
+            Chronicle::ETL::Registry::PluginRegistration.new do |p|
+              p.name = name
+              p.gem = info['name']
+              p.version = info['version']
+              p.description = info['info']
+            end
+          end
+        end
+
+        # Load info about a gem plugin from rubygems API
+        def self.gem_info(name)
+          gem_name = "chronicle-#{name}"
+          Gems.info(gem_name)
+        end
+
+        # Union of installed gems (latest version) + available gems
+        def self.all
+          (installed + available)
+            .group_by(&:name)
+            .transform_values { |plugin| plugin.find(&:installed) || plugin.first }
+            .values
+        end
+
+        # Does a plugin with a given name exist?
         def self.exists?(name)
-          # TODO: implement this. Could query rubygems.org or use a hardcoded
-          # list somewhere
-          true
+          KNOWN_PLUGINS.include?(name)
         end
 
         # All versions of all plugins currently installed
-        def self.all_installed
+        def self.installed_gemspecs
           # TODO: add check for chronicle-etl dependency
           Gem::Specification.filter { |s| s.name.match(/^chronicle-/) && s.name != "chronicle-etl" }
         end
 
         # Latest version of each installed plugin
-        def self.all_installed_latest
-          all_installed.group_by(&:name)
+        def self.installed_gemspecs_latest
+          installed_gemspecs.group_by(&:name)
             .transform_values { |versions| versions.sort_by(&:version).reverse.first }
             .values
-        end
-
-        # Check whether a given plugin is installed
-        def self.installed?(name)
-          (standalones + all_installed.map { |gem| gem.name.gsub("chronicle-", "") }).include?(name)
         end
 
         # Activate a plugin with given name by `require`ing it

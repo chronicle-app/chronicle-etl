@@ -58,4 +58,5 @@ end
 
 require_relative 'self_registering'
 require_relative 'connector_registration'
+require_relative 'plugin_registration'
 require_relative 'plugin_registry'

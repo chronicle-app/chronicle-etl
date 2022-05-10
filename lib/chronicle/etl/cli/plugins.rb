@@ -51,20 +51,24 @@ module Chronicle
         desc "list", "Lists available plugins"
         # Display all available plugins that chronicle-etl has access to
         def list
-          plugins = Chronicle::ETL::Registry::PluginRegistry.all_installed_latest
-
-          info = plugins.map do |plugin|
-            {
-              name: plugin.name.sub("chronicle-", ""),
-              description: plugin.description,
-              version: plugin.version
-            }
+          values = Chronicle::ETL::Registry::PluginRegistry.all
+            .map do |plugin|
+            [
+              plugin.name, 
+              plugin.description,
+              plugin.installed ? '✓' : '',
+              plugin.version
+            ]
           end
 
-          headers = ['name', 'description', 'version'].map{ |h| h.to_s.upcase.bold }
-          table = TTY::Table.new(headers, info.map(&:values))
-          puts "Installed plugins:"
-          puts table.render(indent: 2, padding: [0, 0])
+          headers = ['name', 'description', 'installed', 'version'].map{ |h| h.to_s.upcase.bold }
+          table = TTY::Table.new(headers, values)
+          puts "Available plugins:"
+          puts table.render(
+            indent: 2,
+            padding: [0, 0],
+            alignments: [:left, :left, :center, :left]
+          )
         end
       end
     end

@@ -3,8 +3,10 @@ require 'spec_helper'
 RSpec.describe Chronicle::ETL::CLI::Plugins do
   describe "#list" do
     it "shows installed plugins" do
-      stdout, = invoke_cli(%w[plugins:list])
-      expect(stdout.split("\n").first).to match(/Installed plugins/)
+      VCR.use_cassette("plugins-on-rubygems") do
+        stdout, = invoke_cli(%w[plugins:list])
+        expect(stdout.split("\n").first).to match(/Available plugins/)
+      end
     end
   end
 
