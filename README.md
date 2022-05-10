@@ -51,6 +51,10 @@ $ chronicle-etl --extractor NAME --transformer NAME --loader NAME
 # Read test.csv and display it to stdout as a table 
 $ chronicle-etl --extractor csv --input data.csv --loader table
 
+# Show available plugins and install one
+$ chronicle-etl plugins:list
+$ chronicle-etl plugins:install shell
+
 # Retrieve shell commands run in the last 5 hours
 $ chronicle-etl -e shell --since 5h
 
@@ -135,11 +139,11 @@ Plugins provide access to data from third-party platforms, services, or formats.
 ### Plugin usage
 
 ```bash
+# List available plugins
+$ chronicle-etl plugins:list
+
 # Install a plugin
 $ chronicle-etl plugins:install NAME
-
-# List installed plugins
-$ chronicle-etl plugins:list
 
 # Use a plugin
 $ chronicle-etl plugins:install shell
@@ -244,7 +248,6 @@ $ chronicle-etl secrets:unset pinboard access_token
 ## Roadmap
 
 - Keep tackling **new plugins**. See: [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1)
-- Add an **OAuth2 authorizer** for services that require this type of authorization ([#48](https://github.com/chronicle-app/chronicle-etl/issues/48))
 - Add support for **incremental extractions** ([#37](https://github.com/chronicle-app/chronicle-etl/issues/37))
 - **Improve stdin extractor and shell command transformer** so that users can easily integrate their own scripts/languages/tools into jobs ([#5](https://github.com/chronicle-app/chronicle-etl/issues/48))
 - **Add documentation for Chronicle Schema**. It's found throughout this project but never explained.

@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Chronicle::ETL::CLI::Connectors do
   describe "#list" do
     it "lists installed connectors" do
-      expected_klasses = Chronicle::ETL::Registry.connectors.map(&:klass_name)
+      expected_klasses = Chronicle::ETL::Registry::Connectors.connectors.map(&:klass_name)
 
       stdout, = invoke_cli(%w[connectors:list])
       outputted_klasses = stdout

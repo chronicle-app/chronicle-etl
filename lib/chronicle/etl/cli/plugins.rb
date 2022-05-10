@@ -16,7 +16,7 @@ module Chronicle
           cli_fail(message: "Please specify a plugin to install") unless plugins.any?
 
           installed, not_installed = plugins.partition do |plugin|
-            Chronicle::ETL::Registry::PluginRegistry.installed?(plugin)
+            Chronicle::ETL::Registry::Plugins.installed?(plugin)
           end
 
           puts "Already installed: #{installed.join(", ")}" if installed.any?
@@ -27,7 +27,7 @@ module Chronicle
 
           not_installed.each do |plugin|
             spinner.update(title: "Installing #{plugin}")
-            Chronicle::ETL::Registry::PluginRegistry.install(plugin)
+            Chronicle::ETL::Registry::Plugins.install(plugin)
 
           rescue Chronicle::ETL::PluginError => e
             spinner.error("Error".red)
@@ -41,7 +41,7 @@ module Chronicle
         def uninstall(name)
           spinner = TTY::Spinner.new("[:spinner] Uninstalling plugin #{name}...", format: :dots_2)
           spinner.auto_spin
-          Chronicle::ETL::Registry::PluginRegistry.uninstall(name)
+          Chronicle::ETL::Registry::Plugins.uninstall(name)
           spinner.success("(#{'successful'.green})")
         rescue Chronicle::ETL::PluginError => e
           spinner.error("Error".red)
@@ -51,20 +51,24 @@ module Chronicle
         desc "list", "Lists available plugins"
         # Display all available plugins that chronicle-etl has access to
         def list
-          plugins = Chronicle::ETL::Registry::PluginRegistry.all_installed_latest
-
-          info = plugins.map do |plugin|
-            {
-              name: plugin.name.sub("chronicle-", ""),
-              description: plugin.description,
-              version: plugin.version
-            }
+          values = Chronicle::ETL::Registry::Plugins.all
+            .map do |plugin|
+            [
+              plugin.name, 
+              plugin.description,
+              plugin.installed ? '✓' : '',
+              plugin.version
+            ]
           end
 
-          headers = ['name', 'description', 'version'].map{ |h| h.to_s.upcase.bold }
-          table = TTY::Table.new(headers, info.map(&:values))
-          puts "Installed plugins:"
-          puts table.render(indent: 2, padding: [0, 0])
+          headers = ['name', 'description', 'installed', 'version'].map{ |h| h.to_s.upcase.bold }
+          table = TTY::Table.new(headers, values)
+          puts "Available plugins:"
+          puts table.render(
+            indent: 2,
+            padding: [0, 0],
+            alignments: [:left, :left, :center, :left]
+          )
         end
       end
     end
