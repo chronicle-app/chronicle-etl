@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "faraday"
+require "tty-markdown"
 require "tty-prompt"
 require "tty-spinner"
 
@@ -10,6 +12,13 @@ module Chronicle
       class Plugins < SubcommandBase
         default_task 'list'
         namespace :plugins
+
+        desc "show", "Show information about a plugin"
+        def show(plugin)
+          readme = Chronicle::ETL::Registry::Plugins.readme(plugin)
+          parsed = TTY::Markdown.parse(readme, mode: 16)
+          puts parsed
+        end
 
         desc "install", "Install a plugin"
         def install(*plugins)
