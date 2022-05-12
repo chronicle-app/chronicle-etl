@@ -12,7 +12,7 @@ If you don’t want to spend all your time writing scrapers, reverse-engineering
 
 ## What does `chronicle-etl` give you?
 * **A CLI tool for working with personal data**. You can monitor progress of exports, manipulate the output, set up recurring jobs, manage credentials, and more.
-* **Plugins for many third-party providers**. This plugin system allows you to access data from dozens of third-party services, all accessible through a common CLI interface.
+* **Plugins for many third-party providers** (see [list](#available-plugins-and-connectors)). This plugin system allows you to access data from dozens of third-party services, all accessible through a common CLI interface.
 * **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are represented in a common schema. (Don’t want to use this schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.)
 
 ## Chronicle-ETL in action
@@ -90,34 +90,35 @@ Options:
       [--silent], [--no-silent]          # Silence all output
 ```
 
-### Saving jobs
-
+### Saving a job
 You can save details about a job to a local config file (saved by default in `~/.config/chronicle/etl/jobs/JOB_NAME.yml`) to save yourself the trouble specifying options each time.
 
 ```sh
 # Save a job named 'sample' to ~/.config/chronicle/etl/jobs/sample.yml
 $ chronicle-etl jobs:save sample --extractor pinboard --since 10d
 
-# Show details about the job
-$ chronicle-etl jobs:show sample
-
 # Run the job
 $ chronicle-etl jobs:run sample
+
+# Show details about the job
+$ chronicle-etl jobs:show sample
 
 # Show all saved jobs
 $ chronicle-etl jobs:list
 ```
 
-## Connectors
-Connectors are available to read, process, and load data from different formats or external services.
+## Connectors and plugins
+
+Connectors let you work with different data formats or third-party providers.
+
+### Built-in Connectors
+
+`chronicle-etl` comes with several built-in connectors for common formats and sources.
 
 ```sh
 # List all available connectors
 $ chronicle-etl connectors:list
 ```
-
-### Built-in Connectors
-`chronicle-etl` comes with several built-in connectors for common formats and sources.
 
 #### Extractors
 - [`csv`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/extractors/csv_extractor.rb) - Load records from CSV files or stdin
@@ -133,10 +134,11 @@ $ chronicle-etl connectors:list
 - [`json`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/json_loader.rb) - Load records serialized as JSON
 - [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
 
-## Chronicle Plugins
-Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate rubygems and can be installed through the CLI (under the hood, it's a `gem install chronicle-PLUGINNAME`)
+### Chronicle Plugins for third-party services
 
-### Plugin usage
+Plugins provide access to data from third-party platforms, services, or formats. Plugins are packaged as separate gems and can be installed through the CLI (under the hood, it's a `gem install chronicle-PLUGINNAME`)
+
+#### Plugin usage
 
 ```bash
 # List available plugins
@@ -152,33 +154,42 @@ $ chronicle-etl --extractor shell:history --limit 10
 # Uninstall a plugin
 $ chronicle-etl plugins:uninstall NAME
 ```
+#### Available plugins and connectors
 
-### Status
+The following are the officially-supported list of plugins and their available connectors:
+
+| Plugin                                                          | Type        | Identifier       | Description                               |
+|-----------------------------------------------------------------|-------------|------------------|-------------------------------------------|
+| [email](https://github.com/chronicle-app/chronicle-email)       | extractor   | imap             | emails over an IMAP connection            |
+| [email](https://github.com/chronicle-app/chronicle-email)       | extractor   | mbox             | emails from an .mbox file                 |
+| [email](https://github.com/chronicle-app/chronicle-email)       | transformer | email            | email to Chronicle Schema                 |
+| [github](https://github.com/chronicle-app/chronicle-github)     | extractor   | activity         | user activity stream                      |
+| [imessage](https://github.com/chronicle-app/chronicle-imessage) | extractor   | messages         | imessages from local macOS                |
+| [imessage](https://github.com/chronicle-app/chronicle-imessage) | transformer | message          | imessage to Chronicle Schema              |
+| [pinboard](https://github.com/chronicle-app/chronicle-pinboard) | extractor   | bookmarks        | Pinboard.in bookmarks                     |
+| [pinboard](https://github.com/chronicle-app/chronicle-pinboard) | transformer | bookmark         | bookmark to Chronicle Schema              |
+| [safari](https://github.com/chronicle-app/chronicle-safari)     | extractor   | browser-history  | browser history                           |
+| [safari ](https://github.com/chronicle-app/chronicle-safari )   | transformer | browser-history  | browser history to Chronicle Schema       |
+| [shell](https://github.com/chronicle-app/chronicle-shell)       | extractor   | history          | shell command history (bash / zsh)        |
+| [shell](https://github.com/chronicle-app/chronicle-shell)       | transformer | command          | command to Chronicle Schema               |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | extractor   | liked-tracks     | liked tracks                              |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | extractor   | saved-albums     | saved albums                              |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | extractor   | listens          | recently listened tracks (last 50 tracks) |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | transformer | like             | like to Chronicle Schema                  |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | transformer | listen           | listen to Chronicle Schema                |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)   | authorizer  |                  | OAuth authorizer                          |
+| [zulip](https://github.com/chronicle-app/chronicle-zulip)       | extractor   | private-messages | private messages                          |
+| [zulip](https://github.com/chronicle-app/chronicle-zulip)       | transformer | message          | message to Chronicle Schema               |
+
+
+### Coming soon
 
 A few dozen importers exist [in my Memex project](https://hyfen.net/memex/) and I'm porting them over to the Chronicle system. The [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1/views/1) lets you keep track what's available and what's coming soon.
 
 If you don't see a plugin for a third-party provider or data source that you're interested in using with `chronicle-etl`, [please open an issue](https://github.com/chronicle-app/chronicle-etl/issues/new). If you want to work together on a plugin, please [get in touch](#get-in-touch)!
 
-#### Currently available
-
-| Name                                                            | Description                                                                                 | Availability                     |
-|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------|
-| [email](https://github.com/chronicle-app/chronicle-email)       | Emails and attachments from IMAP or .mbox files                                             | Available |
-| [github](https://github.com/chronicle-app/chronicle-github)     | Github activity stream                                                                      | Available                        |
-| [imessage](https://github.com/chronicle-app/chronicle-imessage) | iMessage messages and attachments                                                           | Available                        |
-| [pinboard](https://github.com/chronicle-app/chronicle-email)    | Bookmarks and tags                                                                          | Available                        |
-| [safari](https://github.com/chronicle-app/chronicle-safari)     | Browser history from local sqlite db                                                        | Available                        |
-| [shell](https://github.com/chronicle-app/chronicle-shell)       | Shell command history                                                                       | Available (still needs zsh support)  |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | Spotify listening/liking history   | Available |
-| [zulip](https://github.com/chronicle-app/chronicle-zulip)       | Zulip message history                                                                       | Available (for private messages) |
-
-
-#### Coming soon
-
 In summary, the following **are coming soon**:
 anki, arc, bear, chrome, facebook, firefox, fitbit, foursquare, git, github, goodreads, google-calendar, images, instagram, lastfm, shazam, slack, strava, things, twitter, whatsapp, youtube.
-
-Please check the [Chronicle Plugin Tracker](https://github.com/orgs/chronicle-app/projects/1/views/1) for details.
 
 ### Writing your own plugin
 
@@ -213,6 +224,7 @@ module Chronicle
   end
 end
 ```
+
 
 ## Secrets Management
 
