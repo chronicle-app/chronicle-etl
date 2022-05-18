@@ -15,6 +15,7 @@ module Chronicle
       module Plugins
         KNOWN_PLUGINS = [
           'email',
+          'foursquare',
           'github',
           'imessage',
           'pinboard',
