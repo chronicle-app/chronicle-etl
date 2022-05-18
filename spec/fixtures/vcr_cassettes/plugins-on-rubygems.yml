@@ -59,9 +59,107 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - ce785d87-8227-4fd4-82c1-5818f24ccaed
+      - bf836784-1faa-4006-bb56-20d60c402f99
       X-Runtime:
-      - '0.016253'
+      - '0.021960'
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Backend:
+      - F_Rails 34.218.36.241:443
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Wed, 18 May 2022 20:59:53 GMT
+      Via:
+      - 1.1 varnish
+      X-Served-By:
+      - cache-yyz4541-YYZ
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Timer:
+      - S1652907594.538604,VS0,VE77
+      Vary:
+      - Accept-Encoding,Fastly-SSL
+      Etag:
+      - '"d51e346ccb6926339135559578dae755"'
+      Server:
+      - RubyGems.org
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"chronicle-email","downloads":2798,"version":"0.2.3","version_created_at":"2022-03-31T21:08:37.174Z","version_downloads":273,"platform":"ruby","authors":"Andrew
+        Louis","info":"Various email importers for chronicle-etl","licenses":["MIT"],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-email","changelog_uri":"https://github.com/chronicle-app/chronicle-email","source_code_uri":"https://github.com/chronicle-app/chronicle-email"},"yanked":false,"sha":"f2a015207ca9b32972ba4318b655bdbb95d7e9e4ccac7195ebbb881cef741cfb","project_uri":"https://rubygems.org/gems/chronicle-email","gem_uri":"https://rubygems.org/gems/chronicle-email-0.2.3.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-email","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-email","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-email","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
+        2.1"},{"name":"rake","requirements":"~\u003e 13.0"},{"name":"rspec","requirements":"~\u003e
+        3.9"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5"},{"name":"email_reply_parser","requirements":"~\u003e
+        0.5"},{"name":"mail","requirements":"~\u003e 2.7"},{"name":"net-imap","requirements":"\u003e=
+        0"},{"name":"net-smtp","requirements":"\u003e= 0"},{"name":"reverse_markdown","requirements":"~\u003e
+        2.0"}]}}'
+  recorded_at: Wed, 18 May 2022 20:59:53 GMT
+- request:
+    method: get
+    uri: https://rubygems.org/api/v1/gems/chronicle-foursquare.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Gems 1.2.0
+      - Ruby
+      Authorization:
+      - "<TOKEN>"
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '30'
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Max-Age:
+      - '1728000'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'
+        https://secure.gaug.es https://gravatar.com https://secure.gravatar.com https://*.fastly-insights.com;
+        object-src 'none'; script-src 'self' https://secure.gaug.es https://www.fastly-insights.com;
+        style-src 'self' https://fonts.googleapis.com; connect-src 'self' https://s3-us-west-2.amazonaws.com/rubygems-dumps/
+        https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
+        form-action 'self'; frame-ancestors 'self'
+      X-Request-Id:
+      - 46705c87-fa18-4ad1-b359-d84bcbc35034
+      X-Runtime:
+      - '0.021174'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
@@ -69,35 +167,33 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:28 GMT
+      - Wed, 18 May 2022 20:59:53 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4546-YYZ
+      - cache-yyz4561-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153908.059272,VS0,VE77
+      - S1652907594.749778,VS0,VE85
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"ac458d63c69cdadf6cf764de3d5ab0d5"'
+      - '"41821c829ebea00c0011e004489c193e"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-email","downloads":2695,"version":"0.2.3","version_created_at":"2022-03-31T21:08:37.174Z","version_downloads":250,"platform":"ruby","authors":"Andrew
-        Louis","info":"Various email importers for chronicle-etl","licenses":["MIT"],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-email","changelog_uri":"https://github.com/chronicle-app/chronicle-email","source_code_uri":"https://github.com/chronicle-app/chronicle-email"},"yanked":false,"sha":"f2a015207ca9b32972ba4318b655bdbb95d7e9e4ccac7195ebbb881cef741cfb","project_uri":"https://rubygems.org/gems/chronicle-email","gem_uri":"https://rubygems.org/gems/chronicle-email-0.2.3.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-email","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-email","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-email","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
-        2.1"},{"name":"rake","requirements":"~\u003e 13.0"},{"name":"rspec","requirements":"~\u003e
-        3.9"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5"},{"name":"email_reply_parser","requirements":"~\u003e
-        0.5"},{"name":"mail","requirements":"~\u003e 2.7"},{"name":"net-imap","requirements":"\u003e=
-        0"},{"name":"net-smtp","requirements":"\u003e= 0"},{"name":"reverse_markdown","requirements":"~\u003e
-        2.0"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:28 GMT
+      string: '{"name":"chronicle-foursquare","downloads":14,"version":"0.1.1","version_created_at":"2022-05-18T20:34:46.311Z","version_downloads":3,"platform":"ruby","authors":"Andrew
+        Louis","info":"Foursquare connectors","licenses":[],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-foursquare","changelog_uri":"https://github.com/chronicle-app/chronicle-foursquare","source_code_uri":"https://github.com/chronicle-app/chronicle-foursquare","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"906782f7b29c9468126c956ddb1583f8be6cfffffadb8e02802111e431b356a7","project_uri":"https://rubygems.org/gems/chronicle-foursquare","gem_uri":"https://rubygems.org/gems/chronicle-foursquare-0.1.1.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-foursquare","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-foursquare","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-foursquare","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
+        2.3"},{"name":"pry-byebug","requirements":"~\u003e 3.9"},{"name":"rake","requirements":"~\u003e
+        13.0.6"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5"},{"name":"faraday","requirements":"~\u003e
+        2"},{"name":"omniauth-oauth2","requirements":"~\u003e 1"}]}}'
+  recorded_at: Wed, 18 May 2022 20:59:53 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-github.json
@@ -157,41 +253,41 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - 6aee9103-f036-4e94-9516-6be9f7c0dce2
+      - 3a2ad482-2331-44ca-abc3-f9df9b35f0a7
       X-Runtime:
-      - '0.012746'
+      - '0.022371'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
-      - F_Rails 54.203.190.11:443
+      - F_Rails 52.88.209.40:443
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:28 GMT
+      - Wed, 18 May 2022 20:59:53 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4524-YYZ
+      - cache-yyz4529-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153908.437530,VS0,VE71
+      - S1652907594.910242,VS0,VE83
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"28728f20fbf2ee50eeb318071db6de62"'
+      - '"76e89e6316dac0518c22a953a6ae93db"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-github","downloads":287,"version":"0.1.0","version_created_at":"2022-03-27T19:13:39.312Z","version_downloads":287,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-github","downloads":310,"version":"0.1.0","version_created_at":"2022-03-27T19:13:39.312Z","version_downloads":310,"platform":"ruby","authors":"Andrew
         Louis","info":"Extract github user event stream, repository events, and more","licenses":["MIT"],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-github","changelog_uri":"https://github.com/chronicle-app/chronicle-github/releases","source_code_uri":"https://github.com/chronicle-app/chronicle-github","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"b7e08c48ddb951169226d25fd16c0ae850b8e5b3229666e31eb2d8cebc8abd61","project_uri":"https://rubygems.org/gems/chronicle-github","gem_uri":"https://rubygems.org/gems/chronicle-github-0.1.0.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-github","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-github","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-github/releases","funding_uri":null,"dependencies":{"development":[],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e
         0.5"},{"name":"octokit","requirements":"~\u003e 4.0"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:28 GMT
+  recorded_at: Wed, 18 May 2022 20:59:53 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-imessage.json
@@ -251,43 +347,43 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - cc12fd3d-d436-40f8-ae95-096aec8ce1b3
+      - fc1d75ec-b427-4621-bc25-ccbafd674c46
       X-Runtime:
-      - '0.014834'
+      - '0.015669'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
-      - F_Rails 54.203.190.11:443
+      - F_Rails 52.88.209.40:443
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:28 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4532-YYZ
+      - cache-yyz4558-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.583466,VS0,VE77
+      - S1652907594.063824,VS0,VE76
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"1ebf4a22a81d4154457ca4b07f3b3901"'
+      - '"7cc3b49df6c2ffbc481835027353cd0b"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-imessage","downloads":2210,"version":"0.2.6","version_created_at":"2022-03-25T03:24:42.820Z","version_downloads":284,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-imessage","downloads":2345,"version":"0.2.6","version_created_at":"2022-03-25T03:24:42.820Z","version_downloads":307,"platform":"ruby","authors":"Andrew
         Louis","info":"Connectors for iMessage","licenses":[],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-imessage","changelog_uri":"https://github.com/chronicle-app/chronicle-imessage","source_code_uri":"https://github.com/chronicle-app/chronicle-imessage","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"7aa6508992f16e1a93429e0abf005d9760f7721792a608ccdc8d725ae1b44e8b","project_uri":"https://rubygems.org/gems/chronicle-imessage","gem_uri":"https://rubygems.org/gems/chronicle-imessage-0.2.6.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-imessage","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-imessage","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-imessage","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
         2.3"},{"name":"rake","requirements":"~\u003e 13.0.6"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e
         0.5"},{"name":"phonelib","requirements":"~\u003e 0.6"},{"name":"sqlite3","requirements":"~\u003e
         1.4"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:28 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-pinboard.json
@@ -347,43 +443,43 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - 78766244-25bc-4621-a272-c714b799ee72
+      - 8ffe01d5-31a4-490b-b8be-6233eea462bd
       X-Runtime:
-      - '0.020481'
+      - '0.016909'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
-      - F_Rails 54.203.190.11:443
+      - F_Rails 52.88.209.40:443
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:28 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4560-YYZ
+      - cache-yyz4535-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.743763,VS0,VE76
+      - S1652907594.210848,VS0,VE72
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"c941de9e68ac124c1a9f50f3647ce6e6"'
+      - '"d655035170d93c1214b371055a90e105"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-pinboard","downloads":625,"version":"0.1.1","version_created_at":"2022-03-25T03:25:14.973Z","version_downloads":282,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-pinboard","downloads":664,"version":"0.1.1","version_created_at":"2022-03-25T03:25:14.973Z","version_downloads":305,"platform":"ruby","authors":"Andrew
         Louis","info":"Import your Pinboard bookmarks","licenses":[],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-pinboard","changelog_uri":"https://github.com/chronicle-app/chronicle-pinboard","source_code_uri":"https://github.com/chronicle-app/chronicle-pinboard","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"3b8768e18112ad69fda2836b6a3cb6ff1394f2d1ee3a1ef548410d4459eb256f","project_uri":"https://rubygems.org/gems/chronicle-pinboard","gem_uri":"https://rubygems.org/gems/chronicle-pinboard-0.1.1.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-pinboard","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-pinboard","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-pinboard","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
         2.3"},{"name":"pry-byebug","requirements":"~\u003e 3.9"},{"name":"rake","requirements":"~\u003e
         13.0.6"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5"},{"name":"faraday","requirements":"~\u003e
         2.2"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:28 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-safari.json
@@ -443,9 +539,9 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - 4f7101b4-910a-4e7f-97cb-803fcf29ea01
+      - d2422a21-e68d-4dde-b68d-fe408b27584f
       X-Runtime:
-      - '0.020673'
+      - '0.015506'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
@@ -453,33 +549,33 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:28 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4538-YYZ
+      - cache-yyz4558-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.903249,VS0,VE84
+      - S1652907594.367135,VS0,VE72
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"6a8ab2bebd4fc0134007e6304dd80f5b"'
+      - '"a600993cc63365d291d29759188edf73"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-safari","downloads":609,"version":"0.1.1","version_created_at":"2022-03-25T03:25:51.733Z","version_downloads":281,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-safari","downloads":648,"version":"0.1.1","version_created_at":"2022-03-25T03:25:51.733Z","version_downloads":304,"platform":"ruby","authors":"Andrew
         Louis","info":"Import your safari history","licenses":[],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-safari","changelog_uri":"https://github.com/chronicle-app/chronicle-safari","source_code_uri":"https://github.com/chronicle-app/chronicle-safari","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"cd72a2979e415af2decb56901047fd5a87de2013430debfb722f9df064e539d6","project_uri":"https://rubygems.org/gems/chronicle-safari","gem_uri":"https://rubygems.org/gems/chronicle-safari-0.1.1.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-safari","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-safari","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-safari","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
         2.3"},{"name":"pry-byebug","requirements":"~\u003e 3.9"},{"name":"rake","requirements":"~\u003e
         13.0.6"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5"},{"name":"sqlite3","requirements":"~\u003e
         1.4"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:28 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-shell.json
@@ -539,9 +635,9 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - 6361a6d0-af92-49d8-8c07-a374d97ddde7
+      - d6b4ca8f-59f5-4c5f-a1fa-ee8c984ef350
       X-Runtime:
-      - '0.016087'
+      - '0.015581'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
@@ -549,31 +645,31 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:29 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4561-YYZ
+      - cache-yyz4549-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.062179,VS0,VE76
+      - S1652907595.524844,VS0,VE75
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"5bbe40f89d74237ced1a39ef8a7b5fe0"'
+      - '"018e417fa5ece5d1cc5055ec3b8c2b71"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-shell","downloads":1700,"version":"0.2.4","version_created_at":"2022-03-25T03:26:10.312Z","version_downloads":284,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-shell","downloads":1804,"version":"0.2.4","version_created_at":"2022-03-25T03:26:10.312Z","version_downloads":308,"platform":"ruby","authors":"Andrew
         Louis","info":"Extract shell command history from Bash or Zsh","licenses":["MIT"],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-shell","changelog_uri":"https://github.com/chronicle-app/chronicle-shell/releases","source_code_uri":"https://github.com/chronicle-app/chronicle-shell","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"84aadca6f2724920ba6e491f397b0b383272fa96b7fd2a9627d9de8caf2d7eae","project_uri":"https://rubygems.org/gems/chronicle-shell","gem_uri":"https://rubygems.org/gems/chronicle-shell-0.2.4.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-shell","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-shell","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-shell/releases","funding_uri":null,"dependencies":{"development":[],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e
         0.5"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:29 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-spotify.json
@@ -633,9 +729,9 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - e0d65d73-5a76-4109-a48d-8f7e8d14c369
+      - 015c1e34-c4fe-415d-b39f-b1c5f86726ec
       X-Runtime:
-      - '0.013106'
+      - '0.015634'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
@@ -643,34 +739,34 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:29 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4527-YYZ
+      - cache-yyz4520-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.215498,VS0,VE73
+      - S1652907595.674438,VS0,VE79
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"d2e7414ca5a5324fe78ea232ebdca9de"'
+      - '"a63a7931985eafbf871ac75b88c21726"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-spotify","downloads":182,"version":"0.1.0","version_created_at":"2022-04-24T02:32:59.389Z","version_downloads":182,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-spotify","downloads":206,"version":"0.1.0","version_created_at":"2022-04-24T02:32:59.389Z","version_downloads":206,"platform":"ruby","authors":"Andrew
         Louis","info":"Spotify connectors","licenses":[],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-spotify","changelog_uri":"https://github.com/chronicle-app/chronicle-spotify","source_code_uri":"https://github.com/chronicle-app/chronicle-spotify","allowed_push_host":"https://rubygems.org"},"yanked":false,"sha":"f1ea15bfc6010d75cf4cb2d2430dca5034a6dc0835458b994320e9cd65ba1796","project_uri":"https://rubygems.org/gems/chronicle-spotify","gem_uri":"https://rubygems.org/gems/chronicle-spotify-0.1.0.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-spotify","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-spotify","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-spotify","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
         2.3"},{"name":"pry-byebug","requirements":"~\u003e 3.9"},{"name":"rake","requirements":"~\u003e
         13.0.6"},{"name":"rubocop","requirements":"\u003e= 0"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e
         0.5"},{"name":"omniauth-spotify","requirements":"\u003e= 0"},{"name":"rspotify","requirements":"~\u003e
         2.11"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:29 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 - request:
     method: get
     uri: https://rubygems.org/api/v1/gems/chronicle-zulip.json
@@ -730,41 +826,41 @@ http_interactions:
         https://*.fastly-insights.com https://fastly-insights.com https://api.github.com;
         form-action 'self'; frame-ancestors 'self'
       X-Request-Id:
-      - 70fb91fd-cbbb-4cf0-916e-13c6a937c6fe
+      - 2999bbb1-a54a-4877-9db8-c50d3a0a91c4
       X-Runtime:
-      - '0.021101'
+      - '0.014793'
       Strict-Transport-Security:
       - max-age=31536000
       X-Backend:
-      - F_Rails 52.88.209.40:443
+      - F_Rails 34.218.36.241:443
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 10 May 2022 03:38:29 GMT
+      - Wed, 18 May 2022 20:59:54 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-yyz4539-YYZ
+      - cache-yyz4549-YYZ
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1652153909.374083,VS0,VE80
+      - S1652907595.829586,VS0,VE70
       Vary:
       - Accept-Encoding,Fastly-SSL
       Etag:
-      - '"6f3561a9a3693b276c7047a91f58d863"'
+      - '"60d559994ad3dc39a5370d49296a11a3"'
       Server:
       - RubyGems.org
       Transfer-Encoding:
       - chunked
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"chronicle-zulip","downloads":391,"version":"0.1.2","version_created_at":"2022-04-04T21:10:53.845Z","version_downloads":238,"platform":"ruby","authors":"Andrew
+      string: '{"name":"chronicle-zulip","downloads":432,"version":"0.1.2","version_created_at":"2022-04-04T21:10:53.845Z","version_downloads":262,"platform":"ruby","authors":"Andrew
         Louis","info":"Zulip importer for chronicle-etl","licenses":["MIT"],"metadata":{"homepage_uri":"https://github.com/chronicle-app/chronicle-zulip","changelog_uri":"https://github.com/chronicle-app/chronicle-zulip","source_code_uri":"https://github.com/chronicle-app/chronicle-zulip"},"yanked":false,"sha":"f9b114d62941e29560d56161d9d786fa39e87fbe1e5e3593b79cfaa55eb3b736","project_uri":"https://rubygems.org/gems/chronicle-zulip","gem_uri":"https://rubygems.org/gems/chronicle-zulip-0.1.2.gem","homepage_uri":"https://github.com/chronicle-app/chronicle-zulip","wiki_uri":null,"documentation_uri":null,"mailing_list_uri":null,"source_code_uri":"https://github.com/chronicle-app/chronicle-zulip","bug_tracker_uri":null,"changelog_uri":"https://github.com/chronicle-app/chronicle-zulip","funding_uri":null,"dependencies":{"development":[{"name":"bundler","requirements":"~\u003e
         2.1"},{"name":"rake","requirements":"~\u003e 13.0"},{"name":"rspec","requirements":"~\u003e
         3.9"}],"runtime":[{"name":"chronicle-etl","requirements":"~\u003e 0.5.3"},{"name":"faraday","requirements":"~\u003e
         2.2"}]}}'
-  recorded_at: Tue, 10 May 2022 03:38:29 GMT
+  recorded_at: Wed, 18 May 2022 20:59:54 GMT
 recorded_with: VCR 6.1.0
