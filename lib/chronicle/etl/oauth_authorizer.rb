@@ -50,7 +50,6 @@ module Chronicle
         associate_oauth_credentials
         @server = load_server
         spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
-        Chronicle::ETL::Logger.attach_to_ui(spinner)
         spinner.auto_spin
         spinner.update(title: "Starting temporary authorization server on port #{@port}""")
 
@@ -63,7 +62,6 @@ module Chronicle
         @server.quit!
         server_thread.join
         spinner.success("(#{'successful'.green})")
-        Chronicle::ETL::Logger.detach_from_ui
 
         # TODO: properly handle failed authorizations
         raise Chronicle::ETL::AuthorizationError unless @server.latest_authorization
