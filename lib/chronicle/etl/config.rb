@@ -1,3 +1,4 @@
+require "active_support/core_ext/hash/keys"
 require 'fileutils'
 require 'yaml'
 
@@ -21,6 +22,8 @@ module Chronicle
       def write(type, identifier, data)
         base = config_pathname_for_type(type)
         path = base.join("#{identifier}.yml")
+
+        data.deep_stringify_keys!
         FileUtils.mkdir_p(File.dirname(path))
         File.open(path, 'w', 0o600) do |f|
           # Ruby likes to add --- separators when writing yaml files

@@ -56,7 +56,7 @@ module Chronicle
         data = {
           secrets: (secrets || {}).transform_keys(&:to_s),
           chronicle_etl_version: Chronicle::ETL::VERSION
-        }.deep_stringify_keys
+        }
         Chronicle::ETL::Config.write("secrets", namespace, data)
       end
 
