@@ -158,30 +158,30 @@ $ chronicle-etl plugins:uninstall NAME
 
 The following are the officially-supported list of plugins and their available connectors:
 
-| Plugin                                                              | Type        | Identifier       | Description                               | Description                               |
-|---------------------------------------------------------------------|-------------|------------------|-------------------------------------------|-------------------------------------------|
-| [email](https://github.com/chronicle-app/chronicle-email)           | extractor   | imap             | emails over an IMAP connection            | emails over an IMAP connection            |
-| [email](https://github.com/chronicle-app/chronicle-email)           | extractor   | mbox             | emails from an .mbox file                 | emails from an .mbox file                 |
-| [email](https://github.com/chronicle-app/chronicle-email)           | transformer | email            | email to Chronicle Schema                 | email to Chronicle Schema                 |
-| [foursquare](https://github.com/chronicle-app/chronicle-foursquare) | extractor   | checkins         | Foursqure visits                          | Foursqure visits                          |
-| [foursquare](https://github.com/chronicle-app/chronicle-foursquare) | transformer | checkin          | checkin to Chronicle Schema               | checkin to Chronicle Schema               |
-| [github](https://github.com/chronicle-app/chronicle-github)         | extractor   | activity         | user activity stream                      | user activity stream                      |
-| [imessage](https://github.com/chronicle-app/chronicle-imessage)     | extractor   | messages         | imessages from local macOS                | imessages from local macOS                |
-| [imessage](https://github.com/chronicle-app/chronicle-imessage)     | transformer | message          | imessage to Chronicle Schema              | imessage to Chronicle Schema              |
-| [pinboard](https://github.com/chronicle-app/chronicle-pinboard)     | extractor   | bookmarks        | Pinboard.in bookmarks                     | Pinboard.in bookmarks                     |
-| [pinboard](https://github.com/chronicle-app/chronicle-pinboard)     | transformer | bookmark         | bookmark to Chronicle Schema              | bookmark to Chronicle Schema              |
-| [safari](https://github.com/chronicle-app/chronicle-safari)         | extractor   | browser-history  | browser history                           | browser history                           |
-| [safari ](https://github.com/chronicle-app/chronicle-safari )       | transformer | browser-history  | browser history to Chronicle Schema       | browser history to Chronicle Schema       |
-| [shell](https://github.com/chronicle-app/chronicle-shell)           | extractor   | history          | shell command history (bash / zsh)        | shell command history (bash / zsh)        |
-| [shell](https://github.com/chronicle-app/chronicle-shell)           | transformer | command          | command to Chronicle Schema               | command to Chronicle Schema               |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | liked-tracks     | liked tracks                              | liked tracks                              |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | saved-albums     | saved albums                              | saved albums                              |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | listens          | recently listened tracks (last 50 tracks) | recently listened tracks (last 50 tracks) |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | transformer | like             | like to Chronicle Schema                  | like to Chronicle Schema                  |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | transformer | listen           | listen to Chronicle Schema                | listen to Chronicle Schema                |
-| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | authorizer  |                  | OAuth authorizer                          | OAuth authorizer                          |
-| [zulip](https://github.com/chronicle-app/chronicle-zulip)           | extractor   | private-messages | private messages                          | private messages                          |
-| [zulip](https://github.com/chronicle-app/chronicle-zulip)           | transformer | message          | message to Chronicle Schema               | message to Chronicle Schema               |
+| Plugin                                                              | Type        | Identifier       | Description                               |
+|---------------------------------------------------------------------|-------------|------------------|-------------------------------------------|
+| [email](https://github.com/chronicle-app/chronicle-email)           | extractor   | imap             | emails over an IMAP connection            |
+| [email](https://github.com/chronicle-app/chronicle-email)           | extractor   | mbox             | emails from an .mbox file                 |
+| [email](https://github.com/chronicle-app/chronicle-email)           | transformer | email            | email to Chronicle Schema                 |
+| [foursquare](https://github.com/chronicle-app/chronicle-foursquare) | extractor   | checkins         | Foursqure visits                          |
+| [foursquare](https://github.com/chronicle-app/chronicle-foursquare) | transformer | checkin          | checkin to Chronicle Schema               |
+| [github](https://github.com/chronicle-app/chronicle-github)         | extractor   | activity         | user activity stream                      |
+| [imessage](https://github.com/chronicle-app/chronicle-imessage)     | extractor   | messages         | imessages from local macOS                |
+| [imessage](https://github.com/chronicle-app/chronicle-imessage)     | transformer | message          | imessage to Chronicle Schema              |
+| [pinboard](https://github.com/chronicle-app/chronicle-pinboard)     | extractor   | bookmarks        | Pinboard.in bookmarks                     |
+| [pinboard](https://github.com/chronicle-app/chronicle-pinboard)     | transformer | bookmark         | bookmark to Chronicle Schema              |
+| [safari](https://github.com/chronicle-app/chronicle-safari)         | extractor   | browser-history  | browser history                           |
+| [safari ](https://github.com/chronicle-app/chronicle-safari )       | transformer | browser-history  | browser history to Chronicle Schema       |
+| [shell](https://github.com/chronicle-app/chronicle-shell)           | extractor   | history          | shell command history (bash / zsh)        |
+| [shell](https://github.com/chronicle-app/chronicle-shell)           | transformer | command          | command to Chronicle Schema               |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | liked-tracks     | liked tracks                              |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | saved-albums     | saved albums                              |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | extractor   | listens          | recently listened tracks (last 50 tracks) |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | transformer | like             | like to Chronicle Schema                  |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | transformer | listen           | listen to Chronicle Schema                |
+| [spotify](https://github.com/chronicle-app/chronicle-spotify)       | authorizer  |                  | OAuth authorizer                          |
+| [zulip](https://github.com/chronicle-app/chronicle-zulip)           | extractor   | private-messages | private messages                          |
+| [zulip](https://github.com/chronicle-app/chronicle-zulip)           | transformer | message          | message to Chronicle Schema               |
 
 
 ### Coming soon
