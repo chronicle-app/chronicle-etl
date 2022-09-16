@@ -113,6 +113,22 @@ LONG_DESC
           cli_fail(message: "Job definition error", exception: e)
         end
 
+        desc "edit", "Edit a job in default editor ($EDITOR)"
+        def edit(name = nil)
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+
+          filename = Chronicle::ETL::Config.path("jobs", name)
+          system "${VISUAL:-${EDITOR:-vi}} \"#{filename}\""
+
+          definition = Chronicle::ETL::JobDefinition.new
+          definition.add_config(load_job_config(name))
+          definition.validate!
+
+          cli_exit(message: "Job '#{name}' saved")
+        rescue Chronicle::ETL::JobDefinitionError => e
+          cli_fail(message: "Job definition error", exception: e)
+        end
+
         desc "list", "List all available jobs"
         # List available ETL jobs
         def list

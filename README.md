@@ -103,6 +103,9 @@ $ chronicle-etl jobs:run sample
 # Show details about the job
 $ chronicle-etl jobs:show sample
 
+# Edit a job definition with default editor ($EDITOR)
+$ chronicle-etl jobs:edit sample
+
 # Show all saved jobs
 $ chronicle-etl jobs:list
 ```

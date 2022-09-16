@@ -22,6 +22,7 @@ module Chronicle
       setting :timestamp_strategy, default: 'file_mtime'
       setting :id_strategy, default: 'file_hash'
       setting :verb, default: 'photographed'
+      setting :provider, default: 'file'
       # EXIF tags often don't have timezones
       setting :timezone_default, default: 'Eastern Time (US & Canada)'
       setting :include_image_data, default: true

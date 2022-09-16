@@ -31,6 +31,13 @@ module Chronicle
         end
       end
 
+      # Returns path for a given config type and identifier
+      def path(type, identifier)
+        base = config_pathname_for_type(type)
+        base.join("#{identifier}.yml")
+      end
+
+      # Whether a config exists for a given type and identifier
       def exists?(type, identifier)
         base = config_pathname_for_type(type)
         path = base.join("#{identifier}.yml")
@@ -44,6 +51,7 @@ module Chronicle
         end
       end
 
+      # Returns all configs available for a given type
       def available_configs(type)
         Dir.glob(File.join(config_pathname_for_type(type), "*.yml")).map do |filename|
           File.basename(filename, ".*")

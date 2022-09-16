@@ -45,6 +45,12 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
     end
   end
 
+  describe "chronicle-etl jobs:edit" do
+    it "launches an editor" do
+      # TODO
+    end
+  end
+
   describe "chronicle-etl jobs:save" do
     include_context "mocked config directory"
 
