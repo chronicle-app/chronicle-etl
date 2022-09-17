@@ -14,6 +14,7 @@ module Chronicle
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module Plugins
         KNOWN_PLUGINS = [
+          'apple-podcasts',
           'email',
           'foursquare',
           'github',
