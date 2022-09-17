@@ -55,15 +55,27 @@ module Chronicle
       end
 
       def to_s
-        output = "Job"
-        output += " '#{name}'".bold if name
-        output += "\n"
-        output += "  → Extracting from #{@job_definition.extractor_klass.description}\n"
-        output += "  → Transforming #{@job_definition.transformer_klass.description}\n"
-        output += "  → Loading to #{@job_definition.loader_klass.description}\n"
+        output = "Job summary\n".upcase.bold
+        # output = ""
+        output += "#{name}:\n" if name
+        output += "→ #{'Extracting'} from #{@job_definition.extractor_klass.description}\n"
+        output += options_to_s(@extractor_options)
+        output += "→ #{'Transforming'} #{@job_definition.transformer_klass.description}\n"
+        output += options_to_s(@transformer_options)
+        output += "→ #{'Loading'} to #{@job_definition.loader_klass.description}\n"
+        output += options_to_s(@loader_options)
+        output
       end
 
       private
+
+      def options_to_s(options, indent: 4)
+        output = ""
+        options.each do |k, v|
+          output += "#{' ' * indent}#{k.to_s.light_blue}: #{v}\n"
+        end
+        output
+      end
 
       def set_continuation
         continuation = Chronicle::ETL::JobLogger.load_latest(@id)

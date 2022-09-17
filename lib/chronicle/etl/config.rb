@@ -60,7 +60,9 @@ module Chronicle
 
       # Load a job definition from job config directory
       def read_job(job_name)
-        load('jobs', job_name)
+        definition = load('jobs', job_name)
+        definition[:name] ||= job_name
+        definition
       end
 
       def config_pathname
