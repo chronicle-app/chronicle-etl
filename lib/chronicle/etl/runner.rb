@@ -81,16 +81,24 @@ class Chronicle::ETL::Runner
   end
 
   def process_extraction(extraction)
-    # For each extraction from our extractor, we create a new tarnsformer
+    # For each extraction from our extractor, we create a new transformer
     transformer = @job.instantiate_transformer(extraction)
 
-    # And then transform that record, logging it if we're in debug log level
-    record = transformer.transform
+    # And then transform the record, capturing the new object(s)
+    new_objects = [transformer.transform].flatten
+
+    # raise an error unless all new_objects are a Base
+    unless new_objects.all? { |r| r.is_a?(Chronicle::ETL::Models::Base) || r.is_a?(Chronicle::ETL::Models::Raw) }
+      raise(Chronicle::ETL::RunnerError, "Expected transformer to output a Chronicle ETL Model")
+    end
+
     Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))
     @job_logger.log_transformation(transformer)
 
     # Then send the results to the loader
-    @loader.load(record) unless @job.dry_run?
+    new_objects.each do |object|
+      @loader.load(object) unless @job.dry_run?
+    end
   rescue Chronicle::ETL::TransformationError => e
     # TODO: have an option to cancel job if we encounter an error
     Chronicle::ETL::Logger.error(tty_log_transformation_failure(e, transformer))
@@ -116,7 +124,7 @@ class Chronicle::ETL::Runner
 
   def tty_log_transformation_failure(exception, transformer)
     output = "  ✖".red
-    output += " Failed to build #{transformer}. #{exception.message}"
+    output += " Failed to transform #{transformer}. #{exception.message}"
   end
 
   def tty_log_completion

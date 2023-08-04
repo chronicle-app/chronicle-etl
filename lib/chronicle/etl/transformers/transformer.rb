@@ -54,7 +54,7 @@ module Chronicle
 
         identifier = begin
           unknown = self.class.to_s
-          friendly_identifier || self.class.to_s
+          friendly_identifier || "instance of #{self.class.to_s}"
         rescue TransformationError, NotImplementedError
           unknown
         end
