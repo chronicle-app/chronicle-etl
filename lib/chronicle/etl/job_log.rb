@@ -60,7 +60,7 @@ module Chronicle
       end
 
       def duration
-        return unless @finished_at
+        return unless @finished_at && @started_at
 
         @finished_at - @started_at
       end
