@@ -33,6 +33,12 @@ module Chronicle
 
       private
 
+      def all_rows
+        @csvs.reduce([]) do |all_rows, csv|
+          all_rows + csv.to_a.map(&:to_h)
+        end
+      end
+
       def prepare_sources
         @csvs = []
         read_input do |csv_data|
