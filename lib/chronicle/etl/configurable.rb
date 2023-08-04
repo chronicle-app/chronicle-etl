@@ -62,7 +62,7 @@ module Chronicle
             # Do nothing with a given option if it's not a connector setting
             next unless setting
 
-            @config[name] = coerced_value(setting, value)
+            @config[name] = coerced_value(setting, name, value)
           end
           validate_config
           options
@@ -84,12 +84,11 @@ module Chronicle
           raise Chronicle::ETL::ConnectorConfigurationError, "Missing options: #{missing}" if missing.count.positive?
         end
 
-        def coerced_value(setting, value)
+        def coerced_value(setting, name, value)
           setting.type ? __send__("coerce_#{setting.type}", value) : value
         rescue StandardError
-          raise(Chronicle::ETL::ConnectorConfigurationError, "Could not coerce #{value} into a #{setting.type}")
+          raise(Chronicle::ETL::ConnectorConfigurationError, "Could not convert value '#{value}' into a #{setting.type} for setting '#{name}'")
         end
-
         def coerce_string(value)
           value.to_s
         end
