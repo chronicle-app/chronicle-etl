@@ -2,10 +2,10 @@ require 'spec_helper'
 
 RSpec.describe Chronicle::ETL::TableLoader do
   let(:record) do
-    Chronicle::ETL::Models::Activity.new(
+    Chronicle::Schema::Activity.new(
       provider: 'foo',
       verb: 'tested',
-      actor: Chronicle::ETL::Models::Entity.new(
+      actor: Chronicle::Schema::Entity.new(
         represent: 'identity',
         provider: 'bar'
       )

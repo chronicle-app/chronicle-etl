@@ -7,7 +7,7 @@ module Chronicle
       end
 
       def transform
-        Chronicle::ETL::Models::Raw.new(@extraction.data)
+        Chronicle::Schema::Raw.new(@extraction.data)
       end
 
       def timestamp; end

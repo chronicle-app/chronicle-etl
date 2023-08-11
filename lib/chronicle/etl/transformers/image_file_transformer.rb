@@ -62,7 +62,7 @@ module Chronicle
       private
 
       def build_created(file)
-        record = ::Chronicle::ETL::Models::Activity.new
+        record = ::Chronicle::Schema::Activity.new
         record.verb = @config.verb
         record.provider = @config.provider
         record.provider_id = id
@@ -77,7 +77,7 @@ module Chronicle
       end
 
       def build_actor
-        actor = ::Chronicle::ETL::Models::Entity.new
+        actor = ::Chronicle::Schema::Entity.new
         actor.represents = 'identity'
         actor.provider = @config.actor[:provider]
         actor.slug = @config.actor[:slug]
@@ -86,7 +86,7 @@ module Chronicle
       end
 
       def build_image
-        image = ::Chronicle::ETL::Models::Entity.new
+        image = ::Chronicle::Schema::Entity.new
         image.represents = @config.involved[:represents]
         image.title = build_title
         image.body = exif['Description']
@@ -107,7 +107,7 @@ module Chronicle
         image.abouts = build_keywords(tags)
 
         if @config.include_image_data
-          attachment = ::Chronicle::ETL::Models::Attachment.new
+          attachment = ::Chronicle::Schema::Attachment.new
           attachment.data = build_image_data
           image.attachments = [attachment]
         end
@@ -117,7 +117,7 @@ module Chronicle
 
       def build_keywords(topics)
         topics.map do |topic|
-          t = ::Chronicle::ETL::Models::Entity.new
+          t = ::Chronicle::Schema::Entity.new
           t.represents = 'topic'
           t.provider = @config.involved[:provider]
           t.title = topic
@@ -129,7 +129,7 @@ module Chronicle
 
       def build_people_depicted(names)
         names.map do |name|
-          identity = ::Chronicle::ETL::Models::Entity.new
+          identity = ::Chronicle::Schema::Entity.new
           identity.represents = 'identity'
           identity.provider = @config.involved[:provider]
           identity.slug = name.parameterize

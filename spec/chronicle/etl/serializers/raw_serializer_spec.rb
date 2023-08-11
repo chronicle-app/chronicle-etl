@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Chronicle::ETL::RawSerializer do
   let(:record_raw) do
-    Chronicle::ETL::Models::Raw.new({ foo: 'bar', num: 4 })
+    Chronicle::Schema::Raw.new({ foo: 'bar', num: 4 })
   end
 
   it "outputs the raw fields of a RawModel" do

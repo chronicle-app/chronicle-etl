@@ -88,8 +88,8 @@ class Chronicle::ETL::Runner
     new_objects = [transformer.transform].flatten
 
     # raise an error unless all new_objects are a Base
-    unless new_objects.all? { |r| r.is_a?(Chronicle::ETL::Models::Base) || r.is_a?(Chronicle::ETL::Models::Raw) }
-      raise(Chronicle::ETL::RunnerError, "Expected transformer to output a Chronicle ETL Model")
+    unless new_objects.all? { |r| r.is_a?(Chronicle::Schema::Base) }
+      raise(Chronicle::ETL::RunnerError, "Expected transformer to output a Chronicle Schema model")
     end
 
     Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))

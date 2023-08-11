@@ -3,7 +3,7 @@ require 'fakefs/safe'
 
 RSpec.describe Chronicle::ETL::JSONLoader do
   let(:record) do
-    Chronicle::ETL::Models::Raw.new({ foo: 'bar' })
+    Chronicle::Schema::Raw.new({ foo: 'bar' })
   end
 
   context "when using stdout as destination" do
