@@ -45,6 +45,7 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
+          puts "-------------------"
           installed.map(&:name).include?(name)
         end
 
@@ -107,7 +108,7 @@ module Chronicle
         # All versions of all plugins currently installed
         def self.installed_gemspecs
           # TODO: add check for chronicle-etl dependency
-          Gem::Specification.filter { |s| s.name.match(/^chronicle-/) && s.name != "chronicle-etl" }
+          Gem::Specification.filter { |s| s.name.match(/^chronicle-/) && s.name != "chronicle-etl" && s.name != "chronicle-core" }
         end
 
         # Latest version of each installed plugin
