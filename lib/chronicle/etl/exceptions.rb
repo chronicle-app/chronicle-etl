@@ -51,8 +51,6 @@ module Chronicle
 
     class ExtractionError < Error; end
 
-    class SerializationError < Error; end
-
     class TransformationError < Error; end
 
     class UntransformableRecordError < TransformationError; end

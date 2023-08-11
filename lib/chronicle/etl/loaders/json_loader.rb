@@ -72,7 +72,8 @@ module Chronicle
 
       # TODO: implement this
       def serializer
-        @config.serializer || Chronicle::ETL::RawSerializer
+        require 'chronicle/serialization'
+        @config.serializer || Chronicle::Serialization::HashSerializer
       end
     end
   end
