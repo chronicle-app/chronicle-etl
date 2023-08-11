@@ -45,7 +45,6 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
-          puts "-------------------"
           installed.map(&:name).include?(name)
         end
 
