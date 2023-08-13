@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'chronicle/serialization'
 
 module Chronicle
   module ETL
@@ -14,7 +15,7 @@ module Chronicle
       setting :access_token
 
       def load(record)
-        payload = Chronicle::ETL::JSONAPISerializer.serialize(record)
+        payload = Chronicle::Serialization::JSONAPISerializer.serialize(record)
         # have the outer data key that json-api expects
         payload = { data: payload } unless payload[:data]
 

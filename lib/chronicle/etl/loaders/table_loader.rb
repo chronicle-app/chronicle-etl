@@ -11,7 +11,7 @@ module Chronicle
 
       setting :truncate_values_at, default: 40
       setting :table_renderer, default: :basic
-      setting :fields_exclude, default: ['lids', 'type']
+      setting :fields_exclude, default: ['type']
       setting :header_row, default: true
 
       def load(record)

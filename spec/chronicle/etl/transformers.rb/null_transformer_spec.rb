@@ -6,7 +6,7 @@ RSpec.describe Chronicle::ETL::NullTransformer do
   describe "#transform" do
     it "does nothing" do
       t = Chronicle::ETL::NullTransformer.new(extraction)
-      expect(t.transform.raw_data[:foo]).to eq('bar')
+      expect(t.transform.foo).to eq('bar')
     end
   end
 end

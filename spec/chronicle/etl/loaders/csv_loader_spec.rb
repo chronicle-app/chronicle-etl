@@ -4,10 +4,10 @@ require 'csv'
 RSpec.describe Chronicle::ETL::CSVLoader do
   # TODO: consolidate this with other specs
   let(:record) do
-    Chronicle::ETL::Models::Activity.new(
+    Chronicle::Schema::Activity.new(
       provider: 'foo',
       verb: 'tested',
-      actor: Chronicle::ETL::Models::Entity.new(
+      actor: Chronicle::Schema::Entity.new(
         represent: 'identity',
         provider: 'bar'
       )
