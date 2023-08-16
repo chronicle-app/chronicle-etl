@@ -4,6 +4,7 @@ module Chronicle
   module ETL
     class CSVLoader < Chronicle::ETL::Loader
       include Chronicle::ETL::Loaders::Helpers::StdoutHelper
+      include Chronicle::ETL::Loaders::Helpers::FieldFilteringHelper
 
       register_connector do |r|
         r.description = 'CSV'
@@ -18,13 +19,13 @@ module Chronicle
       end
 
       def load(record)
-        records << record.to_h_flattened
+        records << record
       end
 
       def finish
         return unless records.any?
 
-        headers = build_headers(records)
+        headers = filtered_headers(records)
 
         csv_options = {}
         if @config.headers
@@ -35,7 +36,7 @@ module Chronicle
         csv_output = CSV.generate(**csv_options) do |csv|
           records.each do |record|
             csv << record
-              .transform_keys(&:to_sym)
+              .to_h_flattened
               .values_at(*headers)
               .map { |value| force_utf8(value) }
           end
