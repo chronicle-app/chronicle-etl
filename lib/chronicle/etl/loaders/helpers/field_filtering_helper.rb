@@ -11,8 +11,15 @@ module Chronicle
             if @config.fields&.any?
               headers = Set.new
               @config.fields.each do |field|
-                s = field.gsub(/\[\]/, '\[\d+\]')
+                # select all array elements if no index is specified
+                s = field.gsub(/\[\]/, '[\d+]')
+
+                # escape underscores and brackets
+                s = s.gsub(/[_\[\]]/, '\\\\\0')
+
+                # build a regex that matches the field at the beginning or end of a string
                 regex = "^(#{s}\\.|#{s}$)"
+
                 headers += records_flattened.flat_map(&:keys).select { |key| key.match(regex) }
               end
             else
