@@ -28,7 +28,7 @@ module Chronicle
       end
 
       def self.db_exists?
-        File.exists?(db_filename)
+        File.exist?(db_filename)
       end
 
       def self.schema_exists?(db)
