@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "chronicle-core", "~> 0.2.2"
   spec.add_dependency "chronic_duration", "~> 0.10.6"
   spec.add_dependency "colorize", "~> 0.8.1"
+  spec.add_dependency "faraday"
   spec.add_dependency "gems", ">= 1"
   spec.add_dependency "launchy"
   spec.add_dependency "marcel", "~> 1.0.2"
@@ -55,6 +56,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tty-progressbar", "~> 0.17"
   spec.add_dependency "tty-prompt", "~> 0.23"
   spec.add_dependency "tty-spinner"
+  spec.add_dependency "tty-markdown"
   spec.add_dependency "tty-table", "~> 0.11"
   spec.add_dependency "xdg", ">= 4.0"
 

@@ -1,3 +1,4 @@
+require 'faraday'
 require 'rubygems'
 require 'rubygems/command'
 require 'rubygems/commands/install_command'
@@ -89,6 +90,14 @@ module Chronicle
         def self.gem_info(name)
           gem_name = "chronicle-#{name}"
           Gems.info(gem_name)
+        end
+
+        # Return readme for a given plugin
+        # @todo make this a responsibility of a Plugin instance
+        def self.readme(name)
+          conn = Faraday.new(url: 'https://raw.githubusercontent.com')
+          response = conn.get("/chronicle-app/chronicle-#{name}/main/README.md")
+          response.body
         end
 
         # Union of installed gems (latest version) + available gems
