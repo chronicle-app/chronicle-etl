@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pp'
 require 'tty-prompt'
 
@@ -11,13 +13,22 @@ module Chronicle
 
         class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'NAME'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
-        class_option :transformer, aliases: '-t', desc: 'Transformer class. Default: null', banner: 'NAME'
-        class_option :'transformer-opts', desc: 'Transformer options', type: :hash, default: {}
+        class_option :transformer,
+                     aliases: '-t',
+                     desc: 'Transformer identifier. Default: null',
+                     banner: 'NAME',
+                     type: 'array',
+                     repeatable: true
         class_option :loader, aliases: '-l', desc: 'Loader class. Default: table', banner: 'NAME'
         class_option :'loader-opts', desc: 'Loader options', type: :hash, default: {}
 
         # This is an array to deal with shell globbing
-        class_option :input, aliases: '-i', desc: 'Input filename or directory', default: [], type: 'array', banner: 'FILENAME'
+        class_option :input,
+                     aliases: '-i',
+                     desc: 'Input filename or directory',
+                     default: [],
+                     type: 'array',
+                     banner: 'FILENAME'
         class_option :since, desc: "Load records SINCE this date (or fuzzy time duration)", banner: 'DATE'
         class_option :until, desc: "Load records UNTIL this date (or fuzzy time duration)", banner: 'DATE'
         class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
@@ -35,14 +46,16 @@ module Chronicle
 
             1. #{'Extractor'.underline}: pulls data from an external source. By default, this is stdout. Other common options including pulling data from an API or reading JSON from a file.
 
-            2. #{'Transformer'.underline}: transforms data into a new format. If none is specified, we use the `null` transformer which does nothing to the data.
+            2. #{'Transformers'.underline}: transform data into a new format. If none is specified, we use the `null` transformer which does nothing to the data.
 
             3. #{'Loader'.underline}: takes that transformed data and loads it externally. This can be an API, flat files, (or by default), stdout. With the --dry-run option, this step won't be run.
 
             If you do not want to use the command line flags, you can also configure a job with a .yml config file. You can either specify the path to this file or use the filename and place the file in ~/.config/chronicle/etl/jobs/NAME.yml and call it with `--job NAME`
-LONG_DESC
+        LONG_DESC
         # Run an ETL job
-        def start(name = nil)
+        def start(*_args)
+          name = nil
+
           # If someone runs `$ chronicle-etl` with no arguments, show help menu.
           # TODO: decide if we should check that there's nothing in stdin pipe
           # in case user wants to actually run this sort of job stdin->null->stdout
@@ -164,7 +177,7 @@ LONG_DESC
           runner = Chronicle::ETL::Runner.new(job)
           runner.run!
         rescue RunnerError => e
-          cli_fail(message: "#{e.message}", exception: e)
+          cli_fail(message: e.message.to_s, exception: e)
         end
 
         # TODO: probably could merge this with something in cli/plugin
@@ -172,10 +185,11 @@ LONG_DESC
           prompt = TTY::Prompt.new
           message = "Plugin#{'s' if missing_plugins.count > 1} specified by job not installed.\n"
           message += "Do you want to install "
-          message += missing_plugins.map { |name| "chronicle-#{name}".bold}.join(", ")
+          message += missing_plugins.map { |name| "chronicle-#{name}".bold }
+            .join(", ")
           message += " and start the job?"
           will_install = prompt.yes?(message)
-          cli_fail(message: "Must install #{missing_plugins.join(", ")} plugin to run job") unless will_install
+          cli_fail(message: "Must install #{missing_plugins.join(', ')} plugin to run job") unless will_install
 
           Chronicle::ETL::CLI::Plugins.new.install(*missing_plugins)
         end
@@ -188,43 +202,59 @@ LONG_DESC
           definition
         end
 
-        def load_job_config name
+        def load_job_config(name)
           Chronicle::ETL::Config.read_job(name)
         end
 
         # Takes flag options and turns them into a runner config
         # TODO: this needs a lot of refactoring
-        def process_flag_options options
-          extractor_options = options[:'extractor-opts'].transform_keys(&:to_sym).merge({
-            input: (options[:input] if options[:input].any?),
-            since: options[:since],
-            until: options[:until],
-            limit: options[:limit]
-          }.compact)
+        def process_flag_options(options)
+          extractor_options = options[:'extractor-opts'].transform_keys(&:to_sym).merge(
+            {
+              input: (options[:input] if options[:input].any?),
+              since: options[:since],
+              until: options[:until],
+              limit: options[:limit]
+            }.compact
+          )
 
-          transformer_options = options[:'transformer-opts'].transform_keys(&:to_sym)
+          loader_options = options[:'loader-opts'].transform_keys(&:to_sym).merge(
+            {
+              output: options[:output],
+              header_row: options[:header_row],
+              fields: options[:fields]
+            }.compact
+          )
 
-          loader_options = options[:'loader-opts'].transform_keys(&:to_sym).merge({
-            output: options[:output],
-            header_row: options[:header_row],
-            fields: options[:fields]
-          }.compact)
-
-          {
+          processed_options = {
             dry_run: options[:dry_run],
             extractor: {
               name: options[:extractor],
               options: extractor_options
-            }.compact,
-            transformer: {
-              name: options[:transformer],
-              options: transformer_options
             }.compact,
             loader: {
               name: options[:loader],
               options: loader_options
             }.compact
           }
+
+          # parse -t transformername foo=bar baz=qux -t transformername2
+          if options[:transformer]&.any?
+            processed_options[:transformers] = options[:transformer].map do |transformer_args|
+              transformer_name, *transformer_options = transformer_args
+              transformer_options = transformer_options.filter { |opt| opt.include?("=") }
+
+              {
+                name: transformer_name,
+                options: transformer_options.to_h do |opt|
+                  key, value = opt.split("=")
+                  [key.to_sym, value]
+                end
+              }
+            end
+          end
+
+          processed_options
         end
       end
     end

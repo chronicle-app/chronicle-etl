@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/hash/deep_merge'
 
 module Chronicle
@@ -9,10 +11,12 @@ module Chronicle
           name: 'stdin',
           options: {}
         },
-        transformer: {
-          name: 'null',
-          options: {}
-        },
+        transformers: [
+          {
+            name: 'null',
+            options: {}
+          }
+        ],
         loader: {
           name: 'table',
           options: {}
@@ -22,7 +26,7 @@ module Chronicle
       attr_reader :errors
       attr_accessor :definition
 
-      def initialize()
+      def initialize
         @definition = SKELETON_DEFINITION
       end
 
@@ -34,8 +38,9 @@ module Chronicle
       def validate
         @errors = {}
 
-        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
-          __send__("#{phase}_klass".to_sym)
+        Chronicle::ETL::Registry::Connectors::PHASES.each do |_phase|
+          # FIXME: add this back
+          # __send__("#{phase}_klass".to_sym)
         rescue Chronicle::ETL::PluginError => e
           @errors[:plugins] ||= []
           @errors[:plugins] << e
@@ -66,9 +71,10 @@ module Chronicle
 
       # For each connector in this job, mix in secrets into the options
       def apply_default_secrets
-        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
+        # FIXME: handle transformer secrets
+        [:extractor, :loader].each do |phase|
           # If the option have a `secrets` key, we look up those secrets and
-          # mix them in. If not, use the connector's plugin name and look up 
+          # mix them in. If not, use the connector's plugin name and look up
           # secrets with the same namespace
           if @definition[phase][:options][:secrets]
             namespace = @definition[phase][:options][:secrets]
@@ -101,8 +107,10 @@ module Chronicle
         load_klass(:extractor, @definition[:extractor][:name])
       end
 
-      def transformer_klass
-        load_klass(:transformer, @definition[:transformer][:name])
+      def transformer_klasses
+        @definition[:transformers].map do |transformer|
+          load_klass(:transformer, transformer[:name])
+        end
       end
 
       def loader_klass
@@ -114,7 +122,9 @@ module Chronicle
       end
 
       def transformer_options
-        @definition[:transformer][:options]
+        @definition[:transformers].map do |transformer|
+          transformer[:options]
+        end
       end
 
       def loader_options
@@ -128,7 +138,7 @@ module Chronicle
       end
 
       def load_credentials
-        Chronicle::ETL::Registry::Connectors::PHASES.each do |phase|
+        [:extractor, :loader].each do |phase|
           credentials_name = @definition[phase].dig(:options, :credentials)
           if credentials_name
             credentials = Chronicle::ETL::Config.load_credentials(credentials_name)

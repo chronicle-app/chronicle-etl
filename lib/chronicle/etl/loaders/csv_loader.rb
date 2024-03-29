@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 module Chronicle
@@ -7,6 +9,7 @@ module Chronicle
       include Chronicle::ETL::Loaders::Helpers::FieldFilteringHelper
 
       register_connector do |r|
+        r.identifier = :csv
         r.description = 'CSV'
       end
 

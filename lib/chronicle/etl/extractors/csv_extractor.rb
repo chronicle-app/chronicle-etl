@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 module Chronicle
@@ -6,6 +8,7 @@ module Chronicle
       include Extractors::Helpers::InputReader
 
       register_connector do |r|
+        r.identifier = :csv
         r.description = 'CSV'
       end
 

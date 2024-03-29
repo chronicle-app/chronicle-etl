@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'chronicle/schema'
+require 'chronicle/models/base'
 
 require_relative 'etl/registry/registry'
 require_relative 'etl/authorizer'
@@ -6,6 +9,7 @@ require_relative 'etl/config'
 require_relative 'etl/configurable'
 require_relative 'etl/exceptions'
 require_relative 'etl/extraction'
+require_relative 'etl/record'
 require_relative 'etl/job_definition'
 require_relative 'etl/job_log'
 require_relative 'etl/job_logger'

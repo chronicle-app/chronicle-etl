@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'colorize'
 require 'chronic_duration'
 require "tty-spinner"
@@ -21,11 +23,11 @@ class Chronicle::ETL::Runner
   rescue Interrupt
     @job_logger&.error
     raise(Chronicle::ETL::RunInterruptedError, "Job interrupted.")
-  rescue StandardError => e
-    # Just throwing this in here until we have better exception handling in
-    # loaders, etc
-    @job_logger&.error
-    raise(Chronicle::ETL::RunnerError, "Error running job. #{e.message}")
+  # rescue StandardError => e
+  #   # Just throwing this in here until we have better exception handling in
+  #   # loaders, etc
+  #   @job_logger&.error
+  #   raise(Chronicle::ETL::RunnerError, "Error running job. #{e.message}")
   ensure
     finish_job
   end
@@ -45,6 +47,7 @@ class Chronicle::ETL::Runner
   def instantiate_connectors
     @initialization_spinner.update(title: "Initializing connectors")
     @extractor = @job.instantiate_extractor
+    @transformers = @job.instantiate_transformers
     @loader = @job.instantiate_loader
   end
 
@@ -67,9 +70,12 @@ class Chronicle::ETL::Runner
   end
 
   def run_extraction
-    @extractor.extract do |extraction|
-      process_extraction(extraction)
-      @progress_bar.increment
+    # Pattern based on Kiba's StreamingRunner
+    # https://github.com/thbar/kiba/blob/master/lib/kiba/streaming_runner.rb
+    stream = extractor_stream
+    recurser = ->(s, t) { transform_stream(s, t) }
+    @transformers.reduce(stream, &recurser).each do |record|
+      load_record(record)
     end
 
     @progress_bar.finish
@@ -80,28 +86,35 @@ class Chronicle::ETL::Runner
     @job_logger.finish
   end
 
-  def process_extraction(extraction)
-    # For each extraction from our extractor, we create a new transformer
-    transformer = @job.instantiate_transformer(extraction)
-
-    # And then transform the record, capturing the new object(s)
-    new_objects = [transformer.transform].flatten
-
-    # raise an error unless all new_objects are a Base
-    unless new_objects.all? { |r| r.is_a?(Chronicle::Schema::Base) }
-      raise(Chronicle::ETL::RunnerError, "Expected transformer to output a Chronicle Schema model")
+  # Initial steam of extracted data, wrapped in a Record class
+  def extractor_stream
+    Enumerator.new do |y|
+      @extractor.extract do |extraction|
+        record = Chronicle::ETL::Record.new(data: extraction.data, extraction: extraction)
+        y << record
+      end
     end
+  end
 
-    Chronicle::ETL::Logger.debug(tty_log_transformation(transformer))
-    @job_logger.log_transformation(transformer)
+  # For a given stream of records and a given transformer,
+  # returns a new stream of transformed records and finally
+  # calls the finish method on the transformer
+  def transform_stream(stream, transformer)
+    Enumerator.new do |y|
+      stream.each do |record|
+        transformer.call(record) do |transformed_record|
+          y << transformed_record
+        end
+      end
 
-    # Then send the results to the loader
-    new_objects.each do |object|
-      @loader.load(object) unless @job.dry_run?
+      transformer.call_finish do |transformed_record|
+        y << transformed_record
+      end
     end
-  rescue Chronicle::ETL::TransformationError => e
-    # TODO: have an option to cancel job if we encounter an error
-    Chronicle::ETL::Logger.error(tty_log_transformation_failure(e, transformer))
+  end
+
+  def load_record(record)
+    @loader.load(record.data) unless @job.dry_run?
   end
 
   def finish_job
@@ -134,8 +147,10 @@ class Chronicle::ETL::Runner
     output += " '#{@job.name}'".bold if @job.name
     output += " in #{ChronicDuration.output(@job_logger.duration)}" if @job_logger.duration
     output += "\n  Status:\t".light_black + status
-    output += "\n  Completed:\t".light_black + "#{@job_logger.job_log.num_records_processed}"
-    output += "\n  Latest:\t".light_black + "#{@job_logger.job_log.highest_timestamp.iso8601}" if @job_logger.job_log.highest_timestamp
+    output += "\n  Completed:\t".light_black + @job_logger.job_log.num_records_processed.to_s
+    if @job_logger.job_log.highest_timestamp
+      output += "\n  Latest:\t".light_black + @job_logger.job_log.highest_timestamp.iso8601.to_s
+    end
     output
   end
 end

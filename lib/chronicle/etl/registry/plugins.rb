@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'rubygems/command'
 require 'rubygems/commands/install_command'
@@ -31,7 +33,7 @@ module Chronicle
         # make registry aware of existence of name of non-gem plugin
         def self.register_standalone(name:)
           plugin = Chronicle::ETL::Registry::PluginRegistration.new do |p|
-            p.name = name
+            p.name = name.to_sym
             p.installed = true
           end
 
@@ -57,7 +59,7 @@ module Chronicle
         def self.installed_as_gem
           installed_gemspecs_latest.map do |gem|
             Chronicle::ETL::Registry::PluginRegistration.new do |p|
-              p.name = gem.name.sub("chronicle-", "")
+              p.name = gem.name.sub("chronicle-", "").to_sym
               p.gem = gem.name
               p.description = gem.description
               p.version = gem.version.to_s
@@ -107,7 +109,9 @@ module Chronicle
         # All versions of all plugins currently installed
         def self.installed_gemspecs
           # TODO: add check for chronicle-etl dependency
-          Gem::Specification.filter { |s| s.name.match(/^chronicle-/) && s.name != "chronicle-etl" && s.name != "chronicle-core" }
+          Gem::Specification.filter do |s|
+            s.name.match(/^chronicle-/) && s.name != "chronicle-etl" && s.name != "chronicle-core"
+          end
         end
 
         # Latest version of each installed plugin

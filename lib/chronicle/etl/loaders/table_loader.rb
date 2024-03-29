@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tty/table'
 require 'active_support/core_ext/string/filters'
 require 'active_support/core_ext/hash/reverse_merge'
@@ -8,6 +10,7 @@ module Chronicle
       include Chronicle::ETL::Loaders::Helpers::FieldFilteringHelper
 
       register_connector do |r|
+        r.identifier = :table
         r.description = 'an ASCII table'
       end
 
@@ -46,7 +49,7 @@ module Chronicle
             .values_at(*headers)
             .map { |value| force_utf8(value.to_s) }
 
-          values = values.map{ |value| value.truncate(@config.truncate_values_at) } if @config.truncate_values_at
+          values = values.map { |value| value.truncate(@config.truncate_values_at) } if @config.truncate_values_at
 
           values
         end

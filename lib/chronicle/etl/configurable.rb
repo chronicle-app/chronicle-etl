@@ -19,7 +19,7 @@ module Chronicle
     #   t.config.when
     module Configurable
       # An individual setting for this Configurable
-      Setting = Struct.new(:default, :required, :type)
+      Setting = Struct.new(:default, :required, :type, :description)
       private_constant :Setting
 
       # Collection of user-supplied options for this Configurable
@@ -87,8 +87,12 @@ module Chronicle
         def coerced_value(setting, name, value)
           setting.type ? __send__("coerce_#{setting.type}", value) : value
         rescue StandardError
-          raise(Chronicle::ETL::ConnectorConfigurationError, "Could not convert value '#{value}' into a #{setting.type} for setting '#{name}'")
+          raise(
+            Chronicle::ETL::ConnectorConfigurationError,
+            "Could not convert value '#{value}' into a #{setting.type} for setting '#{name}'"
+          )
         end
+
         def coerce_string(value)
           value.to_s
         end
@@ -137,8 +141,8 @@ module Chronicle
         #   setting :when, type: :date, required: true
         #
         # @see ::Chronicle::ETL::Configurable
-        def setting(name, default: nil, required: false, type: nil)
-          s = Setting.new(default, required, type)
+        def setting(name, default: nil, required: false, type: nil, description: nil)
+          s = Setting.new(default, required, type, description)
           settings[name] = s
         end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 SimpleCov.start
 
@@ -34,6 +36,9 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.mock_with :rspec
+
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

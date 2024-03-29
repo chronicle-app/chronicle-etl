@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
 module Chronicle
   module ETL
     module Registry
-      # Records details about a connector such as its provider and a description
+      # Records details about a connector such as its source provider and a description
       class ConnectorRegistration
-        # FIXME: refactor custom accessor methods later in file
-        attr_accessor :identifier, :provider, :klass, :description
+        attr_accessor :klass, :identifier, :source, :strategy, :type, :description, :schema
 
+        # Create a new connector registration
         def initialize(klass)
           @klass = klass
         end
 
+        # The ETL phase of this connector
         def phase
           if klass.ancestors.include? Chronicle::ETL::Extractor
             :extractor
@@ -24,6 +27,7 @@ module Chronicle
           "#{phase}-#{identifier}"
         end
 
+        # Whether this connector is built-in to Chronicle
         def built_in?
           @klass.to_s.include? 'Chronicle::ETL'
         end
@@ -32,32 +36,20 @@ module Chronicle
           @klass.to_s
         end
 
-        def identifier
-          @identifier || @klass.to_s.split('::').last.gsub!(/(Extractor$|Loader$|Transformer$)/, '').downcase
-        end
-
-        def description
-          @description || @klass.to_s.split('::').last
-        end
-
-        def provider
-          @provider || (built_in? ? 'chronicle' : '')
-        end
-
         # TODO: allow overriding here. Maybe through self-registration process
         def plugin
-          @provider
+          @source
         end
 
         def descriptive_phrase
           prefix = case phase
-          when :extractor
-            "Extracts from"
-          when :transformer
-            "Transforms"
-          when :loader
-            "Loads to"
-          end
+                   when :extractor
+                     "Extracts from"
+                   when :transformer
+                     "Transforms"
+                   when :loader
+                     "Loads to"
+                   end
 
           "#{prefix} #{description}"
         end

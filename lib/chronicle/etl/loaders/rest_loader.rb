@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 require 'json'
@@ -7,6 +9,7 @@ module Chronicle
   module ETL
     class RestLoader < Chronicle::ETL::Loader
       register_connector do |r|
+        r.identifier = :rest
         r.description = 'a REST endpoint'
       end
 
@@ -23,7 +26,7 @@ module Chronicle
 
         header = {
           "Authorization" => "Bearer #{@config.access_token}",
-          "Content-Type": 'application/json'
+          'Content-Type': 'application/json'
         }
         use_ssl = uri.scheme == 'https'
 

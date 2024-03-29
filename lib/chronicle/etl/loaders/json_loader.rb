@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tempfile'
 
 module Chronicle
@@ -6,6 +8,7 @@ module Chronicle
       include Chronicle::ETL::Loaders::Helpers::StdoutHelper
 
       register_connector do |r|
+        r.identifier = :json
         r.description = 'json'
       end
 
@@ -33,7 +36,8 @@ module Chronicle
       end
 
       def load(record)
-        serialized = serializer.serialize(record)
+        # serialized = serializer.serialize(record)
+        serialized = record.to_h
 
         # When dealing with raw data, we can get improperly encoded strings
         # (eg from sqlite database columns). We force conversion to UTF-8

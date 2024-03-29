@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'pathname'
 
 module Chronicle
   module ETL
     # Return filenames that match a pattern in a directory
     class FileExtractor < Chronicle::ETL::Extractor
-
       register_connector do |r|
+        r.identifier = :file
         r.description = 'file or directory of files'
       end
 
