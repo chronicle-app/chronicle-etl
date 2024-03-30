@@ -5,7 +5,7 @@ module Chronicle
     module Registry
       # Records details about a connector such as its source provider and a description
       class ConnectorRegistration
-        attr_accessor :klass, :identifier, :source, :strategy, :type, :description, :schema
+        attr_accessor :klass, :identifier, :source, :strategy, :type, :description, :from_schema, :to_schema
 
         # Create a new connector registration
         def initialize(klass)

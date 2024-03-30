@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'chronicle/etl'
 
 module Chronicle
@@ -33,7 +35,18 @@ module Chronicle
         raise NotImplementedError
       end
 
-      private
+      protected
+
+      def build_extraction(data:, meta: nil, source: nil, type: nil, strategy: nil)
+        Extraction.new(
+          extractor: self.class,
+          data: data,
+          meta: meta,
+          source: source || self.class.connector_registration.source,
+          type: type || self.class.connector_registration.type,
+          strategy: strategy || self.class.connector_registration.strategy
+        )
+      end
 
       # TODO: reimplemenet this
       # def handle_continuation

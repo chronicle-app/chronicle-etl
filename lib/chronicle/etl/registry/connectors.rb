@@ -22,6 +22,20 @@ module Chronicle
           @connectors ||= []
         end
 
+        def self.find_converter_for_source(source_klass, _target)
+          # FIXME: we're assuming extractor plugin has been loaded already
+          plugin = source_klass.connector_registration.source
+          type = source_klass.connector_registration.type
+          strategy = source_klass.connector_registration.strategy
+
+          connectors.find do |c|
+            c.phase == :transformer &&
+              c.plugin == plugin &&
+              (type.nil? || c.type == type) &&
+              (strategy.nil? || c.strategy == strategy)
+          end
+        end
+
         # Find connector from amongst those currently loaded
         def self.find_by_phase_and_identifier_local(phase, identifier)
           connector = connectors.find { |c| c.phase == phase && c.identifier == identifier }

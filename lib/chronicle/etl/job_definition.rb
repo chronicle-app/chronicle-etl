@@ -104,17 +104,17 @@ module Chronicle
       end
 
       def extractor_klass
-        load_klass(:extractor, @definition[:extractor][:name])
+        find_connector_klass(:extractor, @definition[:extractor][:name])
       end
 
       def transformer_klasses
         @definition[:transformers].map do |transformer|
-          load_klass(:transformer, transformer[:name])
+          find_connector_klass(:transformer, transformer[:name])
         end
       end
 
       def loader_klass
-        load_klass(:loader, @definition[:loader][:name])
+        find_connector_klass(:loader, @definition[:loader][:name])
       end
 
       def extractor_options
@@ -133,7 +133,11 @@ module Chronicle
 
       private
 
-      def load_klass(phase, identifier)
+      def find_schema_transformer_klass(source_klass, target)
+        Chronicle::ETL::Registry::Connectors.find_converter_for_source(source_klass, target).klass
+      end
+
+      def find_connector_klass(phase, identifier)
         Chronicle::ETL::Registry::Connectors.find_by_phase_and_identifier(phase, identifier).klass
       end
 

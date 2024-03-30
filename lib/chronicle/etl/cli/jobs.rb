@@ -32,6 +32,7 @@ module Chronicle
         class_option :since, desc: "Load records SINCE this date (or fuzzy time duration)", banner: 'DATE'
         class_option :until, desc: "Load records UNTIL this date (or fuzzy time duration)", banner: 'DATE'
         class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
+        class_option :schema, desc: 'Which Schema to transform', banner: 'SCHEMA_NAME', type: 'string'
 
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
         class_option :fields, desc: 'Output only these fields', type: 'array', banner: 'field1 field2 ...'
