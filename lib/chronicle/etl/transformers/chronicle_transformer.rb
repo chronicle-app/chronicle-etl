@@ -5,7 +5,7 @@ module Chronicle
     class ChronicleTransformer < Chronicle::ETL::Transformer
       register_connector do |r|
         r.identifier = :chronicle
-        r.description = 'convert to Chronicle schema'
+        r.description = 'records to Chronicle schema'
       end
 
       def transform(record)
@@ -18,9 +18,12 @@ module Chronicle
       private
 
       def find_converter(extraction)
-        source_klass = extraction.extractor
-
-        Chronicle::ETL::Registry::Connectors.find_converter_for_source(source_klass, :chronicle).klass
+        Chronicle::ETL::Registry::Connectors.find_converter_for_source(
+          source: extraction.source,
+          type: extraction.type,
+          strategy: extraction.strategy,
+          target: :chronicle
+        )&.klass
       end
     end
   end

@@ -32,10 +32,22 @@ module Chronicle
         class_option :since, desc: "Load records SINCE this date (or fuzzy time duration)", banner: 'DATE'
         class_option :until, desc: "Load records UNTIL this date (or fuzzy time duration)", banner: 'DATE'
         class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
-        class_option :schema, desc: 'Which Schema to transform', banner: 'SCHEMA_NAME', type: 'string'
+
+        class_option :schema,
+                     desc: 'Which Schema to transform',
+                     banner: 'SCHEMA_NAME',
+                     type: 'string',
+                     enum: ['chronicle', 'activitystream', 'schemaorg']
+        class_option :format,
+                     desc: 'How to serialize results',
+                     banner: 'SCHEMA_NAME',
+                     type: 'string',
+                     enum: ['jsonapi', 'jsonld']
 
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
         class_option :fields, desc: 'Output only these fields', type: 'array', banner: 'field1 field2 ...'
+        class_option :'fields-limit', desc: 'Output first N fields', type: :numeric
+        class_option :filter, desc: 'Filter records', type: 'array', banner: 'field=value'
         class_option :header_row, desc: 'Output the header row of tabular output', type: 'boolean'
 
         # Thor doesn't like `run` as a command name
@@ -222,8 +234,7 @@ module Chronicle
           loader_options = options[:'loader-opts'].transform_keys(&:to_sym).merge(
             {
               output: options[:output],
-              header_row: options[:header_row],
-              fields: options[:fields]
+              header_row: options[:header_row]
             }.compact
           )
 
@@ -239,9 +250,12 @@ module Chronicle
             }.compact
           }
 
+          processed_options[:transformers] ||= []
+          processed_options[:transformers] << { name: options[:schema].to_sym, options: {} } if options[:schema]
+
           # parse -t transformername foo=bar baz=qux -t transformername2
           if options[:transformer]&.any?
-            processed_options[:transformers] = options[:transformer].map do |transformer_args|
+            processed_options[:transformers] += options[:transformer].map do |transformer_args|
               transformer_name, *transformer_options = transformer_args
               transformer_options = transformer_options.filter { |opt| opt.include?("=") }
 
@@ -253,6 +267,50 @@ module Chronicle
                 end
               }
             end
+          end
+
+          if options[:filter]
+            processed_options[:transformers].append(
+              {
+                name: :filter,
+                options: {
+                  filters: options[:filter].map { |f| f.split("=") }.to_h
+                }
+              }
+            )
+          end
+
+          if options[:format]
+            processed_options[:transformers].append(
+              {
+                name: :format,
+                options: {
+                  format: options[:format]
+                }
+              }
+            )
+          end
+      
+          if options[:fields]
+            processed_options[:transformers].append(
+              {
+                name: :filter_fields,
+                options: {
+                  fields: options[:fields]
+                }
+              }
+            )
+          end
+
+          if options[:'fields-limit']
+            processed_options[:transformers].append(
+              {
+                name: :fields_limit,
+                options: {
+                  limit: options[:'fields-limit']
+                }
+              }
+            )
           end
 
           processed_options

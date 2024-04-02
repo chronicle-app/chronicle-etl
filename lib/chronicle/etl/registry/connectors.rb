@@ -22,17 +22,20 @@ module Chronicle
           @connectors ||= []
         end
 
-        def self.find_converter_for_source(source_klass, _target)
+        def self.find_converter_for_source(source:, type: nil, strategy: nil, target: nil)
           # FIXME: we're assuming extractor plugin has been loaded already
-          plugin = source_klass.connector_registration.source
-          type = source_klass.connector_registration.type
-          strategy = source_klass.connector_registration.strategy
+          # This may not be the case if the schema converter is running
+          # off a json dump off extraction data.
+          # plugin = source_klass.connector_registration.source
+          # type = source_klass.connector_registration.type
+          # strategy = source_klass.connector_registration.strategy
 
           connectors.find do |c|
             c.phase == :transformer &&
-              c.plugin == plugin &&
+              c.source == source &&
               (type.nil? || c.type == type) &&
-              (strategy.nil? || c.strategy == strategy)
+              (strategy.nil? || c.strategy == strategy) &&
+              (target.nil? || c.to_schema == target)
           end
         end
 

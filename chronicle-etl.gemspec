@@ -65,7 +65,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug", "~> 3.9"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.9"
-  spec.add_development_dependency "rubocop", "~> 1.25.1"
+  spec.add_development_dependency 'rubocop', '~> 1.57'
   spec.add_development_dependency "simplecov", "~> 0.21"
   spec.add_development_dependency "vcr", "~> 6.1"
   spec.add_development_dependency "webmock", "~> 3"

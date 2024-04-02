@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'tty/table'
+require 'chronicle/utils/hash_utils'
 require 'active_support/core_ext/string/filters'
 require 'active_support/core_ext/hash/reverse_merge'
 
 module Chronicle
   module ETL
     class TableLoader < Chronicle::ETL::Loader
-      include Chronicle::ETL::Loaders::Helpers::FieldFilteringHelper
 
       register_connector do |r|
         r.identifier = :table
@@ -26,7 +26,7 @@ module Chronicle
       def finish
         return if records.empty?
 
-        headers = filtered_headers(records)
+        headers = gather_headers(records)
         rows = build_rows(records, headers)
 
         @table = TTY::Table.new(header: (headers if @config.header_row), rows: rows)
@@ -42,10 +42,16 @@ module Chronicle
 
       private
 
+      def gather_headers(records)
+        records_flattened = records.map do |record|
+          Chronicle::Utils::HashUtils.flatten_hash(record.to_h)
+        end
+        all_fields = records_flattened.flat_map(&:keys).uniq
+      end
+
       def build_rows(records, headers)
         records.map do |record|
-          values = record
-            .to_h_flattened
+          values = Chronicle::Utils::HashUtils.flatten_hash(record.to_h)
             .values_at(*headers)
             .map { |value| force_utf8(value.to_s) }
 

@@ -93,6 +93,10 @@ module Chronicle
           )
         end
 
+        def coerce_hash(value)
+          value.is_a?(Hash) ? value : {}
+        end
+
         def coerce_string(value)
           value.to_s
         end
@@ -108,6 +112,10 @@ module Chronicle
           else
             value
           end
+        end
+
+        def coerce_array(value)
+          value.is_a?(Array) ? value : [value]
         end
 
         def coerce_time(value)

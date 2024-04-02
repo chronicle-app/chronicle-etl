@@ -22,7 +22,7 @@ Style/MethodCallWithArgsParentheses:
 
 Style/MethodCalledOnDoEndBlock:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Style/OpenStructUse:
   Enabled: false
@@ -41,4 +41,3 @@ Style/WordArray:
 
 Lint/ConstantResolution:
   Enabled: false
-
