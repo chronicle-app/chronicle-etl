@@ -19,7 +19,7 @@ module Chronicle
 
       # Called once for each extracted record. Can return 0 or more transformed records.
       def call(record, &block)
-        raise ArgumentError, "Input must be a Chronicle::ETL::Record" unless record.is_a?(Record)
+        raise ArgumentError, 'Input must be a Chronicle::ETL::Record' unless record.is_a?(Record)
 
         yielded = false
 

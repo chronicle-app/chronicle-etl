@@ -7,7 +7,7 @@ module Chronicle
 
         # Macro for setting provider on an Authorizer
         def provider(provider_name)
-          @provider_name = provider_name
+          @provider_name = provider_name.to_sym
         end
 
         # From all loaded Authorizers, return the first one that matches
@@ -16,7 +16,7 @@ module Chronicle
         # @todo Have a proper identifier system for authorizers
         #   (to have more than one per plugin)
         def find_by_provider(provider)
-          ObjectSpace.each_object(::Class).select {|klass| klass < self }.find do |authorizer|
+          ObjectSpace.each_object(::Class).select { |klass| klass < self }.find do |authorizer|
             authorizer.provider_name == provider
           end
         end

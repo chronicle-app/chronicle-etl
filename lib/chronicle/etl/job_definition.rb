@@ -38,13 +38,12 @@ module Chronicle
       def validate
         @errors = {}
 
-        Chronicle::ETL::Registry::Connectors::PHASES.each do |_phase|
-          # FIXME: add this back
-          # __send__("#{phase}_klass".to_sym)
-        rescue Chronicle::ETL::PluginError => e
-          @errors[:plugins] ||= []
-          @errors[:plugins] << e
-        end
+        extractor_klass
+        transformer_klasses
+        loader_klass
+      rescue Chronicle::ETL::PluginError => e
+        @errors[:plugins] ||= []
+        @errors[:plugins] << e
       end
 
       def plugins_missing?
@@ -58,7 +57,7 @@ module Chronicle
       end
 
       def validate!
-        raise(Chronicle::ETL::JobDefinitionError.new(self), "Job definition is invalid") unless valid?
+        raise(Chronicle::ETL::JobDefinitionError.new(self), 'Job definition is invalid') unless valid?
 
         true
       end
@@ -72,7 +71,7 @@ module Chronicle
       # For each connector in this job, mix in secrets into the options
       def apply_default_secrets
         # FIXME: handle transformer secrets
-        [:extractor, :loader].each do |phase|
+        %i[extractor loader].each do |phase|
           # If the option have a `secrets` key, we look up those secrets and
           # mix them in. If not, use the connector's plugin name and look up
           # secrets with the same namespace
@@ -80,11 +79,11 @@ module Chronicle
             namespace = @definition[phase][:options][:secrets]
           else
             # We don't want to do this lookup for built-in connectors
-            next if __send__("#{phase}_klass".to_sym).connector_registration.built_in?
+            next if __send__(:"#{phase}_klass").connector_registration.built_in?
 
             # infer plugin name from connector name and use it for secrets
             # namesepace
-            namespace = @definition[phase][:name].split(":").first
+            namespace = @definition[phase][:name].split(':').first
           end
 
           # Reverse merge secrets into connector's options (we want to preserve
@@ -142,7 +141,7 @@ module Chronicle
       end
 
       def load_credentials
-        [:extractor, :loader].each do |phase|
+        %i[extractor loader].each do |phase|
           credentials_name = @definition[phase].dig(:options, :credentials)
           if credentials_name
             credentials = Chronicle::ETL::Config.load_credentials(credentials_name)

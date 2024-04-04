@@ -53,7 +53,7 @@ module Chronicle
           plugin, type, strategy = identifier.split(':').map(&:to_sym)
 
           unless Chronicle::ETL::Registry::Plugins.installed?(plugin)
-            raise Chronicle::ETL::PluginNotInstalledError, "Plugin '#{plugin}' not installed"
+            raise Chronicle::ETL::PluginNotInstalledError, plugin
           end
 
           Chronicle::ETL::Registry::Plugins.activate(plugin)

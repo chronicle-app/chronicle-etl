@@ -22,7 +22,15 @@ module Chronicle
       end
     end
 
-    class PluginError < Error; end
+    class PluginError < Error
+      attr_reader :name
+
+      def initialize(name)
+        super
+        @name = name
+      end
+    end
+
     class PluginNotInstalledError < PluginError; end
     class PluginConflictError < PluginError; end
     class PluginNotAvailableError < PluginError; end

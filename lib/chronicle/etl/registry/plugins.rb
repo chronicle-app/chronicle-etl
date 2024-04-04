@@ -15,17 +15,17 @@ module Chronicle
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module Plugins
-        KNOWN_PLUGINS = [
-          'apple-podcasts',
-          'email',
-          'foursquare',
-          'github',
-          'imessage',
-          'pinboard',
-          'safari',
-          'shell',
-          'spotify',
-          'zulip'
+        KNOWN_PLUGINS = %w[
+          apple-podcasts
+          email
+          foursquare
+          github
+          imessage
+          pinboard
+          safari
+          shell
+          spotify
+          zulip
         ].freeze
         public_constant :KNOWN_PLUGINS
 
@@ -47,7 +47,7 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
-          installed.map(&:name).include?(name)
+          installed.map(&:name).include?(name.to_sym)
         end
 
         # List of plugins installed as standalone
@@ -59,7 +59,7 @@ module Chronicle
         def self.installed_as_gem
           installed_gemspecs_latest.map do |gem|
             Chronicle::ETL::Registry::PluginRegistration.new do |p|
-              p.name = gem.name.sub("chronicle-", "").to_sym
+              p.name = gem.name.sub('chronicle-', '').to_sym
               p.gem = gem.name
               p.description = gem.description
               p.version = gem.version.to_s
@@ -110,7 +110,7 @@ module Chronicle
         def self.installed_gemspecs
           # TODO: add check for chronicle-etl dependency
           Gem::Specification.filter do |s|
-            s.name.match(/^chronicle-/) && s.name != "chronicle-etl" && s.name != "chronicle-core"
+            s.name.match(/^chronicle-/) && s.name != 'chronicle-etl' && s.name != 'chronicle-core'
           end
         end
 
