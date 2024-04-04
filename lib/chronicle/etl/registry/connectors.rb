@@ -7,7 +7,7 @@ module Chronicle
     module Registry
       # A singleton class that acts as a registry of connector classes available for ETL jobs
       module Connectors
-        PHASES = [:extractor, :transformer, :loader].freeze
+        PHASES = %i[extractor transformer loader].freeze
         public_constant :PHASES
 
         class << self
@@ -53,7 +53,7 @@ module Chronicle
           plugin, type, strategy = identifier.split(':').map(&:to_sym)
 
           unless Chronicle::ETL::Registry::Plugins.installed?(plugin)
-            raise Chronicle::ETL::PluginNotInstalledError, plugin
+            raise Chronicle::ETL::PluginNotInstalledError, "Plugin '#{plugin}' not installed"
           end
 
           Chronicle::ETL::Registry::Plugins.activate(plugin)

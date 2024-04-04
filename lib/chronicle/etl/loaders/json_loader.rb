@@ -12,7 +12,6 @@ module Chronicle
         r.description = 'json'
       end
 
-      setting :serializer
       setting :output
 
       # If true, one JSON record per line. If false, output a single json
@@ -29,14 +28,13 @@ module Chronicle
           if output_to_stdout?
             create_stdout_temp_file
           else
-            File.open(@config.output, "w+")
+            File.open(@config.output, 'w+')
           end
 
         @output_file.puts("[\n") unless @config.line_separated
       end
 
       def load(record)
-        # serialized = serializer.serialize(record)
         serialized = record.to_h
 
         # When dealing with raw data, we can get improperly encoded strings
@@ -62,8 +60,8 @@ module Chronicle
         @output_file.write(line)
 
         @first_line = false
-      # rescue StandardError => e
-      #   binding.pry
+        # rescue StandardError => e
+        #   binding.pry
       end
 
       def finish
@@ -77,16 +75,10 @@ module Chronicle
 
       private
 
-      # TODO: implement this
-      def serializer
-        require 'chronicle/serialization'
-        @config.serializer || Chronicle::Serialization::HashSerializer
-      end
-
-      # TODO Move this to a helper module
+      # TODO: Move this to a helper module
       def deeply_force_utf8(hash)
         # FIXME: probably shouldn't happen but it does
-        return hash.map{|x| force_utf8(x)} if hash.is_a?(Array)
+        return hash.map { |x| force_utf8(x) } if hash.is_a?(Array)
         return force_utf8(hash) unless hash.is_a?(Hash)
 
         hash.transform_values do |value|

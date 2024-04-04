@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: move this into chronicle-core after figuring out what to do about data vs properties
 module Chronicle::ETL
   class Record
     attr_accessor :data, :extraction

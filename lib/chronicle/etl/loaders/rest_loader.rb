@@ -17,15 +17,11 @@ module Chronicle
       setting :endpoint, required: true
       setting :access_token
 
-      def load(record)
-        payload = Chronicle::Serialization::JSONAPISerializer.serialize(record)
-        # have the outer data key that json-api expects
-        payload = { data: payload } unless payload[:data]
-
+      def load(payload)
         uri = URI.parse("#{@config.hostname}#{@config.endpoint}")
 
         header = {
-          "Authorization" => "Bearer #{@config.access_token}",
+          'Authorization' => "Bearer #{@config.access_token}",
           'Content-Type': 'application/json'
         }
         use_ssl = uri.scheme == 'https'

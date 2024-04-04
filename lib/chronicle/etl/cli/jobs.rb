@@ -8,41 +8,41 @@ module Chronicle
     module CLI
       # CLI commands for working with ETL jobs
       class Jobs < SubcommandBase
-        default_task "start"
+        default_task 'start'
         namespace :jobs
 
-        class_option :extractor, aliases: '-e', desc: "Extractor class. Default: stdin", banner: 'NAME'
+        class_option :extractor, aliases: '-e', desc: 'Extractor class. Default: stdin', banner: 'NAME'
         class_option :'extractor-opts', desc: 'Extractor options', type: :hash, default: {}
         class_option :transformer,
-                     aliases: '-t',
-                     desc: 'Transformer identifier. Default: null',
-                     banner: 'NAME',
-                     type: 'array',
-                     repeatable: true
+          aliases: '-t',
+          desc: 'Transformer identifier. Default: null',
+          banner: 'NAME',
+          type: 'array',
+          repeatable: true
         class_option :loader, aliases: '-l', desc: 'Loader class. Default: table', banner: 'NAME'
         class_option :'loader-opts', desc: 'Loader options', type: :hash, default: {}
 
         # This is an array to deal with shell globbing
         class_option :input,
-                     aliases: '-i',
-                     desc: 'Input filename or directory',
-                     default: [],
-                     type: 'array',
-                     banner: 'FILENAME'
-        class_option :since, desc: "Load records SINCE this date (or fuzzy time duration)", banner: 'DATE'
-        class_option :until, desc: "Load records UNTIL this date (or fuzzy time duration)", banner: 'DATE'
-        class_option :limit, desc: "Only extract the first LIMIT records", banner: 'N'
+          aliases: '-i',
+          desc: 'Input filename or directory',
+          default: [],
+          type: 'array',
+          banner: 'FILENAME'
+        class_option :since, desc: 'Load records SINCE this date (or fuzzy time duration)', banner: 'DATE'
+        class_option :until, desc: 'Load records UNTIL this date (or fuzzy time duration)', banner: 'DATE'
+        class_option :limit, desc: 'Only extract the first LIMIT records', banner: 'N'
 
         class_option :schema,
-                     desc: 'Which Schema to transform',
-                     banner: 'SCHEMA_NAME',
-                     type: 'string',
-                     enum: ['chronicle', 'activitystream', 'schemaorg']
+          desc: 'Which Schema to transform',
+          banner: 'SCHEMA_NAME',
+          type: 'string',
+          enum: %w[chronicle activitystream schemaorg chronobase]
         class_option :format,
-                     desc: 'How to serialize results',
-                     banner: 'SCHEMA_NAME',
-                     type: 'string',
-                     enum: ['jsonapi', 'jsonld']
+          desc: 'How to serialize results',
+          banner: 'SCHEMA_NAME',
+          type: 'string',
+          enum: %w[jsonapi jsonld]
 
         class_option :output, aliases: '-o', desc: 'Output filename', type: 'string'
         class_option :fields, desc: 'Output only these fields', type: 'array', banner: 'field1 field2 ...'
@@ -52,7 +52,7 @@ module Chronicle
 
         # Thor doesn't like `run` as a command name
         map run: :start
-        desc "run", "Start a job"
+        desc 'run', 'Start a job'
         option :dry_run, desc: 'Only run the extraction and transform steps, not the loading', type: :boolean
         long_desc <<-LONG_DESC
           This will run an ETL job. Each job needs three parts:
@@ -66,8 +66,8 @@ module Chronicle
             If you do not want to use the command line flags, you can also configure a job with a .yml config file. You can either specify the path to this file or use the filename and place the file in ~/.config/chronicle/etl/jobs/NAME.yml and call it with `--job NAME`
         LONG_DESC
         # Run an ETL job
-        def start(*_args)
-          name = nil
+        def start(*args)
+          name = args.first
 
           # If someone runs `$ chronicle-etl` with no arguments, show help menu.
           # TODO: decide if we should check that there's nothing in stdin pipe
@@ -78,7 +78,7 @@ module Chronicle
             cli_exit
           end
 
-          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?('jobs', name)
 
           job_definition = build_job_definition(name, options)
 
@@ -92,7 +92,7 @@ module Chronicle
 
           run_job(job_definition)
         rescue Chronicle::ETL::JobDefinitionError => e
-          message = ""
+          message = ''
           job_definition.errors.each_pair do |category, errors|
             message << "Problem with #{category}:\n  - #{errors.map(&:to_s).join("\n  - ")}"
           end
@@ -100,14 +100,14 @@ module Chronicle
         end
 
         option :'skip-confirmation', aliases: '-y', type: :boolean
-        desc "save", "Save a job"
+        desc 'save', 'Save a job'
         # Create an ETL job
         def save(name)
           write_config = true
           job_definition = build_job_definition(name, options)
           job_definition.validate!
 
-          if Chronicle::ETL::Config.exists?("jobs", name) && !options[:'skip-confirmation']
+          if Chronicle::ETL::Config.exists?('jobs', name) && !options[:'skip-confirmation']
             prompt = TTY::Prompt.new
             write_config = false
             message = "Job '#{name}' exists already. Ovewrite it?"
@@ -118,32 +118,32 @@ module Chronicle
           end
 
           if write_config
-            Chronicle::ETL::Config.write("jobs", name, job_definition.definition)
+            Chronicle::ETL::Config.write('jobs', name, job_definition.definition)
             cli_exit(message: "Job saved. Run it with `$ chronicle-etl jobs:run #{name}`")
           else
             cli_fail(message: "\nJob not saved")
           end
         rescue Chronicle::ETL::JobDefinitionError => e
-          cli_fail(message: "Job definition error", exception: e)
+          cli_fail(message: 'Job definition error', exception: e)
         end
 
-        desc "show", "Show details about a job"
+        desc 'show', 'Show details about a job'
         # Show an ETL job
         def show(name = nil)
-          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?('jobs', name)
 
           job_definition = build_job_definition(name, options)
           job_definition.validate!
           puts Chronicle::ETL::Job.new(job_definition)
         rescue Chronicle::ETL::JobDefinitionError => e
-          cli_fail(message: "Job definition error", exception: e)
+          cli_fail(message: 'Job definition error', exception: e)
         end
 
-        desc "edit", "Edit a job in default editor ($EDITOR)"
+        desc 'edit', 'Edit a job in default editor ($EDITOR)'
         def edit(name = nil)
-          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?("jobs", name)
+          cli_fail(message: "Job '#{name}' does not exist") if name && !Chronicle::ETL::Config.exists?('jobs', name)
 
-          filename = Chronicle::ETL::Config.path("jobs", name)
+          filename = Chronicle::ETL::Config.path('jobs', name)
           system "${VISUAL:-${EDITOR:-vi}} \"#{filename}\""
 
           definition = Chronicle::ETL::JobDefinition.new
@@ -152,16 +152,16 @@ module Chronicle
 
           cli_exit(message: "Job '#{name}' saved")
         rescue Chronicle::ETL::JobDefinitionError => e
-          cli_fail(message: "Job definition error", exception: e)
+          cli_fail(message: 'Job definition error', exception: e)
         end
 
-        desc "list", "List all available jobs"
+        desc 'list', 'List all available jobs'
         # List available ETL jobs
         def list
           jobs = Chronicle::ETL::Config.available_jobs
 
           job_details = jobs.map do |job|
-            r = Chronicle::ETL::Config.load("jobs", job)
+            r = Chronicle::ETL::Config.load('jobs', job)
 
             extractor = r[:extractor][:name] if r[:extractor]
             transformer = r[:transformer][:name] if r[:transformer]
@@ -170,9 +170,9 @@ module Chronicle
             [job, extractor, transformer, loader]
           end
 
-          headers = ['name', 'extractor', 'transformer', 'loader'].map { |h| h.upcase.bold }
+          headers = %w[name extractor transformer loader].map { |h| h.upcase.bold }
 
-          puts "Available jobs:"
+          puts 'Available jobs:'
           table = TTY::Table.new(headers, job_details)
           puts table.render(indent: 0, padding: [0, 2])
         rescue Chronicle::ETL::ConfigError => e
@@ -197,10 +197,10 @@ module Chronicle
         def install_missing_plugins(missing_plugins)
           prompt = TTY::Prompt.new
           message = "Plugin#{'s' if missing_plugins.count > 1} specified by job not installed.\n"
-          message += "Do you want to install "
+          message += 'Do you want to install '
           message += missing_plugins.map { |name| "chronicle-#{name}".bold }
-            .join(", ")
-          message += " and start the job?"
+            .join(', ')
+          message += ' and start the job?'
           will_install = prompt.yes?(message)
           cli_fail(message: "Must install #{missing_plugins.join(', ')} plugin to run job") unless will_install
 
@@ -250,19 +250,30 @@ module Chronicle
             }.compact
           }
 
-          processed_options[:transformers] ||= []
-          processed_options[:transformers] << { name: options[:schema].to_sym, options: {} } if options[:schema]
+          # TODO: refactor this
+          if options[:schema]
+            processed_options[:transformers] ||= []
+            processed_options[:transformers] << { name: 'chronicle', options: {} }
+
+            if options[:schema] != 'chronicle'
+              processed_options[:transformers] << {
+                name: options[:schema]
+              }
+            end
+
+          end
 
           # parse -t transformername foo=bar baz=qux -t transformername2
           if options[:transformer]&.any?
+            processed_options[:transformers] ||= []
             processed_options[:transformers] += options[:transformer].map do |transformer_args|
               transformer_name, *transformer_options = transformer_args
-              transformer_options = transformer_options.filter { |opt| opt.include?("=") }
+              transformer_options = transformer_options.filter { |opt| opt.include?('=') }
 
               {
                 name: transformer_name,
                 options: transformer_options.to_h do |opt|
-                  key, value = opt.split("=")
+                  key, value = opt.split('=')
                   [key.to_sym, value]
                 end
               }
@@ -270,17 +281,19 @@ module Chronicle
           end
 
           if options[:filter]
+            processed_options[:transformers] ||= []
             processed_options[:transformers].append(
               {
                 name: :filter,
                 options: {
-                  filters: options[:filter].map { |f| f.split("=") }.to_h
+                  filters: options[:filter].map { |f| f.split('=') }.to_h
                 }
               }
             )
           end
 
           if options[:format]
+            processed_options[:transformers] ||= []
             processed_options[:transformers].append(
               {
                 name: :format,
@@ -290,8 +303,9 @@ module Chronicle
               }
             )
           end
-      
+
           if options[:fields]
+            processed_options[:transformers] ||= []
             processed_options[:transformers].append(
               {
                 name: :filter_fields,
@@ -303,6 +317,7 @@ module Chronicle
           end
 
           if options[:'fields-limit']
+            processed_options[:transformers] ||= []
             processed_options[:transformers].append(
               {
                 name: :fields_limit,
