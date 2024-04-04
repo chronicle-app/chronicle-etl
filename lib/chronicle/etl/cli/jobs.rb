@@ -250,85 +250,43 @@ module Chronicle
             }.compact
           }
 
-          # TODO: refactor this
-          if options[:schema]
-            processed_options[:transformers] ||= []
-            processed_options[:transformers] << { name: 'chronicle', options: {} }
-
-            if options[:schema] != 'chronicle'
-              processed_options[:transformers] << {
-                name: options[:schema]
-              }
-            end
-
-          end
-
-          # parse -t transformername foo=bar baz=qux -t transformername2
-          if options[:transformer]&.any?
-            processed_options[:transformers] ||= []
-            processed_options[:transformers] += options[:transformer].map do |transformer_args|
-              transformer_name, *transformer_options = transformer_args
-              transformer_options = transformer_options.filter { |opt| opt.include?('=') }
-
-              {
-                name: transformer_name,
-                options: transformer_options.to_h do |opt|
-                  key, value = opt.split('=')
-                  [key.to_sym, value]
-                end
-              }
-            end
-          end
-
+          add_transformer(processed_options, 'chronicle') if options[:schema]
+          add_transformer(processed_options, options[:schema]) if options[:schema] && options[:schema] != 'chronicle'
+          add_transformers_from_option(processed_options, options[:transformer]) if options[:transformer]&.any?
           if options[:filter]
-            processed_options[:transformers] ||= []
-            processed_options[:transformers].append(
-              {
-                name: :filter,
-                options: {
-                  filters: options[:filter].map { |f| f.split('=') }.to_h
-                }
-              }
-            )
+            add_transformer(processed_options, :filter, { filters: options[:filter].map do |f|
+                                                                     f.split('=')
+                                                                   end.to_h })
           end
-
-          if options[:format]
-            processed_options[:transformers] ||= []
-            processed_options[:transformers].append(
-              {
-                name: :format,
-                options: {
-                  format: options[:format]
-                }
-              }
-            )
-          end
-
-          if options[:fields]
-            processed_options[:transformers] ||= []
-            processed_options[:transformers].append(
-              {
-                name: :filter_fields,
-                options: {
-                  fields: options[:fields]
-                }
-              }
-            )
-          end
-
+          add_transformer(processed_options, :format, { format: options[:format] }) if options[:format]
+          add_transformer(processed_options, :filter_fields, { fields: options[:fields] }) if options[:fields]
           if options[:'fields-limit']
-            processed_options[:transformers] ||= []
-            processed_options[:transformers].append(
-              {
-                name: :fields_limit,
-                options: {
-                  limit: options[:'fields-limit']
-                }
-              }
-            )
+            add_transformer(processed_options, :fields_limit,
+              { limit: options[:'fields-limit'] })
           end
 
           processed_options
+        end
+
+        def add_transformer(processed_options, name, options = {})
+          processed_options[:transformers] ||= []
+          processed_options[:transformers] << { name: name, options: options }
+        end
+
+        def add_transformers_from_option(processed_options, transformer_option)
+          processed_options[:transformers] ||= []
+          processed_options[:transformers] += transformer_option.map do |transformer_args|
+            transformer_name, *transformer_options = transformer_args
+            transformer_options = transformer_options.filter { |opt| opt.include?('=') }
+
+            {
+              name: transformer_name,
+              options: transformer_options.to_h do |opt|
+                key, value = opt.split('=')
+                [key.to_sym, value]
+              end
+            }
+          end
         end
       end
     end

@@ -16,7 +16,7 @@ module Chronicle
         record_hash = record.data.to_h
 
         @config.filters.each do |key, value|
-          path = key.split(".").map do |k|
+          path = key.split('.').map do |k|
             k.match?(/^\d+$/) ? k.to_i : k.to_sym
           end
 
