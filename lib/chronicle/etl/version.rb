@@ -1,5 +1,5 @@
 module Chronicle
   module ETL
-    VERSION = "0.5.5"
+    VERSION = '0.6.0'.freeze
   end
 end
