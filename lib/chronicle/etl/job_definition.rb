@@ -18,7 +18,7 @@ module Chronicle
           }
         ],
         loader: {
-          name: 'table',
+          name: 'json',
           options: {}
         }
       }.freeze
