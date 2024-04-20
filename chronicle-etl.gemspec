@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activesupport', '~> 7.0'
   spec.add_dependency 'chronic_duration', '~> 0.10.6'
-  spec.add_dependency 'chronicle-core', '~> 0.2.4'
+  spec.add_dependency 'chronicle-core', '~> 0.3'
   spec.add_dependency 'colorize', '~> 0.8.1'
   spec.add_dependency 'gems', '>= 1'
   spec.add_dependency 'launchy'
