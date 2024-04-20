@@ -1,1 +1,1 @@
-require_relative "foo/simple_authorizer"
+require_relative 'foo/simple_authorizer'

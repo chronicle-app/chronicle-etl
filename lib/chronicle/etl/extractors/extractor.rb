@@ -23,7 +23,7 @@ module Chronicle
         apply_options(options)
       end
 
-      # Hook called before #extract. Useful for gathering data, initailizing proxies, etc
+      # Hook called before #extract. Useful for gathering data, initializing proxies, etc
       def prepare; end
 
       # An optional method to calculate how many records there are to extract. Used primarily for

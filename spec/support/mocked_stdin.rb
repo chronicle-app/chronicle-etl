@@ -1,6 +1,6 @@
 require 'stringio'
 
-RSpec.shared_context "mocked stdin" do
+RSpec.shared_context 'mocked stdin' do
   let(:fake_stdin) { StringIO.new }
 
   def load_stdin(input)

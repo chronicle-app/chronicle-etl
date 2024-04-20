@@ -12,7 +12,7 @@ module Chronicle
       end
 
       setting :input, default: ['.']
-      setting :dir_glob_pattern, default: "**/*"
+      setting :dir_glob_pattern, default: '**/*'
       setting :larger_than
       setting :smaller_than
 
@@ -34,7 +34,7 @@ module Chronicle
 
       def gather_files
         roots = [@config.input].flatten.map { |filename| Pathname.new(filename) }
-        raise(ExtractionError, "Input must exist") unless roots.all?(&:exist?)
+        raise(ExtractionError, 'Input must exist') unless roots.all?(&:exist?)
 
         directories, files = roots.partition(&:directory?)
 

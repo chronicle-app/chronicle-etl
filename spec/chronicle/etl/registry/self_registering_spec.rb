@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Chronicle::ETL::CLI::Connectors do
-  describe "#register_connector" do
-    it "can register a new class" do
+  describe '#register_connector' do
+    it 'can register a new class' do
       expect do
         class TestExtractor < Chronicle::ETL::Extractor
           register_connector do |r|

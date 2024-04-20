@@ -44,11 +44,11 @@ module Chronicle
         def descriptive_phrase
           prefix = case phase
                    when :extractor
-                     "Extracts from"
+                     'Extracts from'
                    when :transformer
-                     "Transforms"
+                     'Transforms'
                    when :loader
-                     "Loads to"
+                     'Loads to'
                    end
 
           "#{prefix} #{description}"

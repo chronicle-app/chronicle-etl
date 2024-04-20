@@ -1,4 +1,4 @@
-require "active_support/core_ext/hash/keys"
+require 'active_support/core_ext/hash/keys'
 require 'fileutils'
 require 'yaml'
 
@@ -15,7 +15,7 @@ module Chronicle
         path = base.join("#{identifier}.yml")
         return {} unless path.exist?
 
-        YAML.safe_load(File.read(path), symbolize_names: true, permitted_classes: [Symbol, Date, Time])
+        YAML.safe_load_file(path, symbolize_names: true, permitted_classes: [Symbol, Date, Time])
       end
 
       # Writes a hash as a yml config file
@@ -41,20 +41,20 @@ module Chronicle
       def exists?(type, identifier)
         base = config_pathname_for_type(type)
         path = base.join("#{identifier}.yml")
-        return path.exist?
+        path.exist?
       end
 
       # Returns all jobs available in ~/.config/chronicle/etl/jobs/*.yml
       def available_jobs
-        Dir.glob(File.join(config_pathname_for_type("jobs"), "*.yml")).map do |filename|
-          File.basename(filename, ".*")
+        Dir.glob(File.join(config_pathname_for_type('jobs'), '*.yml')).map do |filename|
+          File.basename(filename, '.*')
         end
       end
 
       # Returns all configs available for a given type
       def available_configs(type)
-        Dir.glob(File.join(config_pathname_for_type(type), "*.yml")).map do |filename|
-          File.basename(filename, ".*")
+        Dir.glob(File.join(config_pathname_for_type(type), '*.yml')).map do |filename|
+          File.basename(filename, '.*')
         end
       end
 

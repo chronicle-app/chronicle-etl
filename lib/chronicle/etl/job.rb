@@ -14,13 +14,13 @@ module Chronicle
       def_delegators :@job_definition, :dry_run?
 
       attr_accessor :name,
-                    :extractor_klass,
-                    :extractor_options,
-                    :transformer_klasses,
-                    :transformer_options,
-                    :loader_klass,
-                    :loader_options,
-                    :job_definition
+        :extractor_klass,
+        :extractor_options,
+        :transformer_klasses,
+        :transformer_options,
+        :loader_klass,
+        :loader_options,
+        :job_definition
 
       # TODO: build a proper id system
       alias id name
@@ -76,7 +76,7 @@ module Chronicle
       private
 
       def options_to_s(options, indent: 4)
-        output = ""
+        output = ''
         options.each do |k, v|
           output += "#{' ' * indent}#{k.to_s.light_blue}: #{v}\n"
         end

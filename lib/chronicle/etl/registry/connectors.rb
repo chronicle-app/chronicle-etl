@@ -22,6 +22,17 @@ module Chronicle
           @connectors ||= []
         end
 
+        def self.ancestor_for_phase(phase)
+          case phase
+          when :extractor
+            Chronicle::ETL::Extractor
+          when :transformer
+            Chronicle::ETL::Transformer
+          when :loader
+            Chronicle::ETL::Loader
+          end
+        end
+
         def self.find_converter_for_source(source:, type: nil, strategy: nil, target: nil)
           # FIXME: we're assuming extractor plugin has been loaded already
           # This may not be the case if the schema converter is running
@@ -40,23 +51,30 @@ module Chronicle
         end
 
         # Find connector from amongst those currently loaded
-        def self.find_by_phase_and_identifier_local(phase, identifier)
-          connector = connectors.find { |c| c.phase == phase && c.identifier == identifier }
+        def self.find_by_phase_and_identifier_built_in(phase, identifier)
+          connector = connectors.find { |c| c.phase == phase.to_sym && c.identifier == identifier.to_sym }
         end
 
         # Find connector and load relevant plugin to find it if necessary
         def self.find_by_phase_and_identifier(phase, identifier)
-          connector = find_by_phase_and_identifier_local(phase, identifier.to_sym)
+          connector = find_by_phase_and_identifier_built_in(phase, identifier)
           return connector if connector
 
-          # Example identifier: lastfm:listens:api
-          plugin, type, strategy = identifier.split(':').map(&:to_sym)
+          # determine if we need to try to load a local file. if it has a dot in the identifier, we treat it as a file
+          return find_by_phase_and_identifier_local(phase, identifier) if identifier.to_s.include?('.')
 
-          unless Chronicle::ETL::Registry::Plugins.installed?(plugin)
-            raise Chronicle::ETL::PluginNotInstalledError, plugin
+          # Example identifier: lastfm:listens:api
+          plugin, type, strategy = identifier.split(':')
+            .map { |part| part.gsub('-', '_') }
+            .map(&:to_sym)
+
+          plugin_identifier = plugin.to_s.gsub('_', '-')
+
+          unless Chronicle::ETL::Registry::Plugins.installed?(plugin_identifier)
+            raise Chronicle::ETL::PluginNotInstalledError, plugin_identifier
           end
 
-          Chronicle::ETL::Registry::Plugins.activate(plugin)
+          Chronicle::ETL::Registry::Plugins.activate(plugin_identifier)
 
           # find most specific connector that matches the identifier
           connector = connectors.find do |c|
@@ -64,6 +82,34 @@ module Chronicle
           end
 
           connector || raise(ConnectorNotAvailableError, "Connector '#{identifier}' not found")
+        end
+
+        # Load a plugin from local file system
+        def self.find_by_phase_and_identifier_local(phase, identifier)
+          script = File.read(identifier)
+          raise ConnectorNotAvailableError, "Connector '#{identifier}' not found" if script.nil?
+
+          # load the file by evaluating the contents
+          eval(script, TOPLEVEL_BINDING, __FILE__, __LINE__) # rubocop:disable Security/Eval
+
+          # read the file and look for all class definitions in the ruby script.
+          class_names = script.scan(/class (\w+)/).flatten
+
+          class_names.each do |class_name|
+            klass = Object.const_get(class_name)
+
+            next unless klass.ancestors.include?(ancestor_for_phase(phase))
+
+            registration = ::Chronicle::ETL::Registry::ConnectorRegistration.new(klass)
+
+            klass.connector_registration = registration
+            return registration
+            # return klass
+          rescue NameError
+            # ignore
+          end
+
+          raise ConnectorNotAvailableError, "Connector '#{identifier}' not found"
         end
       end
     end

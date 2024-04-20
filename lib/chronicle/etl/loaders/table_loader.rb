@@ -8,7 +8,6 @@ require 'active_support/core_ext/hash/reverse_merge'
 module Chronicle
   module ETL
     class TableLoader < Chronicle::ETL::Loader
-
       register_connector do |r|
         r.identifier = :table
         r.description = 'an ASCII table'

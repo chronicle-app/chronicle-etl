@@ -41,7 +41,7 @@ module Chronicle
           parsed_data
         end
       rescue JSON::ParserError
-        raise Chronicle::ETL::ExtractionError, "Could not parse JSON"
+        raise Chronicle::ETL::ExtractionError, 'Could not parse JSON'
       end
 
       def load_input(&block)

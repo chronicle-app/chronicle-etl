@@ -49,14 +49,14 @@ module Chronicle
       def authorize!
         associate_oauth_credentials
         @server = load_server
-        spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
+        spinner = TTY::Spinner.new(':spinner :title', format: :dots_2)
         spinner.auto_spin
-        spinner.update(title: "Starting temporary authorization server on port #{@port}""")
+        spinner.update(title: "Starting temporary authorization server on port #{@port}"'')
 
         server_thread = start_authorization_server(port: @port)
         start_oauth_flow
 
-        spinner.update(title: "Waiting for authorization to complete in your browser")
+        spinner.update(title: 'Waiting for authorization to complete in your browser')
         sleep 0.1 while authorization_pending?(server_thread)
 
         @server.quit!
@@ -85,7 +85,7 @@ module Chronicle
       def load_server
         # Load at runtime so that we can set omniauth strategies based on
         # which chronicle plugin has been loaded.
-        require_relative './authorization_server'
+        require_relative 'authorization_server'
         Chronicle::ETL::AuthorizationServer
       end
 
@@ -97,7 +97,7 @@ module Chronicle
 
         Thread.new do
           @server.run!({ port: @port }) do |s|
-            s.silent = true if s.class.to_s == "Thin::Server"
+            s.silent = true if s.class.to_s == 'Thin::Server'
           end
         end
       end
@@ -117,7 +117,7 @@ module Chronicle
             AccessLog: [],
             # TODO: make this windows friendly
             # https://github.com/winton/stasis/commit/77da36f43285fda129300e382f18dfaff48571b0
-            Logger: WEBrick::Log::new("/dev/null")
+            Logger: WEBrick::Log.new('/dev/null')
           }
         )
       rescue LoadError

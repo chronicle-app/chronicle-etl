@@ -4,7 +4,7 @@ module Chronicle
       provider :foo
 
       def authorize!
-        { token: "abc" }
+        { token: 'abc' }
       end
     end
   end

@@ -2,7 +2,7 @@
 
 require 'colorize'
 require 'chronic_duration'
-require "tty-spinner"
+require 'tty-spinner'
 
 class Chronicle::ETL::Runner
   def initialize(job)
@@ -22,7 +22,7 @@ class Chronicle::ETL::Runner
     raise(Chronicle::ETL::RunnerError, "Extraction failed. #{e.message}")
   rescue Interrupt
     @job_logger&.error
-    raise(Chronicle::ETL::RunInterruptedError, "Job interrupted.")
+    raise(Chronicle::ETL::RunInterruptedError, 'Job interrupted.')
   # rescue StandardError => e
   #   # Just throwing this in here until we have better exception handling in
   #   # loaders, etc
@@ -36,27 +36,27 @@ class Chronicle::ETL::Runner
 
   def begin_job
     Chronicle::ETL::Logger.info(tty_log_job_initialize)
-    @initialization_spinner = TTY::Spinner.new(":spinner :title", format: :dots_2)
+    @initialization_spinner = TTY::Spinner.new(':spinner :title', format: :dots_2)
   end
 
   def validate_job
-    @initialization_spinner.update(title: "Validating job")
+    @initialization_spinner.update(title: 'Validating job')
     @job.job_definition.validate!
   end
 
   def instantiate_connectors
-    @initialization_spinner.update(title: "Initializing connectors")
+    @initialization_spinner.update(title: 'Initializing connectors')
     @extractor = @job.instantiate_extractor
     @transformers = @job.instantiate_transformers
     @loader = @job.instantiate_loader
   end
 
   def prepare_job
-    @initialization_spinner.update(title: "Preparing job")
+    @initialization_spinner.update(title: 'Preparing job')
     @job_logger.start
     @loader.start
 
-    @initialization_spinner.update(title: "Preparing extraction")
+    @initialization_spinner.update(title: 'Preparing extraction')
     @initialization_spinner.auto_spin
     @extractor.prepare
     @initialization_spinner.success("(#{'successful'.green})")
@@ -75,6 +75,9 @@ class Chronicle::ETL::Runner
     stream = extractor_stream
     recurser = ->(s, t) { transform_stream(s, t) }
     @transformers.reduce(stream, &recurser).each do |record|
+      Chronicle::ETL::Logger.debug(tty_log_transformation(record))
+      @job_logger.log_transformation(record)
+      @progress_bar.increment
       load_record(record)
     end
 
@@ -125,18 +128,18 @@ class Chronicle::ETL::Runner
   end
 
   def tty_log_job_initialize
-    output = "Beginning job "
+    output = 'Beginning job '
     output += "'#{@job.name}'".bold if @job.name
     output
   end
 
-  def tty_log_transformation(transformer)
-    output = "  ✓".green
-    output += " #{transformer}"
+  def tty_log_transformation(record)
+    output = '  ✓'.green
+    output += " #{record}"
   end
 
   def tty_log_transformation_failure(exception, transformer)
-    output = "  ✖".red
+    output = '  ✖'.red
     output += " Failed to transform #{transformer}. #{exception.message}"
   end
 

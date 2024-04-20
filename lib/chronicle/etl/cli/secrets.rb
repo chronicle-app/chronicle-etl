@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "tty-prompt"
+require 'tty-prompt'
 
 module Chronicle
   module ETL
@@ -10,8 +10,8 @@ module Chronicle
         default_task 'list'
         namespace :secrets
 
-        desc "set NAMESPACE KEY [VALUE]", "Add a secret. VALUE can be set as argument or from stdin"
-        def set(namespace, key, value=nil)
+        desc 'set NAMESPACE KEY [VALUE]', 'Add a secret. VALUE can be set as argument or from stdin'
+        def set(namespace, key, value = nil)
           validate_namespace(namespace)
 
           if value
@@ -24,23 +24,23 @@ module Chronicle
           end
 
           Chronicle::ETL::Secrets.set(namespace, key, value.strip)
-          cli_exit(message: "Secret set")
+          cli_exit(message: 'Secret set')
         rescue TTY::Reader::InputInterrupt
           cli_fail(message: "\nSecret not set")
         end
 
-        desc "unset NAMESPACE KEY", "Remove a secret"
+        desc 'unset NAMESPACE KEY', 'Remove a secret'
         def unset(namespace, key)
           validate_namespace(namespace)
 
           Chronicle::ETL::Secrets.unset(namespace, key)
-          cli_exit(message: "Secret unset")
+          cli_exit(message: 'Secret unset')
         end
 
-        desc "list", "List available secrets"
-        def list(namespace=nil)
+        desc 'list', 'List available secrets'
+        def list(namespace = nil)
           all_secrets = Chronicle::ETL::Secrets.all(namespace)
-          cli_exit(message: "No secrets are stored") unless all_secrets.any?
+          cli_exit(message: 'No secrets are stored') unless all_secrets.any?
 
           rows = []
           all_secrets.each do |namespace, secrets|
@@ -51,9 +51,9 @@ module Chronicle
             end
           end
 
-          headers = ['namespace', 'key', 'value'].map { |h| h.upcase.bold }
+          headers = %w[namespace key value].map { |h| h.upcase.bold }
 
-          puts "Available secrets:"
+          puts 'Available secrets:'
           table = TTY::Table.new(headers, rows)
           puts table.render(indent: 0, padding: [0, 2])
         end
@@ -61,7 +61,9 @@ module Chronicle
         private
 
         def validate_namespace(namespace)
-          cli_fail(message: "'#{namespace}' is not a valid namespace") unless Chronicle::ETL::Secrets.valid_namespace_name?(namespace)
+          return if Chronicle::ETL::Secrets.valid_namespace_name?(namespace)
+
+          cli_fail(message: "'#{namespace}' is not a valid namespace")
         end
       end
     end

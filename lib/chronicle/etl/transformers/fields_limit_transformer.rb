@@ -18,7 +18,6 @@ module Chronicle
 
         Chronicle::Utils::HashUtils.flatten_hash(record.data.to_h).first(@config.limit).to_h
       end
-
     end
   end
 end

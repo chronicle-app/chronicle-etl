@@ -12,11 +12,14 @@ module Chronicle
         default_task 'new'
         namespace :authorizations
 
-        desc "authorize", "Authorize with a third-party provider"
+        desc 'authorize', 'Authorize with a third-party provider'
         option :port, desc: 'Port to run authorization server on', type: :numeric, default: 4567
-        option :credentials, desc: 'Secrets namespace for where to read credentials from (default: PROVIDER)', type: :string, banner: 'NAMESPACE'
-        option :secrets, desc: 'Secrets namespace for where authorization should be saved to (default: PROVIDER)', type: :string, banner: 'NAMESPACE'
-        option :print, desc: 'Show authorization results (instead of just saving secrets)', type: :boolean, default: false
+        option :credentials, desc: 'Secrets namespace for where to read credentials from (default: PROVIDER)',
+          type: :string, banner: 'NAMESPACE'
+        option :secrets, desc: 'Secrets namespace for where authorization should be saved to (default: PROVIDER)',
+          type: :string, banner: 'NAMESPACE'
+        option :print, desc: 'Show authorization results (instead of just saving secrets)', type: :boolean,
+          default: false
         def new(provider)
           authorizer_klass = find_authorizer_klass(provider)
           credentials = load_credentials(provider: provider, credentials_source: options[:credentials])

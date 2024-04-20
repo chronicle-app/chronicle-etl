@@ -44,7 +44,7 @@ module Chronicle
       def id
         @id ||= begin
           id = build_with_strategy(field: :id, strategy: @config.id_strategy)
-          raise(UntransformableRecordError, "Could not build id") unless id
+          raise(UntransformableRecordError, 'Could not build id') unless id
 
           id
         end
@@ -53,7 +53,7 @@ module Chronicle
       def timestamp
         @timestamp ||= begin
           ts = build_with_strategy(field: :timestamp, strategy: @config.timestamp_strategy)
-          raise(UntransformableRecordError, "Could not build timestamp") unless ts
+          raise(UntransformableRecordError, 'Could not build timestamp') unless ts
 
           ts
         end
@@ -61,13 +61,13 @@ module Chronicle
 
       private
 
-      def build_created(file)
+      def build_created(_file)
         record = ::Chronicle::Schema::Activity.new
         record.verb = @config.verb
         record.provider = @config.provider
         record.provider_id = id
         record.end_at = timestamp
-        record.dedupe_on = [[:provider_id, :verb, :provider]]
+        record.dedupe_on = [%i[provider_id verb provider]]
 
         record.involved = build_image
         record.actor = build_actor
@@ -81,7 +81,7 @@ module Chronicle
         actor.represents = 'identity'
         actor.provider = @config.actor[:provider]
         actor.slug = @config.actor[:slug]
-        actor.dedupe_on = [[:provider, :slug, :represents]]
+        actor.dedupe_on = [%i[provider slug represents]]
         actor
       end
 
@@ -93,7 +93,7 @@ module Chronicle
         image.provider = @config.involved[:provider]
         image.provider_id = id
         image.assign_attributes(build_gps)
-        image.dedupe_on = [[:provider, :provider_id, :represents]]
+        image.dedupe_on = [%i[provider provider_id represents]]
 
         if @config.ocr_strategy
           ocr_text = build_with_strategy(field: :ocr, strategy: @config.ocr_strategy)
@@ -122,7 +122,7 @@ module Chronicle
           t.provider = @config.involved[:provider]
           t.title = topic
           t.slug = topic.parameterize
-          t.dedupe_on = [[:provider, :represents, :slug]]
+          t.dedupe_on = [%i[provider represents slug]]
           t
         end
       end
@@ -134,7 +134,7 @@ module Chronicle
           identity.provider = @config.involved[:provider]
           identity.slug = name.parameterize
           identity.title = name
-          identity.dedupe_on = [[:provider, :represents, :slug]]
+          identity.dedupe_on = [%i[provider represents slug]]
           identity
         end
       end
@@ -157,14 +157,14 @@ module Chronicle
         File.basename(@file)
       end
 
-      def build_with_strategy(field:, strategy:[])
+      def build_with_strategy(field:, strategy: [])
         strategies = [strategy].flatten.compact
         strategies.each do |s|
           builder_method = "build_#{field}_using_#{s}"
           result = send(builder_method.to_sym)
           return result if result
         end
-        return
+        nil
       end
 
       def build_id_using_file_hash
@@ -172,7 +172,7 @@ module Chronicle
       end
 
       def build_id_using_xattr_version
-        load_value_from_xattr_plist("com.apple.metadata:kMDItemVersion")
+        load_value_from_xattr_plist('com.apple.metadata:kMDItemVersion')
       end
 
       def build_id_using_xmp_document_id
@@ -227,7 +227,7 @@ module Chronicle
         names = [exif['RegionName']].flatten
         types = [exif['RegionType']].flatten
 
-        names.zip(types).select{|x| x[1] == 'Face'}.map{|x| x[0]}.uniq
+        names.zip(types).select { |x| x[1] == 'Face' }.map { |x| x[0] }.uniq
       end
 
       # Extract image keywords from EXIF/IPTC tag and subtract out those of which are
@@ -236,12 +236,13 @@ module Chronicle
         [exif['Keywords'] || []].flatten - people_names
       end
 
-      def load_value_from_xattr_plist attribute
+      def load_value_from_xattr_plist(attribute)
         require 'nokogiri'
         xml = `xattr -p #{attribute} \"#{@file.path}\" | xxd -r -p | plutil -convert xml1 -o - -- - 2>/dev/null`
         return unless xml
-        value = Nokogiri::XML.parse(r).xpath("//string").text
-        return value.presence
+
+        value = Nokogiri::XML.parse(r).xpath('//string').text
+        value.presence
       end
     end
   end

@@ -125,15 +125,18 @@ module Chronicle
         def self.activate(name)
           # By default, activates the latest available version of a gem
           # so don't have to run Kernel#gem separately
-          require "chronicle/#{name}"
+
+          plugin_require_name = name.to_s.gsub('-', '_')
+          require "chronicle/#{plugin_require_name}"
         rescue Gem::ConflictError => e
           # TODO: figure out if there's more we can do here
-          raise Chronicle::ETL::PluginConflictError.new(name), "Plugin '#{name}' couldn't be loaded. #{e.message}"
+          raise Chronicle::ETL::PluginConflictError.new(name),
+            "Plugin '#{plugin_require_name}' couldn't be loaded. #{e.message}"
         rescue StandardError, LoadError => e
           # StandardError to catch random non-loading problems that might occur
           # when requiring the plugin (eg class macro invoked the wrong way)
           # TODO: decide if this should be separated
-          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{name}' couldn't be loaded"
+          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{plugin_require_name}' couldn't be loaded"
         end
 
         # Install a plugin to local gems

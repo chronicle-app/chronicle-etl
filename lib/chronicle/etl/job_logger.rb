@@ -12,7 +12,7 @@ module Chronicle
       attr_accessor :job_log
 
       # For a given `job_id`, return the last successful log
-      def self.load_latest(job_id)
+      def self.load_latest(_job_id)
         with_db_connection do |db|
           attrs = db[:job_logs].reverse_order(:finished_at).where(success: true).first
           JobLog.build_from_serialized(attrs) if attrs
@@ -32,7 +32,7 @@ module Chronicle
       end
 
       def self.schema_exists?(db)
-        return db.tables.include? :job_logs
+        db.tables.include? :job_logs
       end
 
       def self.db_filename
@@ -44,7 +44,7 @@ module Chronicle
         FileUtils.mkdir_p(File.dirname(db_filename))
       end
 
-      def self.initialize_schema db
+      def self.initialize_schema(db)
         db.create_table :job_logs do
           primary_key :id
           String :job_id, null: false

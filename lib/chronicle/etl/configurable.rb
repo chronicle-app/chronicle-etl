@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "ostruct"
-require "chronic_duration"
+require 'ostruct'
+require 'chronic_duration'
 
 module Chronicle
   module ETL
@@ -108,7 +108,7 @@ module Chronicle
 
         def coerce_boolean(value)
           if value.is_a?(String)
-            value.downcase == "true"
+            value.downcase == 'true'
           else
             value
           end

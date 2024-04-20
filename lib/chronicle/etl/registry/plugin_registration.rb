@@ -4,7 +4,7 @@ module Chronicle
       class PluginRegistration
         attr_accessor :name, :description, :gem, :version, :installed, :gemspec
 
-        def initialize(name=nil)
+        def initialize(name = nil)
           @installed = false
           @name = name
           yield self if block_given?

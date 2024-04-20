@@ -7,8 +7,8 @@ RSpec.describe Chronicle::ETL::Runner do
     Chronicle::ETL::Logger.log_level = Chronicle::ETL::Logger::FATAL
   end
 
-  describe "#run!" do
-    it "runs" do
+  describe '#run!' do
+    it 'runs' do
       filename = 'spec/support/sample_data/test.csv'
 
       # rows in sample CSV file (excluding header)

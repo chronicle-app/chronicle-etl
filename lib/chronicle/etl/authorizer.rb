@@ -23,8 +23,7 @@ module Chronicle
       end
 
       # Construct a new authorizer
-      def initialize(args)
-      end
+      def initialize(args); end
 
       # Main entry-point for authorization flows. Implemented by subclass
       def authorize!

@@ -17,15 +17,15 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
       provider :foo
       omniauth_strategy :developer
       scope 'email'
-      pluck_secrets({ token: [:token]})
+      pluck_secrets({ token: [:token] })
     end
   end
 
   before do
-    stub_const("FooAuthorizer", authorizer)
+    stub_const('FooAuthorizer', authorizer)
   end
 
-  it "returs an authorization after oauth flow completed" do
+  it 'returs an authorization after oauth flow completed' do
     a = authorizer.new(port: port)
     thread = Thread.new do
       wait_until do
@@ -41,7 +41,7 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
     expect(result).to eql({ token: 'abc' })
   end
 
-  it "raises an exception if flow aborts early" do
+  it 'raises an exception if flow aborts early' do
     # TODO: implement this somehow
     # send signal to sinatra?
   end
@@ -56,6 +56,6 @@ RSpec.describe Chronicle::ETL::OauthAuthorizer do
   # TODO: use library? put in SpecHelpers?
   def fetch(uri, limit = 10)
     response = Net::HTTP.get_response(URI(uri))
-    fetch(response['location'], limit - 1) if response == Net::HTTPRedirection || response.code == "302"
+    fetch(response['location'], limit - 1) if response == Net::HTTPRedirection || response.code == '302'
   end
 end
