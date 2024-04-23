@@ -17,8 +17,8 @@ RSpec.describe Chronicle::ETL::CLI::Jobs do
       args = ['jobs:run'] << csv_job_args
       output, = invoke_cli(args)
 
-      # records + table header row
-      expect(output.split("\n").count).to eql(file_record_count + 1)
+      # jsonl output
+      expect(output.split("\n").count).to eql(file_record_count)
     end
 
     context 'for jobs with required plugins not installed' do

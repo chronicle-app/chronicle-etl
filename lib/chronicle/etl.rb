@@ -18,7 +18,6 @@ require_relative 'etl/logger'
 require_relative 'etl/runner'
 require_relative 'etl/secrets'
 require_relative 'etl/utils/binary_attachments'
-require_relative 'etl/utils/text_recognition'
 require_relative 'etl/utils/progress_bar'
 require_relative 'etl/version'
 

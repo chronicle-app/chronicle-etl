@@ -45,7 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gems', '>= 1'
   spec.add_dependency 'launchy'
   spec.add_dependency 'marcel', '~> 1.0.2'
-  spec.add_dependency 'mini_exiftool', '~> 2.10'
   spec.add_dependency 'nokogiri', '~> 1.13'
   spec.add_dependency 'omniauth', '~> 2'
   spec.add_dependency 'sequel', '~> 5.35'
