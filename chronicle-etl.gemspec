@@ -55,7 +55,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tty-progressbar', '~> 0.17'
   spec.add_dependency 'tty-prompt', '~> 0.23'
   spec.add_dependency 'tty-spinner'
-  spec.add_dependency 'tty-table', '~> 0.11'
+  spec.add_dependency 'tty-table', '~> 0.12'
   spec.add_dependency 'xdg', '>= 4.0'
 
   spec.add_development_dependency 'bundler', '~> 2.1'

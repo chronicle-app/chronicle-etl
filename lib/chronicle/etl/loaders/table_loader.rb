@@ -28,11 +28,7 @@ module Chronicle
         headers = gather_headers(records)
         rows = build_rows(records, headers)
 
-        @table = TTY::Table.new(header: (headers if @config.header_row), rows: rows)
-        puts @table.render(
-          @config.table_renderer.to_sym,
-          padding: [0, 2, 0, 0]
-        )
+        render_table(headers, rows)
       end
 
       def records
@@ -40,6 +36,23 @@ module Chronicle
       end
 
       private
+
+      def render_table(headers, rows)
+        @table = TTY::Table.new(header: (headers if @config.header_row), rows: rows)
+        puts @table.render(
+          @config.table_renderer.to_sym,
+          padding: [0, 2, 0, 0]
+        )
+      rescue TTY::Table::ResizeError
+        # The library throws this error before trying to render the table
+        # vertically. These options seem to work.
+        puts @table.render(
+          @config.table_renderer.to_sym,
+          padding: [0, 2, 0, 0],
+          width: 10_000,
+          resize: false
+        )
+      end
 
       def gather_headers(records)
         records_flattened = records.map do |record|
