@@ -36,7 +36,8 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.1'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.add_dependency 'activesupport', '~> 7.0'
   spec.add_dependency 'chronic_duration', '~> 0.10.6'
@@ -45,7 +46,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gems', '>= 1'
   spec.add_dependency 'launchy'
   spec.add_dependency 'marcel', '~> 1.0.2'
-  spec.add_dependency 'nokogiri', '~> 1.13'
   spec.add_dependency 'omniauth', '~> 2'
   spec.add_dependency 'sequel', '~> 5.35'
   spec.add_dependency 'sinatra', '~> 2'
@@ -70,5 +70,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webmock', '~> 3'
   spec.add_development_dependency 'webrick', '~> 1.7'
   spec.add_development_dependency 'yard', '~> 0.9.7'
-  spec.metadata['rubygems_mfa_required'] = 'true'
 end
