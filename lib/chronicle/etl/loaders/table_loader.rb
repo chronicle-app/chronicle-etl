@@ -58,7 +58,7 @@ module Chronicle
         records_flattened = records.map do |record|
           Chronicle::Utils::HashUtils.flatten_hash(record.to_h)
         end
-        all_fields = records_flattened.flat_map(&:keys).uniq
+        records_flattened.flat_map(&:keys).uniq
       end
 
       def build_rows(records, headers)

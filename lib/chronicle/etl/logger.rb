@@ -1,7 +1,7 @@
 module Chronicle
   module ETL
     module Logger
-      extend self
+      module_function
 
       DEBUG = 0
       INFO = 1

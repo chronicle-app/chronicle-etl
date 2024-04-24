@@ -13,7 +13,7 @@ RSpec.describe Chronicle::ETL::CLI::Authorizations do
 
       it 'can authorize' do
         FakeFS.with_fresh do
-          _, stderr = invoke_cli(%w[authorizations:new foo])
+          invoke_cli(%w[authorizations:new foo])
 
           expect(Chronicle::ETL::Secrets.read('foo')).to eql({ token: 'abc' })
         end

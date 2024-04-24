@@ -52,7 +52,7 @@ module Chronicle
 
         # Find connector from amongst those currently loaded
         def self.find_by_phase_and_identifier_built_in(phase, identifier)
-          connector = connectors.find { |c| c.phase == phase.to_sym && c.identifier == identifier.to_sym }
+          connectors.find { |c| c.phase == phase.to_sym && c.identifier == identifier.to_sym }
         end
 
         # Find connector and load relevant plugin to find it if necessary

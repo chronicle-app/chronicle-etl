@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pp'
 require 'tty-prompt'
 
 module Chronicle
@@ -254,9 +253,9 @@ module Chronicle
           add_transformer(processed_options, options[:schema]) if options[:schema] && options[:schema] != 'chronicle'
           add_transformers_from_option(processed_options, options[:transformer]) if options[:transformer]&.any?
           if options[:filter]
-            add_transformer(processed_options, :filter, { filters: options[:filter].map do |f|
+            add_transformer(processed_options, :filter, { filters: options[:filter].to_h do |f|
                                                                      f.split('=')
-                                                                   end.to_h })
+                                                                   end })
           end
           add_transformer(processed_options, :format, { format: options[:format] }) if options[:format]
           add_transformer(processed_options, :filter_fields, { fields: options[:fields] }) if options[:fields]

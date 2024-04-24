@@ -28,7 +28,7 @@ module Chronicle
 
       # Log the result of a single transformation in a job
       # @param transformer [Chronicle::ETL::Tranformer] The transformer that ran
-      def log_transformation(transformer)
+      def log_transformation(_transformer)
         # @last_id = transformer.id if transformer.id
 
         # Save the highest timestamp that we've encountered so far

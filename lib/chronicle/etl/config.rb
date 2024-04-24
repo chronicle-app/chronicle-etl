@@ -6,7 +6,7 @@ module Chronicle
   module ETL
     # Utility methods to read, write, and access config files
     module Config
-      extend self
+      module_function
 
       attr_accessor :xdg_environment
 

@@ -2,7 +2,6 @@
 
 require 'sinatra'
 require 'launchy'
-require 'pp'
 
 module Chronicle
   module ETL
@@ -33,7 +32,7 @@ module Chronicle
 
           cli_exit(message: "Authorization saved to '#{secrets_namespace}' secrets")
         rescue StandardError => e
-          cli_fail(message: "Authorization not successful.\n" + e.message, exception: e)
+          cli_fail(message: "Authorization not successful.\n#{e.message}", exception: e)
         end
 
         private

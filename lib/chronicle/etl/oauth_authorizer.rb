@@ -97,7 +97,7 @@ module Chronicle
 
         Thread.new do
           @server.run!({ port: @port }) do |s|
-            s.silent = true if s.class.to_s == 'Thin::Server'
+            s.silent = true if s.instance_of?(::Thin::Server)
           end
         end
       end
@@ -127,8 +127,8 @@ module Chronicle
       def extract_secrets(authorization:, pluck_values:)
         return authorization unless pluck_values&.any?
 
-        pluck_values.each_with_object({}) do |(key, identifiers), secrets|
-          secrets[key] = authorization.dig(*identifiers)
+        pluck_values.transform_values do |identifiers|
+          authorization.dig(*identifiers)
         end
       end
 

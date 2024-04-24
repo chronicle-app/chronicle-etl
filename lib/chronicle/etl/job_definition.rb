@@ -52,8 +52,7 @@ module Chronicle
         return false unless @errors[:plugins]&.any?
 
         @errors[:plugins]
-          .filter { |e| e.instance_of?(Chronicle::ETL::PluginNotInstalledError) }
-          .any?
+          .any? { |e| e.instance_of?(Chronicle::ETL::PluginNotInstalledError) }
       end
 
       def validate!

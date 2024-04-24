@@ -52,7 +52,7 @@ module Chronicle
 
         # List of plugins installed as standalone
         def self.installed_standalone
-          @standalones ||= []
+          @installed_standalone ||= []
         end
 
         # List of plugins installed as gems
@@ -132,7 +132,7 @@ module Chronicle
           # TODO: figure out if there's more we can do here
           raise Chronicle::ETL::PluginConflictError.new(name),
             "Plugin '#{plugin_require_name}' couldn't be loaded. #{e.message}"
-        rescue StandardError, LoadError => e
+        rescue StandardError, LoadError
           # StandardError to catch random non-loading problems that might occur
           # when requiring the plugin (eg class macro invoked the wrong way)
           # TODO: decide if this should be separated
