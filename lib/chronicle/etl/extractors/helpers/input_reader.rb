@@ -37,7 +37,7 @@ module Chronicle
             elsif read_from_stdin?
               yield $stdin.read, $stdin
             else
-              raise ExtractionError, "No input files or stdin provided"
+              raise ExtractionError, 'No input files or stdin provided'
             end
           end
 
@@ -48,7 +48,7 @@ module Chronicle
             elsif read_from_stdin?
               lines_from_stdin(&block)
             else
-              raise ExtractionError, "No input files or stdin provided"
+              raise ExtractionError, 'No input files or stdin provided'
             end
           end
 

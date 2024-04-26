@@ -1,0 +1,3 @@
+module EmptyPlugin
+  # empty
+end

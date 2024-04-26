@@ -1,18 +1,23 @@
+# frozen_string_literal: true
+
 module Chronicle
   module ETL
     class JSONExtractor < Chronicle::ETL::Extractor
       include Extractors::Helpers::InputReader
 
       register_connector do |r|
+        r.identifier = :json
         r.description = 'JSON'
       end
 
       setting :jsonl, default: true, type: :boolean
+      setting :path, default: nil, type: :string
 
       def prepare
         @jsons = []
         load_input do |input|
-          @jsons << parse_data(input)
+          data = parse_data(input)
+          @jsons += [data].flatten
         end
       end
 
@@ -28,10 +33,15 @@ module Chronicle
 
       private
 
-      def parse_data data
-        JSON.parse(data)
+      def parse_data(data)
+        parsed_data = JSON.parse(data)
+        if @config.path
+          parsed_data.dig(*@config.path.split('.'))
+        else
+          parsed_data
+        end
       rescue JSON::ParserError
-        raise Chronicle::ETL::ExtractionError, "Could not parse JSON"
+        raise Chronicle::ETL::ExtractionError, 'Could not parse JSON'
       end
 
       def load_input(&block)

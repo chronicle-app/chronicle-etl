@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'rubygems/command'
 require 'rubygems/commands/install_command'
@@ -13,17 +15,17 @@ module Chronicle
       # @todo Better validation for whether a gem is actually a plugin
       # @todo Add ways to load a plugin that don't require a gem on rubygems.org
       module Plugins
-        KNOWN_PLUGINS = [
-          'apple-podcasts',
-          'email',
-          'foursquare',
-          'github',
-          'imessage',
-          'pinboard',
-          'safari',
-          'shell',
-          'spotify',
-          'zulip'
+        KNOWN_PLUGINS = %w[
+          apple-podcasts
+          email
+          foursquare
+          github
+          imessage
+          pinboard
+          safari
+          shell
+          spotify
+          zulip
         ].freeze
         public_constant :KNOWN_PLUGINS
 
@@ -31,7 +33,7 @@ module Chronicle
         # make registry aware of existence of name of non-gem plugin
         def self.register_standalone(name:)
           plugin = Chronicle::ETL::Registry::PluginRegistration.new do |p|
-            p.name = name
+            p.name = name.to_sym
             p.installed = true
           end
 
@@ -45,19 +47,19 @@ module Chronicle
 
         # Check whether a given plugin is installed
         def self.installed?(name)
-          installed.map(&:name).include?(name)
+          installed.map(&:name).include?(name.to_sym)
         end
 
         # List of plugins installed as standalone
         def self.installed_standalone
-          @standalones ||= []
+          @installed_standalone ||= []
         end
 
         # List of plugins installed as gems
         def self.installed_as_gem
           installed_gemspecs_latest.map do |gem|
             Chronicle::ETL::Registry::PluginRegistration.new do |p|
-              p.name = gem.name.sub("chronicle-", "")
+              p.name = gem.name.sub('chronicle-', '').to_sym
               p.gem = gem.name
               p.description = gem.description
               p.version = gem.version.to_s
@@ -107,7 +109,9 @@ module Chronicle
         # All versions of all plugins currently installed
         def self.installed_gemspecs
           # TODO: add check for chronicle-etl dependency
-          Gem::Specification.filter { |s| s.name.match(/^chronicle-/) && s.name != "chronicle-etl" && s.name != "chronicle-core" }
+          Gem::Specification.filter do |s|
+            s.name.match(/^chronicle-/) && s.name != 'chronicle-etl' && s.name != 'chronicle-core'
+          end
         end
 
         # Latest version of each installed plugin
@@ -121,15 +125,18 @@ module Chronicle
         def self.activate(name)
           # By default, activates the latest available version of a gem
           # so don't have to run Kernel#gem separately
-          require "chronicle/#{name}"
+
+          plugin_require_name = name.to_s.gsub('-', '_')
+          require "chronicle/#{plugin_require_name}"
         rescue Gem::ConflictError => e
           # TODO: figure out if there's more we can do here
-          raise Chronicle::ETL::PluginConflictError.new(name), "Plugin '#{name}' couldn't be loaded. #{e.message}"
-        rescue StandardError, LoadError => e
+          raise Chronicle::ETL::PluginConflictError.new(name),
+            "Plugin '#{plugin_require_name}' couldn't be loaded. #{e.message}"
+        rescue StandardError, LoadError
           # StandardError to catch random non-loading problems that might occur
           # when requiring the plugin (eg class macro invoked the wrong way)
           # TODO: decide if this should be separated
-          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{name}' couldn't be loaded"
+          raise Chronicle::ETL::PluginLoadError.new(name), "Plugin '#{plugin_require_name}' couldn't be loaded"
         end
 
         # Install a plugin to local gems

@@ -1,4 +1,4 @@
-require "active_support/core_ext/hash/keys"
+require 'active_support/core_ext/hash/keys'
 
 module Chronicle
   module ETL
@@ -8,7 +8,7 @@ module Chronicle
 
       # Whether a given namespace exists
       def exists?(namespace)
-        Chronicle::ETL::Config.exists?("secrets", namespace)
+        Chronicle::ETL::Config.exists?('secrets', namespace)
       end
 
       # Save a setting to a namespaced config file
@@ -47,7 +47,7 @@ module Chronicle
 
       # Read secrets from a config file
       def read(namespace)
-        definition = Chronicle::ETL::Config.load("secrets", namespace)
+        definition = Chronicle::ETL::Config.load('secrets', namespace)
         definition[:secrets] || {}
       end
 
@@ -57,7 +57,7 @@ module Chronicle
           secrets: (secrets || {}).transform_keys(&:to_s),
           chronicle_etl_version: Chronicle::ETL::VERSION
         }
-        Chronicle::ETL::Config.write("secrets", namespace, data)
+        Chronicle::ETL::Config.write('secrets', namespace, data)
       end
 
       # Which config files are available in ~/.config/chronicle/etl/secrets

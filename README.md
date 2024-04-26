@@ -6,14 +6,14 @@
 
 Are you trying to archive your digital history or incorporate it into your own projects? You’ve probably discovered how frustrating it is to get machine-readable access to your own data. While [building a memex](https://hyfen.net/memex/), I learned first-hand what great efforts must be made before you can begin using the data in interesting ways.
 
-If you don’t want to spend all your time writing scrapers, reverse-engineering APIs, or parsing takeout data, this tool is for you! (_If you do enjoy these things, please see the [open issues](https://github.com/chronicle-app/chronicle-etl/issues)._)
+If you don’t want to spend all your time writing scrapers, reverse-engineering APIs, or parsing export data, this tool is for you! (_If you do enjoy these things, please see the [open issues](https://github.com/chronicle-app/chronicle-etl/issues)._)
 
 **`chronicle-etl` is a CLI tool that gives you a unified interface to your personal data.** It uses the ETL pattern to _extract_ data from a source (e.g. your local browser history, a directory of images, goodreads.com reading history), _transform_ it (into a given schema), and _load_ it to a destination (e.g. a CSV file, JSON, external API).
 
 ## What does `chronicle-etl` give you?
 
 - **A CLI tool for working with personal data**. You can monitor progress of exports, manipulate the output, set up recurring jobs, manage credentials, and more.
-- **Plugins for many third-party providers** (see [list](#available-plugins-and-connectors)). This plugin system allows you to access data from dozens of third-party services, all accessible through a common CLI interface.
+- **Plugins for many third-party sources** (see [list](#available-plugins-and-connectors)). This plugin system allows you to access data from dozens of third-party services, all accessible through a common CLI interface.
 - **A common, opinionated schema**: You can normalize different datasets into a single schema so that, for example, all your iMessages and emails are represented in a common schema. (Don’t want to use this schema? `chronicle-etl` always allows you to fall back on working with the raw extraction data.)
 
 ## Chronicle-ETL in action
@@ -58,10 +58,10 @@ $ chronicle-etl --extractor csv --input data.csv --loader table
 
 # Show available plugins and install one
 $ chronicle-etl plugins:list
-$ chronicle-etl plugins:install shell
+$ chronicle-etl plugins:install imessage
 
-# Retrieve shell commands run in the last 5 hours
-$ chronicle-etl -e shell --since 5h
+# Retrieve imessage messages from the last 5 hours
+$ chronicle-etl -e imessage --since 5h
 
 # Get email senders from an .mbox email archive file
 $ chronicle-etl --extractor email:mbox -i sample-email-archive.mbox -t email --fields actor.slug
@@ -80,12 +80,16 @@ Options:
       [--extractor-opts=key:value]       # Extractor options
   -t, [--transformer=NAME]               # Transformer class. Default: null
       [--transformer-opts=key:value]     # Transformer options
-  -l, [--loader=NAME]                    # Loader class. Default: table
+  -l, [--loader=NAME]                    # Loader class. Default: json
       [--loader-opts=key:value]          # Loader options
   -i, [--input=FILENAME]                 # Input filename or directory
       [--since=DATE]                     # Load records SINCE this date (or fuzzy time duration)
       [--until=DATE]                     # Load records UNTIL this date (or fuzzy time duration)
       [--limit=N]                        # Only extract the first LIMIT records
+      [--schema=SCHEMA_NAME]             # Which Schema to transform
+                                         # Possible values: chronicle, activitystream, schemaorg, chronobase
+      [--format=SCHEMA_NAME]              # How to serialize results
+                                          # Possible values: jsonapi, jsonld
   -o, [--output=OUTPUT]                  # Output filename
       [--fields=field1 field2 ...]       # Output only these fields
       [--header-row], [--no-header-row]  # Output the header row of tabular output
@@ -119,7 +123,7 @@ $ chronicle-etl jobs:list
 
 ## Connectors and plugins
 
-Connectors let you work with different data formats or third-party providers.
+Connectors let you work with different data formats or third-party sources.
 
 ### Built-in Connectors
 
@@ -139,13 +143,16 @@ $ chronicle-etl connectors:list
 #### Transformers
 
 - [`null`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/transformers/null_transformer.rb) - (default) Don’t do anything and pass on raw extraction data
+- [`sampler`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/transformers/sampler_transformer.rb) - Sample `percent` records from the extraction
+- [`sort`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/transformers/sampler_transformer.rb) - sort extracted results by `key` and `direction`
+
 
 #### Loaders
 
-- [`table`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/table_loader.rb) - (default) Output an ascii table of records. Useful for exploring data.
+- [`json`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/json_loader.rb) - (default) Load records serialized as JSON
+- [`table`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/table_loader.rb) - Output an ascii table of records. Useful for exploring data.
 - [`csv`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/extractors/csv_extractor.rb) - Load records to CSV
-- [`json`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/json_loader.rb) - Load records serialized as JSON
-- [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Serialize records with [JSONAPI](https://jsonapi.org/) and send to a REST API
+- [`rest`](https://github.com/chronicle-app/chronicle-etl/blob/main/lib/chronicle/etl/loaders/rest_loader.rb) - Send JSON to a REST API
 
 ### Chronicle Plugins for third-party services
 
@@ -161,8 +168,8 @@ $ chronicle-etl plugins:list
 $ chronicle-etl plugins:install NAME
 
 # Use a plugin
-$ chronicle-etl plugins:install shell
-$ chronicle-etl --extractor shell:history --limit 10
+$ chronicle-etl plugins:install imessage
+$ chronicle-etl --extractor imessage --limit 10
 
 # Uninstall a plugin
 $ chronicle-etl plugins:uninstall NAME
@@ -219,28 +226,7 @@ If you want to work together on a connector, please [get in touch](#get-in-touch
 #### Sample custom Extractor class
 
 ```ruby
-module Chronicle
-  module FooService
-    class FooExtractor < Chronicle::ETL::Extractor
-      register_connector do |r|
-        r.identifier = 'foo'
-        r.description = 'from foo.com'
-      end
-
-      setting :access_token, required: true
-
-      def prepare
-        @records = # load from somewhere
-      end
-
-      def extract
-        @records.each do |record|
-          yield Chronicle::ETL::Extraction.new(data: row.to_h)
-        end
-      end
-    end
-  end
-end
+# TODO
 ```
 
 ## Secrets Management

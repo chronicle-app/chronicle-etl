@@ -9,13 +9,13 @@ module Chronicle
       extend Forwardable
 
       attr_accessor :job,
-                    :job_id,
-                    :last_id,
-                    :highest_timestamp,
-                    :num_records_processed,
-                    :started_at,
-                    :finished_at,
-                    :success
+        :job_id,
+        :last_id,
+        :highest_timestamp,
+        :num_records_processed,
+        :started_at,
+        :finished_at,
+        :success
 
       def_delegators :@job, :save_log?
 
@@ -28,11 +28,11 @@ module Chronicle
 
       # Log the result of a single transformation in a job
       # @param transformer [Chronicle::ETL::Tranformer] The transformer that ran
-      def log_transformation(transformer)
-        @last_id = transformer.id if transformer.id
+      def log_transformation(_transformer)
+        # @last_id = transformer.id if transformer.id
 
         # Save the highest timestamp that we've encountered so far
-        @highest_timestamp = [transformer.timestamp, @highest_timestamp].compact.max if transformer.timestamp
+        # @highest_timestamp = [transformer.timestamp, @highest_timestamp].compact.max if transformer.timestamp
 
         # TODO: a transformer might yield nil. We might also want certain transformers to explode
         # records into multiple new ones. Therefore, this this variable will need more subtle behaviour
@@ -54,7 +54,7 @@ module Chronicle
         @finished_at = Time.now
       end
 
-      def job= job
+      def job=(job)
         @job = job
         @job_id = job.id
       end
@@ -78,14 +78,12 @@ module Chronicle
         }
       end
 
-      private
-
       # Create a new JobLog and set its instance variables from a serialized hash
-      def self.build_from_serialized attrs
+      def self.build_from_serialized(attrs)
         attrs.delete(:id)
         new do |job_log|
           attrs.each do |key, value|
-            setter = "#{key.to_s}=".to_sym
+            setter = :"#{key}="
             job_log.send(setter, value)
           end
         end

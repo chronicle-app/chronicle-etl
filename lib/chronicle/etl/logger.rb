@@ -14,13 +14,13 @@ module Chronicle
 
       @log_level = INFO
 
-      def output message, level
+      def output(message, level)
         return unless level >= @log_level
 
         if @ui_element
           @ui_element.log(message)
         else
-          $stderr.puts(message)
+          warn(message)
         end
       end
 

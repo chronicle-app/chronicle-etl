@@ -11,7 +11,7 @@ module Chronicle
           end
           list.sort! { |a, b| a[0] <=> b[0] }
 
-          shell.say "COMMANDS".bold
+          shell.say 'COMMANDS'.bold
           shell.print_table(list, indent: 2, truncate: true)
           shell.say
           class_options_help(shell)
@@ -19,7 +19,7 @@ module Chronicle
 
         # Show docs with command:subcommand pattern.
         # For `help` command, don't use colon
-        def self.banner(command, namespace = nil, subcommand = false)
+        def self.banner(command, _namespace = nil, _subcommand = false)
           if command.name == 'help'
             "#{subcommand_prefix} #{command.usage}"
           else
@@ -29,7 +29,9 @@ module Chronicle
 
         # Use subcommand classname to derive display name for subcommand
         def self.subcommand_prefix
-          self.name.gsub(%r{.*::}, '').gsub(%r{^[A-Z]}) { |match| match[0].downcase }.gsub(%r{[A-Z]}) { |match| "-#{match[0].downcase}" }
+          name.gsub(/.*::/, '').gsub(/^[A-Z]/) do |match|
+            match[0].downcase
+          end.gsub(/[A-Z]/) { |match| "-#{match[0].downcase}" }
         end
       end
     end

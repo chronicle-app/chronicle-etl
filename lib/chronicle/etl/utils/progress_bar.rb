@@ -4,7 +4,6 @@ require 'colorize'
 module Chronicle
   module ETL
     module Utils
-
       class ProgressBar
         FORMAT_WITH_TOTAL = [
           ':bar ',
@@ -37,7 +36,7 @@ module Chronicle
           '/s) '.light_black
         ].join.freeze
 
-        def initialize(title: 'Loading', total:)
+        def initialize(total:, title: 'Loading')
           opts = {
             clear: true,
             complete: '▓'.light_blue,
@@ -64,7 +63,7 @@ module Chronicle
         end
 
         def log(message)
-          message.split("\n").each do |line|
+          message.split("\n").each do |_line|
             @pbar.log message
           end
         end

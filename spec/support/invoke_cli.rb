@@ -7,7 +7,7 @@ module Chronicle
       # @param [Boolean] rescue_from_exit whether to rescue when CLI explictly
       #   exits. If set to false, example must include
       #   `.to raise_error(SystemExit)`, otherwise tests will prematurely end
-      def invoke_cli(args = [], rescue_from_exit=true)
+      def invoke_cli(args = [], rescue_from_exit = true)
         capture do
           Chronicle::ETL::CLI::Main.start(args)
         rescue SystemExit

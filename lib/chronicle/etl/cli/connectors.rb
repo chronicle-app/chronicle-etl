@@ -10,7 +10,7 @@ module Chronicle
         default_task 'list'
         namespace :connectors
 
-        desc "list", "Lists available connectors"
+        desc 'list', 'Lists available connectors'
         # Display all available connectors that chronicle-etl has access to
         def list
           connector_info = Chronicle::ETL::Registry::Connectors.connectors.map do |connector_registration|
@@ -18,7 +18,7 @@ module Chronicle
               identifier: connector_registration.identifier,
               phase: connector_registration.phase,
               description: connector_registration.descriptive_phrase,
-              provider: connector_registration.provider,
+              source: connector_registration.source,
               core: connector_registration.built_in? ? '✓' : '',
               class: connector_registration.klass_name
             }
@@ -36,10 +36,10 @@ module Chronicle
           puts table.render(indent: 0, padding: [0, 2])
         end
 
-        desc "show PHASE IDENTIFIER", "Show information about a connector"
+        desc 'show PHASE IDENTIFIER', 'Show information about a connector'
         def show(phase, identifier)
-          unless ['extractor', 'transformer', 'loader'].include?(phase)
-            cli_fail(message: "Phase argument must be one of: [extractor, transformer, loader]")
+          unless %w[extractor transformer loader].include?(phase)
+            cli_fail(message: 'Phase argument must be one of: [extractor, transformer, loader]')
           end
 
           begin
@@ -51,9 +51,9 @@ module Chronicle
           puts connector.klass.to_s.bold
           puts "  #{connector.descriptive_phrase}"
           puts
-          puts "Settings:"
+          puts 'Settings:'
 
-          headers = ['name', 'default', 'required'].map{ |h| h.to_s.upcase.bold }
+          headers = %w[name default required].map { |h| h.to_s.upcase.bold }
 
           settings = connector.klass.settings.map do |name, setting|
             [

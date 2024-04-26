@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'pathname'
 
 module Chronicle
   module ETL
     # Return filenames that match a pattern in a directory
     class FileExtractor < Chronicle::ETL::Extractor
-
       register_connector do |r|
+        r.identifier = :file
         r.description = 'file or directory of files'
       end
 
       setting :input, default: ['.']
-      setting :dir_glob_pattern, default: "**/*"
+      setting :dir_glob_pattern, default: '**/*'
       setting :larger_than
       setting :smaller_than
 
@@ -32,7 +34,7 @@ module Chronicle
 
       def gather_files
         roots = [@config.input].flatten.map { |filename| Pathname.new(filename) }
-        raise(ExtractionError, "Input must exist") unless roots.all?(&:exist?)
+        raise(ExtractionError, 'Input must exist') unless roots.all?(&:exist?)
 
         directories, files = roots.partition(&:directory?)
 

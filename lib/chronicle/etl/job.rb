@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 
 module Chronicle
@@ -12,13 +14,13 @@ module Chronicle
       def_delegators :@job_definition, :dry_run?
 
       attr_accessor :name,
-                    :extractor_klass,
-                    :extractor_options,
-                    :transformer_klass,
-                    :transformer_options,
-                    :loader_klass,
-                    :loader_options,
-                    :job_definition
+        :extractor_klass,
+        :extractor_options,
+        :transformer_klasses,
+        :transformer_options,
+        :loader_klass,
+        :loader_options,
+        :job_definition
 
       # TODO: build a proper id system
       alias id name
@@ -39,9 +41,10 @@ module Chronicle
         @extractor_klass.new(@extractor_options)
       end
 
-      def instantiate_transformer(extraction)
-        @transformer_klass = @job_definition.transformer_klass
-        @transformer_klass.new(extraction, @transformer_options)
+      def instantiate_transformers
+        @job_definition.transformer_klasses.each_with_index.map do |klass, i|
+          klass.new(@transformer_options[i] || {})
+        end
       end
 
       def instantiate_loader
@@ -51,18 +54,21 @@ module Chronicle
 
       def save_log?
         # TODO: this needs more nuance
-        return !id.nil?
+        !id.nil?
       end
 
       def to_s
         output = "Job summary\n".upcase.bold
         # output = ""
         output += "#{name}:\n" if name
-        output += "→ #{'Extracting'} from #{@job_definition.extractor_klass.description}\n"
+        output += "→ Extracting from #{@job_definition.extractor_klass.description}\n"
         output += options_to_s(@extractor_options)
-        output += "→ #{'Transforming'} #{@job_definition.transformer_klass.description}\n"
-        output += options_to_s(@transformer_options)
-        output += "→ #{'Loading'} to #{@job_definition.loader_klass.description}\n"
+
+        @job_definition.transformer_klasses.each do |klass|
+          output += "→ Transforming #{klass.description}\n"
+        end
+        # TODO: transformer options
+        output += "→ Loading to #{@job_definition.loader_klass.description}\n"
         output += options_to_s(@loader_options)
         output
       end
@@ -70,7 +76,7 @@ module Chronicle
       private
 
       def options_to_s(options, indent: 4)
-        output = ""
+        output = ''
         options.each do |k, v|
           output += "#{' ' * indent}#{k.to_s.light_blue}: #{v}\n"
         end

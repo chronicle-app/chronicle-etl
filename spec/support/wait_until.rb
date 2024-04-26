@@ -5,7 +5,7 @@ module Chronicle
       def wait_until(timeout = 1)
         start_time = Time.now
 
-        while true
+        loop do
           return if yield
           raise TimeoutError if (Time.now - start_time) > timeout
 

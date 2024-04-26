@@ -2,14 +2,14 @@ require 'spec_helper'
 
 RSpec.describe Chronicle::ETL::TableLoader do
   let(:record) do
-    Chronicle::Schema::Activity.new(
+    {
       provider: 'foo',
       verb: 'tested',
-      actor: Chronicle::Schema::Entity.new(
+      actor: {
         represent: 'identity',
         provider: 'bar'
-      )
-    )
+      }
+    }
   end
 
   it 'can output a table' do

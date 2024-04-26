@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tempfile'
 
 module Chronicle
@@ -5,6 +7,8 @@ module Chronicle
     module Loaders
       module Helpers
         module StdoutHelper
+          # TODO: have option to immediately output to stdout
+
           # TODO: let users use "stdout" as an option for the `output` setting
           # Assume we're using stdout if no output is specified
           def output_to_stdout?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 require 'json'
@@ -7,6 +9,7 @@ module Chronicle
   module ETL
     class RestLoader < Chronicle::ETL::Loader
       register_connector do |r|
+        r.identifier = :rest
         r.description = 'a REST endpoint'
       end
 
@@ -14,16 +17,12 @@ module Chronicle
       setting :endpoint, required: true
       setting :access_token
 
-      def load(record)
-        payload = Chronicle::Serialization::JSONAPISerializer.serialize(record)
-        # have the outer data key that json-api expects
-        payload = { data: payload } unless payload[:data]
-
+      def load(payload)
         uri = URI.parse("#{@config.hostname}#{@config.endpoint}")
 
         header = {
-          "Authorization" => "Bearer #{@config.access_token}",
-          "Content-Type": 'application/json'
+          'Authorization' => "Bearer #{@config.access_token}",
+          'Content-Type': 'application/json'
         }
         use_ssl = uri.scheme == 'https'
 
