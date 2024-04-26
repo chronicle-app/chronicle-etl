@@ -97,7 +97,7 @@ module Chronicle
 
         Thread.new do
           @server.run!({ port: @port }) do |s|
-            s.silent = true if s.instance_of?(::Thin::Server)
+            s.silent = true if defined?(::Thin::Server) && s.instance_of?(::Thin::Server)
           end
         end
       end

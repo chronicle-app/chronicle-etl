@@ -55,7 +55,7 @@ module Chronicle
         def help(meth = nil, _subcommand = false)
           if meth && !respond_to?(meth)
             klass, task = ::Thor::Util.find_class_and_task_by_namespace("#{meth}:#{meth}")
-            klass.start(['-h', task].compact, shell: shell)
+            klass.start(['-h', task].compact, shell:)
           else
             shell.say 'ABOUT:'.bold
             shell.say "  #{'chronicle-etl'.italic} is a toolkit for extracting and working with your digital"
