@@ -45,7 +45,7 @@ module Chronicle
             c.phase == :transformer &&
               c.source == source &&
               (type.nil? || c.type == type) &&
-              (strategy.nil? || c.strategy == strategy) &&
+              (strategy.nil? || c.strategy == strategy || c.strategy.nil?) &&
               (target.nil? || c.to_schema == target)
           end
         end

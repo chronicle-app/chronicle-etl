@@ -10,6 +10,8 @@ module Chronicle
 
       def transform(record)
         converter_klass = find_converter(record.extraction)
+        # TODO: handle missing converter
+
         converter_klass.new.call(record) do |transformed_record|
           yield transformed_record.data
         end

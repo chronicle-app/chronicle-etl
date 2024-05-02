@@ -269,7 +269,7 @@ module Chronicle
 
         def add_transformer(processed_options, name, options = {})
           processed_options[:transformers] ||= []
-          processed_options[:transformers] << { name: name, options: options }
+          processed_options[:transformers] << { name:, options: }
         end
 
         def add_transformers_from_option(processed_options, transformer_option)
